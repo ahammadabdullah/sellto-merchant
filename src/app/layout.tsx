@@ -75,15 +75,17 @@ export default function RootLayout({
           sizes="any"
         />
 
-        <meta property="og:image" content="/og_img.webp" />
-        <meta property="og:image:type" content="webp" />
-        <meta property="og:image:width" content="1920" />
-        <meta property="og:image:height" content="1080" />
+        <meta property="og:site_name" content="sellto" />
+        <meta property="og:image" content="/og_img2.webp" />
+        <meta property="og:image:url" content="/og_img2.webp" />
+        <meta property="og:image:type" content="image/webp" />
+        <meta property="og:image:width" content="1320" />
+        <meta property="og:image:height" content="600" />
 
-        <meta name="twitter:image" content="/og_img.webp" />
-        <meta name="twitter:image:type" content="webp" />
-        <meta name="twitter:image:width" content="1910" />
-        <meta name="twitter:image:height" content="1080" />
+        <meta name="twitter:image" content="/og_img2.webp" />
+        <meta name="twitter:image:type" content="image/webp" />
+        <meta name="twitter:image:width" content="1320" />
+        <meta name="twitter:image:height" content="600" />
       </head>
       <body
         className={cn(
