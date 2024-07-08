@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary2: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 355 85% 52%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary2: 256 100% 68%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 355 85% 52%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 263.4 70% 50.4%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+.bg_primary_radial_gradient {
+  background: hsl(var(--primary) / 0.03);
+  background: radial-gradient(
+    circle,
+    hsl(var(--primary) / 0.5) 0%,
+    hsl(var(--primary) / 0.18) 30%,
+    hsl(var(--primary) / 0.05) 50%,
+    hsl(var(--primary) / 0) 70%
+  );
+  background-size: cover;
+  background-position: center;
+  object-fit: fill;
+}
+.bg_white_radial_gradient {
+  background: hsl(var(--foreground) / 0.01);
+  background: radial-gradient(
+    circle,
+    hsl(var(--foreground) / 0.2) 0%,
+    hsl(var(--foreground) / 0.09) 30%,
+    hsl(var(--foreground) / 0.02) 50%,
+    hsl(var(--foreground) / 0) 70%
+  );
+  background-size: cover;
+  background-position: center;
+  object-fit: fill;
+}
+.dark .bg_primary_radial_gradient {
+  background: hsl(var(--primary) / 0.03);
+  background: radial-gradient(
+    circle,
+    hsl(var(--primary) / 0.4) 0%,
+    hsl(var(--primary) / 0.15) 30%,
+    hsl(var(--primary) / 0.05) 50%,
+    hsl(var(--primary) / 0) 70%
+  );
+  background-size: cover;
+  background-position: center;
+  object-fit: fill;
+}
+.boder_primary_gradient {
+  background: hsl(var(--primary) / 0.03);
+  background: radial-gradient(
+    linear,
+    hsl(var(--primary) / 0.5) 0%,
+    hsl(var(--primary) / 0.18) 30%,
+    hsl(var(--primary) / 0.05) 50%,
+    hsl(var(--primary) / 0) 70%
+  );
+  background: linear-gradient(
+    320deg,
+    rgba(119, 47, 253, 1) 0%,
+    rgba(61, 28, 101, 0.7) 15%,
+    rgba(140, 47, 253, 0) 40%,
+    rgba(129, 47, 253, 0) 65%,
+    rgba(89, 34, 152, 0.6) 88%,
+    rgba(119, 47, 253, 1) 100%
+  );
+  background-size: cover;
+  background-position: center;
+  object-fit: fill;
+}
+.boder_primary_gradient::before {
+  content: "";
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border-radius: 50%;
+  background-color: hsl(var(--background));
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
