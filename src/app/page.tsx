@@ -10,13 +10,6 @@ import { useGSAP } from "@gsap/react";
 export default function Home() {
   gsap.registerPlugin(useGSAP);
   useGSAP(() => {
-    // gsap.to(".main_hero_circle", { opacity: 1, stagger: 0.2 }); // <-- automatically reverted
-    // gsap.to(".main_hero_circle", {
-    //   rotation: "360",
-    //   stagger: 0.5,
-    //   duration: 8,
-    //   repeat: -1,
-    // }); // <-- automatically reverted
     gsap.to(".main_hero_text", {
       y: 0,
       opacity: 1,
