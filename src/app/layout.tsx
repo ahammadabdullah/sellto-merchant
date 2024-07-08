@@ -102,7 +102,7 @@ export default function RootLayout({
         >
           <Nav />
           {children}
-          <ModeToggle />
+          {/* <ModeToggle /> */}
         </ThemeProvider>
       </body>
     </html>
