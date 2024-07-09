@@ -17,7 +17,7 @@ export default function Home() {
     });
   }, {});
   return (
-    <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
+    <main className="h-[100svh] grid place-items-center overflow-hidden relative">
       <section className="container text-center flex flex-col gap-4 items-center place-content-center mt-10 main_hero_text opacity-0 translate-y-[70%]">
         <div className="img_wrap mb-[-3rem] relative z-[-3]">
           <Image src="/hero_img.png" width={520} height={300} alt="hero" />
