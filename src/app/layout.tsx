@@ -1,14 +1,15 @@
+"use client";
 import type { Metadata } from "next";
 import i18next from "i18next";
 
-export const metadata: Metadata = {
-  title: "Sellto",
-  description: "Your one stop digital store solution.",
-  openGraph: {
-    title: "Sellto",
-    description: "Your one stop digital store solution.",
-  },
-};
+// export const metadata: Metadata = {
+//   title: "Sellto",
+//   description: "Your one stop digital store solution.",
+//   openGraph: {
+//     title: "Sellto",
+//     description: "Your one stop digital store solution.",
+//   },
+// };
 
 import lang_globals_en from "@/lang/en/globals.json";
 import lang_globals_sb from "@/lang/sb/globals.json";
@@ -80,6 +81,7 @@ import Nav from "@/components/Nav";
 import { ModeToggle } from "@/components/ui/themeButton";
 import { interpolate } from "gsap-trial/dist";
 import { I18nextProvider } from "react-i18next";
+import Head from "next/head";
 
 export default function RootLayout({
   children,
@@ -89,14 +91,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.svg" sizes="any" />
-        <link
-          rel="apple-touch-icon"
-          href="/appleIcon.png"
-          type="image/png"
-          sizes="any"
-        />
-
+        <Head>
+          <link rel="icon" href="/favicon.svg" sizes="any" />
+          <link
+            rel="apple-touch-icon"
+            href="/appleIcon.png"
+            type="image/png"
+            sizes="any"
+          />
+          <title>Sellto</title>
+          <meta
+            name="description"
+            content={"Your one stop digital store solution."}
+          />
+          <meta property="og:title" content={"Sellto"} />
+          <meta
+            property="og:description"
+            content={"Your one stop digital store solution."}
+          />
+        </Head>
         <meta property="og:site_name" content="sellto" />
         <meta property="og:image" content="/og_img2.webp" />
         <meta property="og:image:url" content="/og_img2.webp" />
