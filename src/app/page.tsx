@@ -10,6 +10,9 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+import uk from "@/assets/lang/uk.png";
+import sb from "@/assets/lang/sb.png";
+
 export default function Home() {
   gsap.registerPlugin(useGSAP);
   useGSAP(() => {
@@ -28,13 +31,11 @@ export default function Home() {
   };
   return (
     <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
-      {/* <Button onChange={setLang(!lang)}></Button> */}
       <Button
         className="fixed right-0 top-0 m-10"
         onClick={() => handleChange(language)}
       >
-        {/* {language === "en" ? "🇬🇧" : ""} */}
-        {language.toLocaleUpperCase()}
+        <Image src={lang === "en" ? uk : sb} alt="language" />
       </Button>
       <section className="container text-center flex flex-col gap-4 items-center place-content-center mt-10 main_hero_text opacity-0 translate-y-[70%]">
         <div className="img_wrap mb-[-3rem] relative z-[-3]">
