@@ -3,8 +3,9 @@ import { cn } from "@/lib/utils";
 
 export interface classProps {
   className?: string;
+  t: any;
 }
-export default function Component({ className }: classProps) {
+export default function Component({ className, t }: classProps) {
   return (
     <form
       className={cn(
@@ -14,7 +15,7 @@ export default function Component({ className }: classProps) {
     >
       <input
         type={"email"}
-        placeholder="Enter your email..."
+        placeholder={t("input.input")}
         min="4"
         className="sm:min-w-[250px] min-w-[170px] flex-1 flex-grow px-4 py-2 rounded-l-md bg-primary/0  h-10 w-full rounded-md  text-sm  placeholder:text-muted-foreground focus-visible:outline-none  disabled:cursor-not-allowed disabled:opacity-50"
       />
@@ -23,7 +24,7 @@ export default function Component({ className }: classProps) {
         variant={"secondary"}
         className="flex-grow sm:flex-grow-0"
       >
-        Join Beta Waitlist
+        {t("input.button")}
       </Button>
     </form>
   );

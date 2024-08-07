@@ -1,18 +1,20 @@
+import { useTranslation } from "react-i18next";
+import { Button } from "../ui/button";
+
 export interface classProps {
   className?: string;
+  t: any;
 }
-export default function Component({ className }: classProps) {
+export default function Component({ className, t }: classProps) {
   return (
     <>
       <h1 className="sm:text-6xl text-5xl font-clash font-medium">
-        <span className="text-primary2">Your one stop</span>
+        <span className="text-primary2">{t("header.first_t")}</span>
         <br />
-        digital store solution<span className="text-primary2">.</span>
+        {t("header.second_t")}
+        <span className="text-primary2">.</span>
       </h1>
-      <p className="max-w-[580px] opacity-75">
-        Sellto is an all-in-one platform to start, run, and grow a digital
-        business from software to communities and everything else.
-      </p>
+      {t("header.p")}
     </>
   );
 }
