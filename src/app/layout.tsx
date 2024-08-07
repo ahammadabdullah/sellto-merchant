@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import i18next from "i18next";
+
 export const metadata: Metadata = {
   title: "Sellto",
   description: "Your one stop digital store solution.",
@@ -8,16 +10,31 @@ export const metadata: Metadata = {
   },
 };
 
+import lang_globals_en from "@/lang/en/globals.json";
+import lang_globals_sb from "@/lang/sb/globals.json";
+i18next.init({
+  interpolation: { escapeValue: true },
+  lng: "en",
+  resources: {
+    en: {
+      globals: lang_globals_en,
+    },
+    sb: {
+      globals: lang_globals_sb,
+    },
+  },
+});
+
 // import "@/styles/fonts.css";
 import "@/styles/globals.css";
 
+// utils
 import { ThemeProvider } from "@/components/theme-provider";
-import { ModeToggle } from "@/components/ui/themeButton";
-
 import { cn } from "@/lib/utils";
+
+// fonts
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
-
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -58,7 +75,12 @@ const ClashDisplay = localFont({
   variable: "--font-clash-display",
 });
 
+// components
 import Nav from "@/components/Nav";
+import { ModeToggle } from "@/components/ui/themeButton";
+import { interpolate } from "gsap-trial/dist";
+import { I18nextProvider } from "react-i18next";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -94,16 +116,18 @@ export default function RootLayout({
           ClashDisplay.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Nav />
-          {children}
-          {/* <ModeToggle /> */}
-        </ThemeProvider>
+        <I18nextProvider i18n={i18next}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Nav />
+            {children}
+            {/* <ModeToggle /> */}
+          </ThemeProvider>
+        </I18nextProvider>
       </body>
     </html>
   );
