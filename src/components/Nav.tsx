@@ -55,10 +55,10 @@ export default function Nav() {
               y2="-1.08572"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stop-color="#6D28D9" />
-              <stop offset="0.2903" stop-color="#893EFF" />
-              <stop offset="0.6777" stop-color="#893EFF" />
-              <stop offset="1" stop-color="#6D28D9" />
+              <stop stopColor="#6D28D9" />
+              <stop offset="0.2903" stopColor="#893EFF" />
+              <stop offset="0.6777" stopColor="#893EFF" />
+              <stop offset="1" stopColor="#6D28D9" />
             </linearGradient>
             <linearGradient
               id="paint1_linear_52_58"
@@ -68,10 +68,10 @@ export default function Nav() {
               y2="10.6381"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stop-color="#6D28D9" />
-              <stop offset="0.2903" stop-color="#893EFF" />
-              <stop offset="0.6777" stop-color="#893EFF" />
-              <stop offset="1" stop-color="#6D28D9" />
+              <stop stopColor="#6D28D9" />
+              <stop offset="0.2903" stopColor="#893EFF" />
+              <stop offset="0.6777" stopColor="#893EFF" />
+              <stop offset="1" stopColor="#6D28D9" />
             </linearGradient>
           </defs>
         </svg>
