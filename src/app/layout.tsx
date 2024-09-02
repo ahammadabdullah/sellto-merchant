@@ -114,10 +114,10 @@ export default function RootLayout({
           <MultiLangProvider>
             <Nav />
             {children}
-            <Toaster />
           </MultiLangProvider>
           <ModeToggle />
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
