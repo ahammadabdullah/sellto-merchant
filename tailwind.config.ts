@@ -64,7 +64,7 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
+        sans: ["var(--font-inter)", ...fontFamily.sans],
         clash: ["var(--font-clash-display)", ...fontFamily.sans],
       },
       keyframes: {
