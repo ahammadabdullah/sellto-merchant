@@ -40,7 +40,7 @@ export default function Home() {
       <section className="container text-center flex flex-col gap-4 items-center place-content-center mt-10 main_hero_text opacity-0 translate-y-[70%]">
         <div className="img_wrap mb-[-3rem] relative z-[-3]">
           <Image src="/hero_img.png" width={520} height={300} alt="hero" />
-          <div className=" bg_primary_radial_gradient w-[700px] aspect-square rounded-full absolute top-[-300%] sm:top-[-130%] left-[50%] translate-x-[-50%] pointer-events-none z-[-3] animate-pulse "></div>
+          <div className=" bg_primary_radial_gradient w-[700px] aspect-square rounded-full absolute top-[-300%] sm:top-[-130%] left-[50%] translate-x-[-50%] pointer-events-none z-[-3] animate-pulse"></div>
           {/* <div className="hero_overlay w-[700px] h-[230px]  bg-gradient-to-b from-background/0 to-background absolute bottom-[-100%] left-[50%] translate-x-[-50%]  z-[-2]"></div> */}
         </div>
         <TextContent t={t} />

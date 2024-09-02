@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 import "@/styles/globals.css";
 
 // utils
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/helpers/theme-provider";
 import { cn } from "@/lib/utils";
 
 // fonts
@@ -62,7 +62,7 @@ const ClashDisplay = localFont({
 // components
 import Nav from "@/components/Nav";
 import Head from "next/head";
-import MultiLangProvider from "@/components/ui/MultiLangProvider";
+import MultiLangProvider from "@/components/helpers/MultiLangProvider";
 import { ModeToggle } from "@/components/ui/themeButton";
 import { interpolate } from "gsap-trial/dist";
 
@@ -114,7 +114,7 @@ export default function RootLayout({
             <Nav />
             {children}
           </MultiLangProvider>
-          {/* <ModeToggle /> */}
+          <ModeToggle />
         </ThemeProvider>
       </body>
     </html>
