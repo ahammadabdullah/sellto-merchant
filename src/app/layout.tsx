@@ -63,6 +63,7 @@ const ClashDisplay = localFont({
 import Nav from "@/components/Nav";
 import Head from "next/head";
 import MultiLangProvider from "@/components/helpers/MultiLangProvider";
+import { Toaster } from "@/components/ui/toaster";
 import { ModeToggle } from "@/components/ui/themeButton";
 import { interpolate } from "gsap-trial/dist";
 
@@ -113,6 +114,7 @@ export default function RootLayout({
           <MultiLangProvider>
             <Nav />
             {children}
+            <Toaster />
           </MultiLangProvider>
           <ModeToggle />
         </ThemeProvider>
