@@ -1,22 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { cn, isValidEmail } from "@/lib/utils";
+import { useState } from "react";
 import { toast, useToast } from "../hooks/use-toast";
 import { Toast } from "../ui/toast";
+
+// loading icon
+import { Loader2 } from "lucide-react";
 
 export interface classProps {
   className?: string;
   t: any;
 }
 
-// toast({
-//   title: "Success",
-//   description: "You have been added to the waitlist",
-// });
 export default function Component({ className, t }: classProps) {
   const { toast } = useToast();
+  // button loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmission = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state
+
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email");
     if (isValidEmail(email as string)) {
@@ -37,7 +41,6 @@ export default function Component({ className, t }: classProps) {
               title: "Error",
               description: resData.message,
             });
-            return;
           } else if (resData.error) {
             toast({
               variant: "destructive",
@@ -51,10 +54,12 @@ export default function Component({ className, t }: classProps) {
             });
           }
 
+          setIsLoading(false);
           return resData;
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
+          setIsLoading(false);
           toast({
             variant: "destructive",
             title: "Error",
@@ -95,8 +100,13 @@ export default function Component({ className, t }: classProps) {
         type="submit"
         variant={"secondary"}
         className="flex-grow sm:flex-grow-0"
+        disabled={isLoading} // Disable the button while loading
       >
-        {t("input.button")}
+        {isLoading ? (
+          <Loader2 className="mr-2 h-4 w-20 animate-spin" />
+        ) : (
+          t("input.button")
+        )}
       </Button>
     </form>
   );
