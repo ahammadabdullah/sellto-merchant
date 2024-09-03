@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, isValidEmail } from "@/lib/utils";
 import { toast, useToast } from "../hooks/use-toast";
 import { Toast } from "../ui/toast";
 
@@ -7,6 +7,11 @@ export interface classProps {
   className?: string;
   t: any;
 }
+
+// toast({
+//   title: "Success",
+//   description: "You have been added to the waitlist",
+// });
 export default function Component({ className, t }: classProps) {
   const { toast } = useToast();
 
@@ -14,18 +19,38 @@ export default function Component({ className, t }: classProps) {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email");
-    console.log(email);
-    if (email) {
-      toast({
-        title: "Success",
-        description: "You have been added to the waitlist",
-      });
-
-      console.log("object");
+    if (isValidEmail(email as string)) {
+      fetch("/api/waitlist", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            toast({
+              title: "Error",
+              description: data.message,
+            });
+          } else {
+            toast({
+              title: "Success",
+              description: data.message,
+            });
+          }
+        })
+        .catch((error) => {
+          toast({
+            title: "Error",
+            description: "Something went wrong",
+          });
+        });
     } else {
       toast({
-        title: "please provide a valid email",
-        variant: "destructive",
+        title: "Error",
+        description: "Please provide a valid email",
       });
     }
     // clear the email input here
