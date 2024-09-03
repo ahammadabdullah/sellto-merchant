@@ -27,24 +27,39 @@ export default function Component({ className, t }: classProps) {
           "Content-Type": "application/json",
         },
       })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
+        .then(async (res) => {
+          console.log(res.status);
+          let resData = await res.json();
+          // console.log(resData);
+          if (res.status !== 200) {
             toast({
+              variant: "destructive",
               title: "Error",
-              description: data.message,
+              description: resData.message,
+            });
+            return;
+          } else if (resData.error) {
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: resData.message,
             });
           } else {
             toast({
               title: "Success",
-              description: data.message,
+              description: resData.message,
             });
           }
+
+          return resData;
         })
         .catch((error) => {
+          console.log(error);
           toast({
+            variant: "destructive",
             title: "Error",
-            description: "Something went wrong",
+            description:
+              "Something went wrong, contact support if this continues",
           });
         });
     } else {
