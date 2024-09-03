@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 
 let siteMetadata = {
   title: "The simplest digital store solution - Sellto",
@@ -9,13 +10,16 @@ let siteMetadata = {
   ogUrl: "https://www.sellto.io",
 };
 
+export const viewport: Viewport = {
+  themeColor: "#875CFF",
+  colorScheme: "dark light",
+};
+
 export const metadata: Metadata = {
   robots: "index, follow", //  { index: false, follow: false }
-  themeColor: "#875CFF",
   publisher: "Sellto.io",
   title: siteMetadata.title,
   description: siteMetadata.description,
-  colorScheme: "dark light",
 
   openGraph: {
     type: "website",
@@ -114,9 +118,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <meta name="theme-color" content="#875CFF" />
-      </Head>
+      {/* <Head></Head> */}
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
