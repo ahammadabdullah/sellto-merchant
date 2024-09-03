@@ -7,12 +7,11 @@ let siteMetadata = {
   canonical: "https://www.sellto.io",
   image: "https://www.sellto.io/og_img2.webp",
   ogUrl: "https://www.sellto.io",
-  color: "#875CFF",
 };
 
 export const metadata: Metadata = {
   robots: "index, follow", //  { index: false, follow: false }
-  themeColor: siteMetadata.color,
+  themeColor: "#875CFF",
   publisher: "Sellto.io",
   title: siteMetadata.title,
   description: siteMetadata.description,
