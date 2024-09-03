@@ -1,23 +1,31 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  robots: "index, follow", //  { index: false, follow: false }
-  publisher: "Sellto.io",
+let siteMetadata = {
   title: "The simplest digital store solution - Sellto",
   description:
     "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
-  themeColor: "#875CFF",
+  canonical: "https://www.sellto.io",
+  image: "https://www.sellto.io/og_img2.webp",
+  ogUrl: "https://www.sellto.io",
+  color: "#875CFF",
+};
+
+export const metadata: Metadata = {
+  robots: "index, follow", //  { index: false, follow: false }
+  publisher: "Sellto.io",
+  title: siteMetadata.title,
+  description: siteMetadata.description,
+  themeColor: siteMetadata.color,
   colorScheme: "dark light",
 
   openGraph: {
     type: "website",
-    url: "http://www.sellto.io",
+    url: siteMetadata.ogUrl,
     siteName: "sellto.io",
-    title: "The simplest digital store solution - Sellto",
-    description:
-      "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
+    title: siteMetadata.title,
+    description: siteMetadata.description,
     images: {
-      url: "https://www.sellto.io/og_img2.webp",
+      url: siteMetadata.image,
       width: 1200,
       height: 630,
     },
@@ -25,10 +33,10 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     site: "@sellto.io",
-    images: "https://www.sellto.io/og_img2.webp",
+    images: siteMetadata.image,
   },
   alternates: {
-    canonical: "https://www.sellto.io",
+    canonical: siteMetadata.canonical,
     // types: {
     //   "application/rss+xml": [
     //     { url: "blog.rss", title: "rss" },
@@ -108,28 +116,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <title>Sellto</title>
-        <meta
-          name="description"
-          content={"Your one stop digital store solution."}
-        />
-        <meta property="og:title" content={"Sellto"} />
-        <meta
-          property="og:description"
-          content={"Your one stop digital store solution."}
-        />
-
-        <meta property="og:site_name" content="sellto" />
-        <meta property="og:image" content="/og_img2.webp" />
-        <meta property="og:image:url" content="/og_img2.webp" />
-        <meta property="og:image:type" content="image/webp" />
-        <meta property="og:image:width" content="1320" />
-        <meta property="og:image:height" content="600" />
-
-        <meta name="twitter:image" content="/og_img2.webp" />
-        <meta name="twitter:image:type" content="image/webp" />
-        <meta name="twitter:image:width" content="1320" />
-        <meta name="twitter:image:height" content="600" />
+        <meta name="theme-color" content="#875CFF" />
       </Head>
       <body
         className={cn(
