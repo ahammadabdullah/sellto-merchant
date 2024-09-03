@@ -32,10 +32,15 @@ export default function Home() {
   return (
     <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
       <Button
-        className="fixed right-0 top-0 m-10"
+        className="fixed right-0 top-0 m-4 text-sm"
         onClick={() => handleChange(language)}
       >
-        <Image src={lang === "en" ? sb : uk} alt="language" />
+        <Image
+          className="max-w-5"
+          src={lang === "en" ? uk : sb}
+          alt="language"
+        />{" "}
+        <span className="ml-1">{lang === "en" ? "English" : "Serbian"}</span>
       </Button>
       <section className="container text-center flex flex-col gap-4 items-center place-content-center mt-10 main_hero_text opacity-0 translate-y-[70%]">
         <div className="img_wrap mb-[-3rem] relative z-[-3]">
