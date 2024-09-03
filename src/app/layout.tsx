@@ -12,10 +12,10 @@ let siteMetadata = {
 
 export const metadata: Metadata = {
   robots: "index, follow", //  { index: false, follow: false }
+  themeColor: siteMetadata.color,
   publisher: "Sellto.io",
   title: siteMetadata.title,
   description: siteMetadata.description,
-  themeColor: siteMetadata.color,
   colorScheme: "dark light",
 
   openGraph: {
