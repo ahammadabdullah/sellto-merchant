@@ -6,10 +6,7 @@ export const metadata: Metadata = {
   title: "The simplest digital store solution - Sellto",
   description:
     "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#875CFF" },
-    { media: "(prefers-color-scheme: light)", color: "#6D28D9" },
-  ],
+  themeColor: "#875CFF",
   colorScheme: "dark light",
 
   openGraph: {
