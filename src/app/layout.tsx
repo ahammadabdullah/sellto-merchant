@@ -1,12 +1,48 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sellto",
-  description: "Your one stop digital store solution.",
+  robots: "index, follow", //  { index: false, follow: false }
+  publisher: "Sellto.io",
+  title: "The simplest digital store solution - Sellto",
+  description:
+    "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#875CFF" },
+    { media: "(prefers-color-scheme: light)", color: "#6D28D9" },
+  ],
+  colorScheme: "dark light",
+
   openGraph: {
-    title: "Sellto",
-    description: "Your one stop digital store solution.",
+    type: "website",
+    url: "http://www.sellto.io",
+    siteName: "sellto.io",
+    title: "The simplest digital store solution - Sellto",
+    description:
+      "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
+    images: {
+      url: "https://www.sellto.io/og_img2.webp",
+      width: 1200,
+      height: 630,
+    },
   },
+  twitter: {
+    card: "summary_large_image",
+    site: "@sellto.io",
+    images: "https://www.sellto.io/og_img2.webp",
+  },
+  alternates: {
+    canonical: "https://www.sellto.io",
+    // types: {
+    //   "application/rss+xml": [
+    //     { url: "blog.rss", title: "rss" },
+    //     { url: "blog/js.rss", title: "js title" },
+    //   ],
+    // },
+  },
+  icons: [
+    { rel: "icon", url: "https://www.sellto.io/icon.png" },
+    { rel: "apple-touch-icon", url: "https://www.sellto.io/apple-icon.png" },
+  ],
 };
 
 // import "@/styles/fonts.css";
