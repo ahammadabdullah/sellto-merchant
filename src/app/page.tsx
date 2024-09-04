@@ -44,10 +44,10 @@ export default function Home() {
       >
         <Image
           className="max-w-5"
-          src={lang === "en" ? uk : sb}
+          src={lang === "en" ? sb : uk}
           alt="language"
         />{" "}
-        <span className="ml-1">{lang === "en" ? "English" : "Serbian"}</span>
+        <span className="ml-1">{lang === "en" ? "Serbian" : "English"}</span>
       </Button>
       <section className="container text-center flex flex-col gap-4 items-center place-content-center mt-10 main_hero_text opacity-0 translate-y-[70%]">
         <div className="img_wrap mb-[-3rem] relative z-[-3]">
