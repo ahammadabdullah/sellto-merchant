@@ -1,14 +1,19 @@
 "use client";
+
+// libraries
+import gsap from "gsap";
 import Image from "next/image";
+
+// functions
+import { useGSAP } from "@gsap/react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+// components
+import { Button } from "@/components/ui/button";
 import TextContent from "@/components/waitlist/TextContent";
 import Form from "@/components/waitlist/form";
 import Circles from "@/components/waitlist/Ciecles";
-
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useTranslation } from "react-i18next";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 
 import uk from "@/assets/lang/uk.png";
 import sb from "@/assets/lang/sb.png";
@@ -22,6 +27,8 @@ export default function Home() {
       duration: 0.5,
     });
   }, {});
+
+  // multi lang button handling
   const [t, i18n] = useTranslation("globals");
   const [lang, setLang] = useState("en");
   const language = lang === "en" ? "sb" : "en";
