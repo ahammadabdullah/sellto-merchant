@@ -17,6 +17,7 @@ import Circles from "@/components/waitlist/Ciecles";
 
 import uk from "@/assets/lang/uk.png";
 import sb from "@/assets/lang/sb.png";
+import NotionMagicLinkEmail from "@/emails/notion-magic-link";
 
 export default function Home() {
   gsap.registerPlugin(useGSAP);

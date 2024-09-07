@@ -1,29 +1,40 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 const nodemailer = require("nodemailer");
+import { render } from "@react-email/components";
+import { NotionMagicLinkEmail } from "@/emails/notion-magic-link";
+import { Email } from "@/emails/email";
 async function sendEmail(email: string) {
-  // Import the Nodemailer library
-
-  // Create a transporter object
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 2525,
-    secure: false, // use SSL
+    host: "live.smtp.mailtrap.io",
+    port: 587,
     auth: {
-      user: "0530fe69bfc298",
-      pass: "04c2ab6e28ec95",
+      user: "api",
+      pass: "f678625cfc75068c78d4bde3dd24b1e1",
     },
   });
+  const emailHtml = await render(
+    NotionMagicLinkEmail({ loginCode: "123456" }),
+    {
+      pretty: true,
+    }
+  );
 
-  // Configure the mailoptions object
+  const plainText = await render(
+    NotionMagicLinkEmail({ loginCode: "123456" }),
+    {
+      plainText: true,
+    }
+  );
+
   const mailOptions = {
-    from: "yourusername@email.com",
-    to: "alcahammad@email.com",
-    subject: "Sending Email using Node.js",
-    text: "That was easy!",
+    from: "info@sellto.io",
+    to: `<${email}>`,
+    subject: "Thanks for signing up!",
+    html: emailHtml,
+    plainText: plainText,
   };
 
-  // Send the email
   transporter.sendMail(mailOptions, function (error: any, info: any) {
     if (error) {
       console.log("Error:", error);
