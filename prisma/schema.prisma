@@ -19,3 +19,12 @@ model WaitList {
   email     String   @unique
   createdAt DateTime @default(now())
 }
+
+model Merchant {
+  id        String   @id @unique @default(cuid())
+  name      String
+  email     String   @unique
+  shopName  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}
