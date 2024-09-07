@@ -32,7 +32,6 @@ export default function Component({ className, t }: classProps) {
         },
       })
         .then(async (res) => {
-          console.log(res.status);
           let resData = await res.json();
           // console.log(resData);
           if (res.status !== 200) {
