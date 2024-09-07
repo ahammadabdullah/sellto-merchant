@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   });
   if (emailExists) {
     return NextResponse.json(
-      { message: "You have already been added to the waitlist" },
+      { message: "You have already been added to the waitList" },
       { status: 400 }
     );
   }
