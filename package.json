@@ -7,7 +7,10 @@
     "postinstall": "prisma generate",
     "build": "npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email": "email dev --dir src/emails",
+    "email-export": "email export",
+    "email-build": "email build"
   },
   "dependencies": {
     "@gsap/react": "^2.1.1",
@@ -24,6 +27,8 @@
     "next-themes": "^0.3.0",
     "react": "^18",
     "react-dom": "^18",
+    "@react-email/components": "0.0.25",
+    "react-email": "3.0.1",
     "react-i18next": "^15.0.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
