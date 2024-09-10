@@ -2,8 +2,9 @@ import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 const nodemailer = require("nodemailer");
 import { render } from "@react-email/components";
-import { NotionMagicLinkEmail } from "@/emails/notion-magic-link";
-import { Email } from "@/emails/email";
+
+import { waitlistEmailTemplate } from "@/emails/waitlistEmail";
+
 async function sendEmail(email: string) {
   const transporter = nodemailer.createTransport({
     host: "live.smtp.mailtrap.io",
@@ -13,19 +14,13 @@ async function sendEmail(email: string) {
       pass: "f678625cfc75068c78d4bde3dd24b1e1",
     },
   });
-  const emailHtml = await render(
-    NotionMagicLinkEmail({ loginCode: "123456" }),
-    {
-      pretty: true,
-    }
-  );
+  const emailHtml = await render(waitlistEmailTemplate({}), {
+    pretty: true,
+  });
 
-  const plainText = await render(
-    NotionMagicLinkEmail({ loginCode: "123456" }),
-    {
-      plainText: true,
-    }
-  );
+  const plainText = await render(waitlistEmailTemplate({}), {
+    plainText: true,
+  });
 
   const mailOptions = {
     from: '"Sellto.io" <noreply@sellto.io>',
@@ -34,6 +29,7 @@ async function sendEmail(email: string) {
     html: emailHtml,
     plainText: plainText,
     text: plainText,
+    date: new Date(),
   };
 
   transporter.sendMail(mailOptions, function (error: any, info: any) {
