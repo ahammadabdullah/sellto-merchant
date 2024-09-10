@@ -6,7 +6,7 @@ import Image from "next/image";
 
 // functions
 import { useGSAP } from "@gsap/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // components
@@ -17,6 +17,7 @@ import Circles from "@/components/waitlist/Ciecles";
 
 import uk from "@/assets/lang/uk.png";
 import sb from "@/assets/lang/sb.png";
+import NotionMagicLinkEmail from "@/emails/notion-magic-link";
 
 export default function Home() {
   gsap.registerPlugin(useGSAP);
@@ -36,6 +37,7 @@ export default function Home() {
     i18n.changeLanguage(lng);
     setLang(lng);
   };
+
   return (
     <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
       <Button
