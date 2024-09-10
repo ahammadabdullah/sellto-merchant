@@ -1,8 +1,6 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-const nodemailer = require("nodemailer");
-import { render } from "@react-email/components";
 
 // email template
 import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
@@ -10,40 +8,6 @@ import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
 async function sendEmail(email: string) {
   // resend int
   const resend = new Resend(process.env.RESEND_API_KEY);
-  // const transporter = nodemailer.createTransport({
-  //   host: "live.smtp.mailtrap.io",
-  //   port: 587,
-  //   auth: {
-  //     user: "api",
-  //     pass: "f678625cfc75068c78d4bde3dd24b1e1",
-  //   },
-  // });
-  // const emailHtml = await render(WaitlistEmailTemplate({}), {
-  //   pretty: true,
-  // });
-
-  // const plainText = await render(WaitlistEmailTemplate({}), {
-  //   plainText: true,
-  // });
-
-  // const mailOptions = {
-  //   from: '"Sellto.io" <noreply@sellto.io>',
-  //   to: `<${email}>`,
-  //   subject: `You've been added to the waitlist! // sent at ${new Date()}`,
-  //   html: emailHtml,
-  //   plainText: plainText,
-  //   text: plainText,
-  //   date: new Date(),
-  // };
-
-  // transporter.sendMail(mailOptions, function (error: any, info: any) {
-  //   if (error) {
-  //     throw new Error(error);
-  //   }
-  //   // else {
-  //   //   console.log("Email sent: " + info.response);
-  //   // }
-  // });
 
   try {
     const { data, error } = await resend.emails.send({
