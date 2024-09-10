@@ -25,7 +25,7 @@ async function sendEmail(email: string) {
   const mailOptions = {
     from: '"Sellto.io" <noreply@sellto.io>',
     to: `<${email}>`,
-    subject: "You've been added to the waitlist!",
+    subject: `You've been added to the waitlist! // sent at ${new Date()}`,
     html: emailHtml,
     plainText: plainText,
     text: plainText,
