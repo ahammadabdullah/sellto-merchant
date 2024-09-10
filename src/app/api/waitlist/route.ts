@@ -34,7 +34,7 @@ async function sendEmail(email: string) {
 
   transporter.sendMail(mailOptions, function (error: any, info: any) {
     if (error) {
-      console.log("Error:", error);
+      throw new Error(error);
     }
     // else {
     //   console.log("Email sent: " + info.response);
