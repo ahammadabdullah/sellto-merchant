@@ -47,7 +47,7 @@ async function sendEmail(email: string) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: "Sellto.io <noreply@resend.sellto.io>",
+      from: "Sellto.io <noreply@mail.sellto.io>",
       to: [email],
       subject: `You've been added to the waitlist! // sent at ${new Date()}`,
       react: WaitlistEmailTemplate({}),

@@ -73,7 +73,7 @@ export const WaitlistEmailTemplate = ({
               </Text>
               <Section className="mx-0 w-full p-0 ">
                 <Text className="text-white  text-[12px] ">
-                  Copyright © Rive Inc
+                  Copyright © Sellto.io
                 </Text>
 
                 {/* <Hr className="border border-solid border-slate-500 opacity-8 bg-slate-500 my-[1rem] mx-0 w-full" /> */}
