@@ -7,6 +7,7 @@
   "input": {
     "button": "Pridruži Se Beta",
     "input": "Unesite Vaš email...",
-    "sub": "Pridružite se beta tester listi čekanja sa 110+ drugih"
+    "sub": "Pridružite se beta tester listi čekanja sa ",
+    "sub_end": "drugih"
   }
 }

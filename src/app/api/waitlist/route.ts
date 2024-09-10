@@ -4,6 +4,7 @@ import { Resend } from "resend";
 
 // email template
 import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
+import { revalidateTag } from "next/cache";
 
 async function sendEmail(email: string) {
   // resend int
@@ -61,6 +62,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
   try {
     await sendEmail(email);
+    // revalidateTag("waitlistCount");
     return NextResponse.json(
       {
         message:

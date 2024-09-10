@@ -3,6 +3,7 @@ import { cn, isValidEmail } from "@/lib/utils";
 import { useState } from "react";
 import { toast, useToast } from "../hooks/use-toast";
 import { Toast } from "../ui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 // loading icon
 import { Loader2 } from "lucide-react";
@@ -14,6 +15,7 @@ export interface classProps {
 
 export default function Component({ className, t }: classProps) {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   // button loading state
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,6 +49,10 @@ export default function Component({ className, t }: classProps) {
               description: resData.message,
             });
           } else {
+            queryClient.invalidateQueries({
+              queryKey: ["waitlistCount"],
+              exact: true,
+            });
             toast({
               title: "Success",
               description: resData.message,

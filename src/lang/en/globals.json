@@ -7,6 +7,7 @@
   "input": {
     "button": "Join Beta Waitlist",
     "input": "Enter  your email...",
-    "sub": "Join the beta tester waitlist with 140+ others"
+    "sub": "Join the beta tester waitlist with",
+    "sub_end": "others"
   }
 }

@@ -106,7 +106,7 @@ const ClashDisplay = localFont({
 // components
 import Nav from "@/components/Nav";
 import Head from "next/head";
-import MultiLangProvider from "@/components/helpers/MultiLangProvider";
+import UseClientProvider from "@/components/helpers/UseClientProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { ModeToggle } from "@/components/ui/themeButton";
 import { interpolate } from "gsap-trial/dist";
@@ -132,10 +132,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <MultiLangProvider>
+          <UseClientProvider>
             <Nav />
             {children}
-          </MultiLangProvider>
+          </UseClientProvider>
           <ModeToggle />
         </ThemeProvider>
         <Toaster />

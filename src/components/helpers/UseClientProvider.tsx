@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 // components
 import { Button } from "@/components/ui/button";
 
@@ -32,5 +38,11 @@ export default function MultiLangWrapper({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <I18nextProvider i18n={i18next}>{children}</I18nextProvider>;
+  // Create a client
+  const queryClient = new QueryClient();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+    </QueryClientProvider>
+  );
 }

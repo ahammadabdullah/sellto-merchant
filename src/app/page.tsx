@@ -8,6 +8,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 
 // components
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,27 @@ import sb from "@/assets/lang/sb.png";
 import NotionMagicLinkEmail from "@/emails/notion-magic-link";
 
 export default function Home() {
+  // waitlist count
+  // const [count, setCount] = useState<number>(50);
+
+  // useEffect(() => {
+  //   fetch("/api/waitlist/count", { next: { tags: ["waitlistCount"] } })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setCount(data.count);
+  //     });
+  // }, []);
+
+  const { data } = useQuery({
+    queryKey: ["waitlistCount"],
+    queryFn: async () => {
+      const response = await fetch("/api/waitlist/count");
+
+      return await response.json();
+    },
+    // refetchInterval: 60 * 1000, // refetch every minute
+  });
+
   gsap.registerPlugin(useGSAP);
   useGSAP(() => {
     gsap.to(".main_hero_text", {
@@ -59,7 +81,10 @@ export default function Home() {
         </div>
         <TextContent t={t} />
         <Form t={t} className="mt-14" />
-        <p className="max-w-[580px] opacity-65">{t("input.sub")}</p>
+        <p className="max-w-[580px] opacity-65">
+          {t("input.sub")} {data?.count}
+          {"+ "} {t("input.sub_end")}
+        </p>
       </section>
       <div className="circel bg_primary_radial_gradient w-[1600px] aspect-square rounded-full absolute top-[6rem] pointer-events-none z-[-1] opacity-85"></div>
       <Circles />
