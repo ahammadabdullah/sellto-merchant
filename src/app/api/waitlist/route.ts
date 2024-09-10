@@ -28,19 +28,21 @@ async function sendEmail(email: string) {
   );
 
   const mailOptions = {
-    from: "info@sellto.io",
+    from: '"Sellto.io" <noreply@sellto.io>',
     to: `<${email}>`,
-    subject: "Thanks for signing up!",
+    subject: "You've been added to the waitlist!",
     html: emailHtml,
     plainText: plainText,
+    text: plainText,
   };
 
   transporter.sendMail(mailOptions, function (error: any, info: any) {
     if (error) {
       console.log("Error:", error);
-    } else {
-      console.log("Email sent: " + info.response);
     }
+    // else {
+    //   console.log("Email sent: " + info.response);
+    // }
   });
 }
 
@@ -70,14 +72,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
         email,
       },
     });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error adding you to the waitlist, try again" },
+      { status: 500 }
+    );
+  }
+  try {
     await sendEmail(email);
     return NextResponse.json(
-      { message: "You have been added to the waitlist" },
+      {
+        message:
+          "You have been added to the waitlist, check email for confirmation",
+      },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Added to waitlist, Error sending confirmation email" },
       { status: 500 }
     );
   }
