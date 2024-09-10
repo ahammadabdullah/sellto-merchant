@@ -1,44 +1,66 @@
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 const nodemailer = require("nodemailer");
 import { render } from "@react-email/components";
 
-import { waitlistEmailTemplate } from "@/emails/waitlistEmail";
+// email template
+import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
 
 async function sendEmail(email: string) {
-  const transporter = nodemailer.createTransport({
-    host: "live.smtp.mailtrap.io",
-    port: 587,
-    auth: {
-      user: "api",
-      pass: "f678625cfc75068c78d4bde3dd24b1e1",
-    },
-  });
-  const emailHtml = await render(waitlistEmailTemplate({}), {
-    pretty: true,
-  });
+  // resend int
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  // const transporter = nodemailer.createTransport({
+  //   host: "live.smtp.mailtrap.io",
+  //   port: 587,
+  //   auth: {
+  //     user: "api",
+  //     pass: "f678625cfc75068c78d4bde3dd24b1e1",
+  //   },
+  // });
+  // const emailHtml = await render(WaitlistEmailTemplate({}), {
+  //   pretty: true,
+  // });
 
-  const plainText = await render(waitlistEmailTemplate({}), {
-    plainText: true,
-  });
+  // const plainText = await render(WaitlistEmailTemplate({}), {
+  //   plainText: true,
+  // });
 
-  const mailOptions = {
-    from: '"Sellto.io" <noreply@sellto.io>',
-    to: `<${email}>`,
-    subject: `You've been added to the waitlist! // sent at ${new Date()}`,
-    html: emailHtml,
-    plainText: plainText,
-    text: plainText,
-    date: new Date(),
-  };
+  // const mailOptions = {
+  //   from: '"Sellto.io" <noreply@sellto.io>',
+  //   to: `<${email}>`,
+  //   subject: `You've been added to the waitlist! // sent at ${new Date()}`,
+  //   html: emailHtml,
+  //   plainText: plainText,
+  //   text: plainText,
+  //   date: new Date(),
+  // };
 
-  transporter.sendMail(mailOptions, function (error: any, info: any) {
+  // transporter.sendMail(mailOptions, function (error: any, info: any) {
+  //   if (error) {
+  //     throw new Error(error);
+  //   }
+  //   // else {
+  //   //   console.log("Email sent: " + info.response);
+  //   // }
+  // });
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: "Sellto.io <noreply@resend.sellto.io>",
+      to: [email],
+      subject: `You've been added to the waitlist! // sent at ${new Date()}`,
+      react: WaitlistEmailTemplate({}),
+    });
+
     if (error) {
-      console.log("Error:", error);
-    } else {
-      console.log("Email sent: " + info.response);
+      return Response.json({ error }, { status: 500 });
     }
-  });
+
+    return Response.json(data);
+  } catch (error) {
+    return Response.json({ error }, { status: 500 });
+  }
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {

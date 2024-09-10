@@ -31,7 +31,7 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "";
 
-export const waitlistEmailTemplate = ({
+export const WaitlistEmailTemplate = ({
   topBanner = `https://i.ibb.co.com/WWns0Q9/waitlist-email-banner.png`,
   topBannerAlt = "Sellto.io",
   accentColor = "#875CFF",
@@ -104,7 +104,7 @@ export const waitlistEmailTemplate = ({
   );
 };
 
-waitlistEmailTemplate.PreviewProps = {
+WaitlistEmailTemplate.PreviewProps = {
   topBanner: "https://i.ibb.co.com/WWns0Q9/waitlist-email-banner.png",
   topBannerAlt: "Sellto.io",
   accentColor: "#875CFF",
@@ -115,4 +115,4 @@ waitlistEmailTemplate.PreviewProps = {
     "Note: not all applicants are guaranteed to get beta tester privileges and some accounts may get the beta tester privileges earlier than others, based on sign up date, region/country etc.",
 } as waitlistEmailTemplateProps;
 
-export default waitlistEmailTemplate;
+export default WaitlistEmailTemplate;
