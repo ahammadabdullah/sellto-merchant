@@ -34,11 +34,11 @@ async function sendEmail(email: string) {
 
   transporter.sendMail(mailOptions, function (error: any, info: any) {
     if (error) {
+      console.log(error);
       throw new Error(error);
+    } else {
+      console.log("Email sent: " + info.response);
     }
-    // else {
-    //   console.log("Email sent: " + info.response);
-    // }
   });
 }
 
