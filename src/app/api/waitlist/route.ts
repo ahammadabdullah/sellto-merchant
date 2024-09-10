@@ -3,19 +3,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 // email template
+import { render } from "@react-email/components";
 import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
+
 import { revalidateTag } from "next/cache";
 
 async function sendEmail(email: string) {
   // resend int
   const resend = new Resend(process.env.RESEND_API_KEY);
 
+  const plainText = await render(WaitlistEmailTemplate({}), {
+    plainText: true,
+  });
   try {
     const { data, error } = await resend.emails.send({
-      from: "Sellto.io <noreply@mail.sellto.io>",
+      from: "Sellto.io <updates@mail.sellto.io>",
       to: [email],
-      subject: `You've been added to the waitlist! // sent at ${new Date()}`,
+      subject: `You've been signed up for the beta tester list! // sent at ${new Date()}`,
       react: WaitlistEmailTemplate({}),
+      text: plainText,
     });
 
     if (error) {

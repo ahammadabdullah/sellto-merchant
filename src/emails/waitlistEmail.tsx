@@ -17,6 +17,7 @@ import {
 import { Tailwind } from "@react-email/tailwind";
 import * as React from "react";
 
+import { truncateString } from "@/lib/utils";
 export interface waitlistEmailTemplateProps {
   accentColor?: string;
   previewText?: string;
@@ -40,7 +41,9 @@ export const WaitlistEmailTemplate = ({
   para_2 = "Note: not all applicants are guaranteed to get beta tester privileges and some accounts may get the beta tester privileges earlier than others, based on sign up date, region/country etc.",
 }: waitlistEmailTemplateProps) => {
   let previewTxt: string = previewText;
-
+  if (!previewText || previewText === "") {
+    previewTxt = truncateString(para_1, 20);
+  }
   return (
     <Html>
       <Head />
