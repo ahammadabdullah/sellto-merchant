@@ -25,6 +25,9 @@ async function sendEmail(email: string, uniqID: string) {
       subject: `You've been signed up for the beta tester list! // sent at ${new Date()}`,
       react: WaitlistEmailTemplate({ email: email, uniqID: uniqID }),
       text: plainText,
+      headers: {
+        "List-Unsubscribe": `<https://www.sellto.io/waitlist/remove?token=${uniqID}>`,
+      },
     });
 
     if (error) {
@@ -39,6 +42,7 @@ async function sendEmail(email: string, uniqID: string) {
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
+
   const { email } = body;
   let uniqID: string = "";
 
