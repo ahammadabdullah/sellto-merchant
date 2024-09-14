@@ -8,19 +8,22 @@ import { WaitlistEmailTemplate } from "@/emails/waitlistEmail";
 
 import { revalidateTag } from "next/cache";
 
-async function sendEmail(email: string) {
+async function sendEmail(email: string, uniqID: string) {
   // resend int
   const resend = new Resend(process.env.RESEND_API_KEY);
 
-  const plainText = await render(WaitlistEmailTemplate({}), {
-    plainText: true,
-  });
+  const plainText = await render(
+    WaitlistEmailTemplate({ email: email, uniqID: uniqID }),
+    {
+      plainText: true,
+    }
+  );
   try {
     const { data, error } = await resend.emails.send({
       from: "Sellto.io <updates@mail.sellto.io>",
       to: [email],
       subject: `You've been signed up for the beta tester list! // sent at ${new Date()}`,
-      react: WaitlistEmailTemplate({}),
+      react: WaitlistEmailTemplate({ email: email, uniqID: uniqID }),
       text: plainText,
     });
 
@@ -37,6 +40,8 @@ async function sendEmail(email: string) {
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json();
   const { email } = body;
+  let uniqID: string = "";
+
   if (!email) {
     return NextResponse.json(
       { error: "Please provide a valid email" },
@@ -55,11 +60,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   }
   try {
-    await prisma.waitList.create({
-      data: {
-        email,
-      },
-    });
+    await prisma.waitList
+      .create({
+        data: {
+          email,
+        },
+      })
+      .then((data) => {
+        uniqID = data.id;
+      });
   } catch (error) {
     return NextResponse.json(
       { message: "Error adding you to the waitlist, try again" },
@@ -67,7 +76,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     );
   }
   try {
-    await sendEmail(email);
+    // console.log("uniqID: " + uniqID);
+
+    await sendEmail(email, uniqID);
     // revalidateTag("waitlistCount");
     return NextResponse.json(
       {

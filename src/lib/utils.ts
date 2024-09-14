@@ -19,3 +19,17 @@ export function truncateString(str: string, maxStrLength: number): string {
     return str;
   }
 }
+
+// uniq code generator that takes in current time
+export const generateUniqueCode = (currentTime: any): string | null => {
+  const uniqueCode =
+    Math.random().toString(36).substring(2, 14) +
+    currentTime
+      .toISOString()
+      .replace(/[-:.TZ]/g, Math.random().toString(32).substring(2, 3)) +
+    Math.random().toString(36).substring(2, 14) +
+    Math.random().toString(32).substring(2, 8) +
+    Math.random().toString(36).substring(2, 14);
+  if (uniqueCode) return uniqueCode.toString();
+  return uniqueCode;
+};

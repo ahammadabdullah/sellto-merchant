@@ -26,6 +26,8 @@ export interface waitlistEmailTemplateProps {
   topBannerAlt?: string;
   para_1?: string;
   para_2?: string;
+  email: string;
+  uniqID: string;
 }
 
 const baseUrl = process.env.VERCEL_URL
@@ -33,11 +35,13 @@ const baseUrl = process.env.VERCEL_URL
   : "";
 
 export const WaitlistEmailTemplate = ({
+  email,
+  uniqID,
   topBanner = `https://i.ibb.co.com/WWns0Q9/waitlist-email-banner.png`,
   topBannerAlt = "Sellto.io",
   accentColor = "#875CFF",
   previewText = "Sign up Complete!",
-  para_1 = "You’ve signed up to be waitlisted for being a beta tester of sellto.io. You’ll receive an email notification when the beta version goes live.",
+  para_1 = `You’ve signed up to be waitlisted for being a beta tester of sellto.io using ${email}. You’ll receive an email notification when the beta version goes live.`,
   para_2 = "Note: not all applicants are guaranteed to get beta tester privileges and some accounts may get the beta tester privileges earlier than others, based on sign up date, region/country etc.",
 }: waitlistEmailTemplateProps) => {
   let previewTxt: string = previewText;
@@ -49,7 +53,7 @@ export const WaitlistEmailTemplate = ({
       <Head />
       <Preview>{previewTxt}</Preview>
       <Tailwind>
-        <Body className="bg-[#e2e2eb] my-auto mx-auto font-sans px-1 py-4 rounded-xl">
+        <Body className=" my-auto mx-auto font-sans px-1 py-4 rounded-xl">
           <Container className="bg-[#0a1226] border border-solid border-[#272E40] rounded-3xl my-[40px] max-w-[550px]">
             <Section className="mt-0  rounded-md mb-[-4.6rem]">
               <Img
@@ -85,7 +89,7 @@ export const WaitlistEmailTemplate = ({
                   <span className="text-[#d9dadc]">Sellto.io,</span> If you wish
                   to get your email removed from the list{" "}
                   <Link
-                    href={`https://www.sellto.io/emailslist/remove`}
+                    href={`https://www.sellto.io/waitlist/remove?token=${uniqID}`}
                     className="underline"
                   >
                     click here
@@ -112,6 +116,8 @@ WaitlistEmailTemplate.PreviewProps = {
   topBannerAlt: "Sellto.io",
   accentColor: "#875CFF",
   previewText: "Text",
+  email: "email@example.com",
+  uniqID: "dowajfopwajpo3",
   para_1:
     "You’ve signed up to be waitlisted for being a beta tester of sellto.io. You’ll receive an email notification when the beta version goes live.",
   para_2:
