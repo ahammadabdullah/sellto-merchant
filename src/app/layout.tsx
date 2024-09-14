@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { Viewport } from "next";
 
 let siteMetadata = {
-  title: "The simplest digital store solution - Sellto",
+  title: "Sellto - The simplest digital store solution",
   description:
     "An effortless digital store experience. Showcase and sell your digital creations hassle-free.",
   canonical: "https://www.sellto.io",
