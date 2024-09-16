@@ -110,6 +110,7 @@ import UseClientProvider from "@/components/helpers/UseClientProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { ModeToggle } from "@/components/ui/themeButton";
 import { interpolate } from "gsap-trial/dist";
+import LandingNav from "@/components/nav/LandingNav";
 
 export default function RootLayout({
   children,
@@ -133,7 +134,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <UseClientProvider>
-            <Nav />
+            <LandingNav />
             {children}
           </UseClientProvider>
           <ModeToggle />
