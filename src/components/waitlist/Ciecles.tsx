@@ -30,7 +30,7 @@ export default function Component({ className }: classProps) {
       </div> */}
       <div
         className={cn(
-          "hero_circles_wrap pointer-events-none absolute top-0 z-[-5] h-full w-full",
+          "hero_circles_wrap pointer-events-none absolute top-0 z-[-5] h-full w-full overflow-hidden",
           className
         )}
       >

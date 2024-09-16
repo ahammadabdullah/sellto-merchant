@@ -122,7 +122,7 @@ export default function RootLayout({
       {/* <Head></Head> */}
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-[100dvh] bg-background font-sans antialiased  w-full ",
           fontSans.variable,
           ClashDisplay.variable
         )}

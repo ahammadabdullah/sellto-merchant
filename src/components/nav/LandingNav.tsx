@@ -2,12 +2,12 @@
 // libraries
 import gsap from "gsap";
 import Image from "next/image";
+import Link from "next/link";
 
 // functions
 import { useGSAP } from "@gsap/react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AlignRight, X, ChevronLast } from "lucide-react";
 
@@ -294,7 +294,7 @@ export default function LandingNav() {
               Log in
             </Button>
           </Link>
-          <Link href="/auth/singup" className="w-full sm:w-auto">
+          <Link href="/auth/signup" className="w-full sm:w-auto">
             <Button
               className={cn(styles.link_button, "justify-start")}
               onClick={() => navHandlder("closer")}
