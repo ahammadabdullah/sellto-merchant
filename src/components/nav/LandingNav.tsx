@@ -250,7 +250,6 @@ export default function LandingNav() {
             size={"icon"}
             onClick={() => navHandlder("closer")}
           >
-            {/* <X /> */}
             <ChevronLast />
           </Button>
         </div>
