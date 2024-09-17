@@ -21,7 +21,7 @@ export default function Home() {
     <main className=" w-full ">
       <Hero />
 
-      <h2 className="text-4xl text-center w-full min-h-screen bg-slate-50/10 grid place-items-center">
+      <h2 className="text-4xl text-center w-full min-h-screen bg-background grid place-items-center">
         {" "}
         Section
       </h2>

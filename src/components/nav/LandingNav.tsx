@@ -83,7 +83,7 @@ export default function LandingNav() {
   }, [setmobileNav, menuOn, navHandlder]);
 
   return (
-    <nav className="rounded-lg border bg-card/15 text-card-foreground shadow-md sm:shadow-sm p-[.60rem] max-w-[1400px] w-[98%] fixed top-1 sm:top-[1rem] left-[50%] translate-x-[-50%] flex justify-between place-items-center gap-6 z-[1000] backdrop-blur-lg backdrop-saturate-150">
+    <nav className="rounded-lg border bg-card/55 text-card-foreground shadow-md sm:shadow-sm p-[.60rem] max-w-[1400px] w-[98%] fixed top-1 sm:top-[1rem] left-[50%] translate-x-[-50%] flex justify-between place-items-center gap-6 z-[1000] backdrop-blur-lg backdrop-saturate-150">
       <Link href={"/"} className="hover:opacity-60 transition-opacity">
         <svg
           className="max-w-[100px] min-w-[90px] sm:max-w-[120px] w-full ml-3 "
