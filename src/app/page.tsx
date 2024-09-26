@@ -15,16 +15,19 @@ import TextContent from "@/components/waitlist/TextContent";
 import Form from "@/components/waitlist/form";
 import Circles from "@/components/waitlist/Ciecles";
 import Hero from "@/components/home/hero";
+import LargeInfoCardsSec from "@/components/home/LargeInfoCardsSec";
+import InfoCardsSec from "@/components/home/InfoCards";
+import GlobalMap from "@/components/home/globalMap";
+import Testimonials from "@/components/home/Testimonials";
 
 export default function Home() {
   return (
-    <main className=" w-full ">
+    <main className="w-full">
       <Hero />
-
-      <h2 className="text-4xl text-center w-full min-h-screen bg-background grid place-items-center">
-        {" "}
-        Section
-      </h2>
+      <LargeInfoCardsSec></LargeInfoCardsSec>
+      <InfoCardsSec></InfoCardsSec>
+      <GlobalMap></GlobalMap>
+      <Testimonials></Testimonials>
     </main>
   );
 }
