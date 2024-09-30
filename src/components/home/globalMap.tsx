@@ -19,7 +19,7 @@ export interface classProps {
 }
 export default function Component({ className }: classProps) {
   return (
-    <section className="container my-[7rem] relative overflow-x-hidden min-[810px]:min-h-[660px]">
+    <section className="container mt-[7rem] relative overflow-x-hidden min-[810px]:min-h-[660px]">
       <SectionTitle
         text1="Helping hundreds of businesses"
         text2="reaching clients everywhere."

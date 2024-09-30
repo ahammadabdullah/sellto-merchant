@@ -9,6 +9,7 @@ import { useGSAP } from "@gsap/react";
 import { Button } from "../ui/button";
 import Circles from "@/components/waitlist/Ciecles";
 import SectionTitle from "@/components/SecTitle";
+import TestimonialCard from "@/components/home/components/TestimonialCard";
 
 // assets
 import img_global_map from "@/assets/home/global_map.png";
@@ -19,11 +20,16 @@ export interface classProps {
 }
 export default function Component({ className }: classProps) {
   return (
-    <section className="container  ">
+    <section className="container">
       <SectionTitle
         text1="What our customers"
         text2="think about us."
       ></SectionTitle>
+      <div className="testimonial_wrap flex flex-wrap gap-4">
+        <TestimonialCard></TestimonialCard>
+        <TestimonialCard></TestimonialCard>
+        <TestimonialCard></TestimonialCard>
+      </div>
     </section>
   );
 }

@@ -30,6 +30,7 @@
     "embla-carousel-react": "^8.3.0",
     "gsap": "^3.12.5",
     "i18next": "^23.12.2",
+    "lenis": "^1.1.13",
     "lucide-react": "^0.402.0",
     "next": "14.2.4",
     "next-auth": "^5.0.0-beta.20",
