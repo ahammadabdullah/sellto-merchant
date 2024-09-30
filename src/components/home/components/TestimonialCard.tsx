@@ -23,7 +23,7 @@ export interface classProps {
 export default function LargeInfoCard({ className, flip }: classProps) {
   return (
     <div className=" grow flex flex-col place-items-center basis-96">
-      <div className="name_wrap flex grow w-full place-items-center gap-3 p-4 pb-3 pt-6 bg-gradient-to-t from-primary/20">
+      <div className="name_wrap flex grow w-full place-items-center gap-3 p-4 pb-3 pt-6 bg-gradient-to-t from-primary/20 mb-[-5px]">
         <Image
           className="max-w-[42px] rounded-full "
           src={testi_pfp_sample}
