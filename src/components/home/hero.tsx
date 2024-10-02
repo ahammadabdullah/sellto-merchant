@@ -26,9 +26,9 @@ export default function Component({ className }: classProps) {
   }, {});
 
   return (
-    <div className="hero_wrapper h-[100dvh] w-full overflow-hidden  relative">
-      <section className="h-full container flex flex-wrap gap-6 justify-between items-center place-content-center mt-10 main_hero_text opacity-0  relative">
-        <div className="left_content max-[1278px]:mt-[30vw] max-[1278px]:pt-16 max-[700px]:pt-2">
+    <div className="hero_wrapper min-h-[100dvh] w-full overflow-hidden  relative grid place-items-center">
+      <section className="min-h-full container flex flex-wrap gap-6 justify-between items-center place-items-center  main_hero_text opacity-0  relative">
+        <div className="left_content max-[1278px]:mt-[30vw] ">
           <div className="text_content">
             <h1 className="sm:text-6xl text-5xl font-clash font-medium">
               <span className="text-primary2">The simplest</span>

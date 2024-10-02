@@ -15,7 +15,7 @@ import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
-    <section className="container px-[1rem] max-[1000px]:px-[0.5rem] ">
+    <section className="container px-[1rem] max-[1000px]:px-[0.5rem] mt-auto">
       <footer className="rounded-t-lg border border-b-0 bg-card/55 text-card-foreground shadow-md sm:shadow-sm  p-10 relative overflow-hidden">
         <div className="top_wrap px-4 flex flex-wrap gap-6 justify-between mb-12">
           <div className="left_wrap  min-[770px]:max-w-[42%] min-[970px]:max-w-[90%]">

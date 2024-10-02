@@ -50,23 +50,23 @@ export default function Component({ className }: classProps) {
         <InfoCard
           title="Market"
           points={[
-            "Software & keys",
-            "Accounts",
-            "Digital Assets",
-            "Content & videos",
-            "Discord roles",
-            "Game powerups",
+            "Rewards",
+            "Ratings & reviews",
+            "Referral program",
+            "ticket system",
+            "Automated blacklists",
+            "Stock count",
           ]}
         ></InfoCard>
         <InfoCard
           title="Tools"
           points={[
-            "Software & keys",
-            "Accounts",
-            "Digital Assets",
-            "Content & videos",
-            "Discord roles",
-            "Game powerups",
+            "Single sign-on (SSO)",
+            "Analytics & graphs",
+            "Invite team members",
+            "Discord community",
+            "Payment logs",
+            "Auto Scheduler",
           ]}
         ></InfoCard>
       </div>

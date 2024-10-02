@@ -1,10 +1,23 @@
-import Circles from "@/components/waitlist/Ciecles";
+"use client";
 
+import Circles from "@/components/waitlist/Ciecles";
+import PageHeading from "@/components/PageHeading";
+import PricingSec from "@/components/Pricing/PricingSec";
+import Footer from "@/components/nav/Footer";
+
+import { ReactLenis, useLenis } from "lenis/react";
 export default function Home() {
   return (
-    <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
-      <h1 className="text-[3rem] font-clash">Pricing</h1>
-      <Circles />
-    </main>
+    <ReactLenis root>
+      <main className="w-full flex flex-col min-h-[100dvh] overflow-hidden">
+        <PageHeading
+          sub="Pricing"
+          text1="Boost your business without"
+          text2=" breaking your bank."
+        ></PageHeading>
+        <PricingSec></PricingSec>
+        <Footer></Footer>
+      </main>
+    </ReactLenis>
   );
 }

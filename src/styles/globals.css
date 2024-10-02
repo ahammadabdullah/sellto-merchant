@@ -80,6 +80,7 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
 .bg_primary_radial_gradient {
   background: hsl(var(--primary) / 0.03);
   background: radial-gradient(
@@ -97,7 +98,7 @@ html.lenis body {
   background: hsl(var(--foreground) / 0.01);
   background: radial-gradient(
     circle,
-    hsl(var(--foreground) / 0.2) 0%,
+    hsl(var(--foreground) / 0.3) 0%,
     hsl(var(--foreground) / 0.09) 30%,
     hsl(var(--foreground) / 0.02) 50%,
     hsl(var(--foreground) / 0) 70%
