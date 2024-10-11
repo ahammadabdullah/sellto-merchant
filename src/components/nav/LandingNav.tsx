@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/CustomButton";
 import { AlignRight, X, ChevronLast } from "lucide-react";
 
 import styles from "./LandingNav.module.css";
@@ -284,7 +284,7 @@ export default function LandingNav() {
           </Link>
         </div>
         <div className="right_wrap flex flex-wrap flex-col sm:flex-row  gap-1 w-full sm:w-auto">
-          <Link href="/auth/login" className="w-full sm:w-auto">
+          <Link href="/login" className="w-full sm:w-auto">
             <Button
               variant={"ghost"}
               className={cn(styles.link_button, "justify-start")}
@@ -293,7 +293,7 @@ export default function LandingNav() {
               Log in
             </Button>
           </Link>
-          <Link href="/auth/signup" className="w-full sm:w-auto">
+          <Link href="/dashboard" className="w-full sm:w-auto">
             <Button
               className={cn(styles.link_button, "justify-start")}
               onClick={() => navHandlder("closer")}

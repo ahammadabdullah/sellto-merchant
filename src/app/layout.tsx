@@ -105,12 +105,9 @@ const ClashDisplay = localFont({
 
 // components
 import Nav from "@/components/Nav";
-import Head from "next/head";
 import UseClientProvider from "@/components/helpers/UseClientProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { ModeToggle } from "@/components/ui/themeButton";
-import { interpolate } from "gsap-trial/dist";
-import LandingNav from "@/components/nav/LandingNav";
 
 export default function RootLayout({
   children,
@@ -119,7 +116,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <Head></Head> */}
       <body
         className={cn(
           "min-h-[100dvh] bg-background font-sans antialiased  w-full ",
@@ -134,7 +130,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <UseClientProvider>
-            <LandingNav />
+            {/* <LandingNav /> */}
             {children}
           </UseClientProvider>
           <ModeToggle />

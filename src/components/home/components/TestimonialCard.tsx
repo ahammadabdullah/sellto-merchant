@@ -8,7 +8,6 @@ import Link from "next/link";
 // import { useGSAP } from "@gsap/react";
 // import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 // import { AlignRight, X, ChevronLast } from "lucide-react";
 
 import testi_pfp_sample from "@/assets/testi_pfp_sample.png";

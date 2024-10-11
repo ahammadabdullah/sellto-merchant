@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 // components
-import { Button } from "../ui/button";
+import { Button } from "../ui/CustomButton";
 // import Circles from "@/components/waitlist/Ciecles";
 // import SectionTitle from "@/components/SecTitle";
 import PricingCard from "@/components/Pricing/PricingCard";

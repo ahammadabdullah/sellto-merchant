@@ -16,7 +16,6 @@ import InfoCardsSec from "@/components/home/InfoCards";
 import GlobalMap from "@/components/home/globalMap";
 import Testimonials from "@/components/home/Testimonials";
 import CTABanner from "@/components/home/CTABanner";
-import Footer from "@/components/nav/Footer";
 
 export default function Home() {
   return (
@@ -28,7 +27,6 @@ export default function Home() {
         <GlobalMap></GlobalMap>
         <Testimonials></Testimonials>
         <CTABanner></CTABanner>
-        <Footer></Footer>
       </main>
     </ReactLenis>
   );

@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +6,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-import { Button } from "../ui/button";
+import { Button } from "../ui/CustomButton";
 import Circles from "@/components/waitlist/Ciecles";
 
 import hero_company_icons from "@/assets/home/hero_company_icons.png";

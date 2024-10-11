@@ -3,7 +3,6 @@
 import Circles from "@/components/waitlist/Ciecles";
 import PageHeading from "@/components/PageHeading";
 import PricingSec from "@/components/Pricing/PricingSec";
-import Footer from "@/components/nav/Footer";
 
 import { ReactLenis, useLenis } from "lenis/react";
 export default function Home() {
@@ -16,7 +15,6 @@ export default function Home() {
           text2=" breaking your bank."
         ></PageHeading>
         <PricingSec></PricingSec>
-        <Footer></Footer>
       </main>
     </ReactLenis>
   );

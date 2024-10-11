@@ -187,7 +187,7 @@ export default function Footer() {
               </Link>
             </li>
           </ul>
-          <p className="text-sm opacity-70">Copyright © Rive Inc </p>
+          <p className="text-sm opacity-70">Copyright © Sellto.io </p>
         </div>
         <div className="bg_primary_radial_gradient  min-[430px]:w-[80%] w-[120%]  aspect-square rounded-full absolute left-[50%] translate-x-[-50%] min-[1250px]:bottom-[-250%] min-[1000px]:bottom-[-200%] min-[806px]:bottom-[-150%] min-[735px]:bottom-[-90%] min-[496px]:bottom-[-50%] bottom-[-30%] opacity-90 pointer-events-none"></div>
       </footer>

@@ -6,7 +6,7 @@ import Link from "next/link";
 // import { useGSAP } from "@gsap/react";
 
 // components
-import { Button } from "../ui/button";
+import { Button } from "../ui/CustomButton";
 import SectionTitle from "@/components/SecTitle";
 
 // assets
