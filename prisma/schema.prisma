@@ -28,3 +28,48 @@ model Merchant {
   password  String
   createdAt DateTime @default(now())
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String
+  password  String
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      String   @default("merchant")
+  status    String   @default("pending")
+  shop      Shop[]
+}
+
+model Shop {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  image     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  price     Float
+  image     String?
+  shopId    String
+  shop      Shop       @relation(fields: [shopId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  category  Category[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
