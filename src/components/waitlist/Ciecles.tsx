@@ -30,14 +30,14 @@ export default function Component({ className }: classProps) {
       </div> */}
       <div
         className={cn(
-          "hero_circles_wrap pointer-events-none absolute top-0 z-[-5] h-full w-full",
+          "hero_circles_wrap pointer-events-none absolute top-0 z-[-5] h-full w-full overflow-hidden",
           className
         )}
       >
-        <div className="opacity-0 w-[760px] sm:w-[845px] circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
-        <div className="opacity-0 w-[1050px] z-[-1]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
-        <div className="opacity-0 w-[1250px] z-[-2]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
-        <div className="opacity-0 w-[1450px] z-[-3]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
+        <div className="opacity-0 w-[600px] sm:w-[845px] circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
+        <div className="opacity-0 w-[650px] sm:w-[1050px] z-[-1]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
+        <div className="opacity-0 w-[700px] sm:w-[1250px] z-[-2]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
+        <div className="opacity-0 w-[750px] sm:w-[1450px] z-[-3]  circel boder_primary_gradient aspect-square rounded-full absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] main_hero_circle"></div>
       </div>
     </>
   );

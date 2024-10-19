@@ -59,6 +59,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 .bg_primary_radial_gradient {
   background: hsl(var(--primary) / 0.03);
   background: radial-gradient(
@@ -76,7 +98,7 @@
   background: hsl(var(--foreground) / 0.01);
   background: radial-gradient(
     circle,
-    hsl(var(--foreground) / 0.2) 0%,
+    hsl(var(--foreground) / 0.3) 0%,
     hsl(var(--foreground) / 0.09) 30%,
     hsl(var(--foreground) / 0.02) 50%,
     hsl(var(--foreground) / 0) 70%
@@ -98,6 +120,7 @@
   background-position: center;
   object-fit: fill;
 }
+
 .boder_primary_gradient {
   background: hsl(var(--primary) / 0.03);
   background: radial-gradient(
@@ -130,4 +153,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.bg_liner_overlay_gradient {
+  background: linear-gradient(
+    180deg,
+    hsl(var(--background) / 0) 0%,
+    hsl(var(--background) / 1) 100%
+  );
+  /* background: red; */
 }

@@ -63,7 +63,7 @@ export default function Home() {
   return (
     <main className="h-[100dvh] grid place-items-center overflow-hidden relative">
       <Button
-        className="fixed right-0 top-0 m-4 text-sm"
+        className="fixed right-0 top-[0.6rem] m-4 text-sm hidden sm:flex"
         onClick={() => handleChange(language)}
       >
         <Image

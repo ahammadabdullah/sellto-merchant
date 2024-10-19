@@ -2,10 +2,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../ui/button";
 
 export interface classProps {
-  className?: string;
   t: any;
 }
-export default function Component({ className, t }: classProps) {
+export default function Component({ t }: classProps) {
   return (
     <>
       <h1 className="sm:text-6xl text-5xl font-clash font-medium">
