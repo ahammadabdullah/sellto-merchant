@@ -5,88 +5,35 @@ import Image from "next/image";
 
 // components
 import { Button } from "@/components/ui/CustomButton";
-import ChartSec from "@/components/dashboard/root/ChartsSec";
-import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
-import Hero from "@/components/home/hero";
+// import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
 
-import { ChevronDown } from "lucide-react";
-import { auth } from "@/auth";
+import { ShoppingBasket, Ticket, Palette } from "lucide-react";
+import PageTitle from "@/components/dashboard/PageTitle";
 
 export default async function Home() {
-  // const layout = cookies().get("react-resizable-panels:layout:mail");
-  // const collapsed = cookies().get("react-resizable-panels:collapsed");
-
-  // const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-
-  // const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
-  const session = await auth();
-  // console.log(session);
-
   return (
     <main className="p-8">
-      <div className="flex flex-wrap gap-6 mb-10 place-items-center justify-between">
-        <div className="text_group flex flex-col gap-2">
-          <h1 className="font-clash text-4xl font-medium">
-            Welcome {"Rashid..."}
-          </h1>
-          <p className="text-sm mt-[-0.7em] opacity-60">
-            Here’s the latest data on your store {"{store name}"}
-          </p>
-        </div>
-        <Button className="px-6 pr-4">
-          Last 7 Days
-          <ChevronDown />
-        </Button>
-      </div>
-      <ChartSec className="mb-10"></ChartSec>
+      <PageTitle
+        Icon={ShoppingBasket}
+        title="Orders"
+        subTitle="(total 5 orders)"
+      />
       <div className=" opacity-65">
-        Lorem ipsum odor amet, consectetuer advising elit. Litora vestibulum
-        mauris fermentum ipsum leo hendrerit. Tempor malesuada sapien malesuada
-        curabitur varius quis, habitasse ut sagittis. Suscipit sapien vel
-        elementum augue hac hac venenatis senectus. Ullamcorper odio pharetra
-        tempor fames donec commodo neque nam. Egestas per gravida porttitor erat
-        interdum tellus natoque. Elit aenean sagittis suspendisse vestibulum,
-        porta class hac vulputate. Ante ante bibendum ex tincidunt leo torquent,
-        et sapien. Massa auctor venenatis maximus sed eget cursus netus mauris.
-        Etiam praesent finibus turpis, nascetur litora dictumst ex viverra id.
-        Est himenaeos pulvinar molestie egestas velit per. Sem lectus fames
-        dapibus mattis blandit mauris, curabitur conubia. Primis inceptos rutrum
-        suscipit sodales posuere maecenas primis auctor. Placerat metus lacinia
-        molestie donec, rutrum facilisi. Aliquam ultricies non suscipit eget
-        laoreet. Praesent semper id pulvinar ullamcorper torquent mollis orci
-        quis. Ipsum vivamus commodo accumsan odio bibendum litora. Class semper
-        facilisis aliquam adipiscing porta integer. Nec ex ad mus massa cursus
-        blandit. Amet eros tincidunt hac ad per sociosqu massa. Sodales
-        ultricies facilisi vestibulum nascetur potenti, viverra tristique
-        iaculis. Dis fringilla molestie ut morbi sociosqu neque placerat. Libero
-        ac morbi ante ac himenaeos est sagittis. Himenaeos tortor auctor laoreet
-        hendrerit mus eros. Duis eget dictum efficitur lobortis mus; imperdiet
-        inceptos. Luctus eleifend placerat imperdiet in imperdiet vitae
-        hendrerit. Porttitor interdum orci nisi metus condimentum ullamcorper
-        sagittis sociosqu. Quisque diam cubilia; proin eget fringilla
-        consectetur. Platea felis tellus leo massa accumsan. Diam montes dis
-        luctus quisque, hac porta sed sollicitudin nisi. Habitasse felis commodo
-        gravida metus hac maximus nibh dolor ullamcorper. Nisi et cras quis duis
-        et himenaeos. Suspendisse fames eu tristique dolor conubia cursus eu.
-        Laoreet proin odio dictum maximus congue eu suscipit. Habitant at amet;
-        sociosqu venenatis diam nisl. Interdum integer aliquet erat; auctor
-        ullamcorper libero pulvinar malesuada? Facilisis malesuada inceptos
-        etiam lectus quam; euismod odio ac. Taciti per augue leo arcu eleifend
-        ultrices non. Dictumst luctus sociosqu eros amet auctor aenean libero
-        metus quisque. Maximus nisi dis; quam habitasse nibh dui dui. Mattis per
-        neque blandit nullam eu congue lacinia curabitur. Auctor fames semper
-        taciti placerat litora finibus neque. Fames nisl per ornare mus morbi
-        luctus aliquet rhoncus sodales. Proin enim mi mi convallis habitasse
-        etiam. Purus libero tellus cubilia per curabitur elementum. Quam aenean
-        lobortis ultrices curabitur; dapibus felis bibendum purus. Posuere at
-        curabitur; tempus mi bibendum ex lorem. Sollicitudin aliquam inceptos
-        orci fusce id, cursus vitae commodo. Bibendum eget felis; enim
-        pellentesque rhoncus lectus feugiat phasellus. Libero tellus posuere
-        taciti lobortis eget dapibus potenti. Hac facilisi pharetra ante
-        himenaeos sed, lacinia habitant lectus. Faucibus maximus massa velit
-        facilisi duis netus arcu dignissim conubia. Non fermentum nascetur
-        auctor eleifend parturient et. Nulla integer magnis ultrices orci
-        volutpat iaculis nulla inceptos class. Netus nibh egestas rhoncus
+        leo arcu eleifend ultrices non. Dictumst luctus sociosqu eros amet
+        auctor aenean libero metus quisque. Maximus nisi dis; quam habitasse
+        nibh dui dui. Mattis per neque blandit nullam eu congue lacinia
+        curabitur. Auctor fames semper taciti placerat litora finibus neque.
+        Fames nisl per ornare mus morbi luctus aliquet rhoncus sodales. Proin
+        enim mi mi convallis habitasse etiam. Purus libero tellus cubilia per
+        curabitur elementum. Quam aenean lobortis ultrices curabitur; dapibus
+        felis bibendum purus. Posuere at curabitur; tempus mi bibendum ex lorem.
+        Sollicitudin aliquam inceptos orci fusce id, cursus vitae commodo.
+        Bibendum eget felis; enim pellentesque rhoncus lectus feugiat phasellus.
+        Libero tellus posuere taciti lobortis eget dapibus potenti. Hac facilisi
+        pharetra ante himenaeos sed, lacinia habitant lectus. Faucibus maximus
+        massa velit facilisi duis netus arcu dignissim conubia. Non fermentum
+        nascetur auctor eleifend parturient et. Nulla integer magnis ultrices
+        orci volutpat iaculis nulla inceptos class. Netus nibh egestas rhoncus
         sollicitudin cursus hendrerit. Convallis aliquam diam suspendisse;
         praesent eleifend gravida velit. Lacinia leo maximus erat neque
         condimentum? Convallis augue curabitur lacus ullamcorper felis habitant

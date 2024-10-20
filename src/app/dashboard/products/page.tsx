@@ -5,40 +5,19 @@ import Image from "next/image";
 
 // components
 import { Button } from "@/components/ui/CustomButton";
-import ChartSec from "@/components/dashboard/root/ChartsSec";
-import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
-import Hero from "@/components/home/hero";
+// import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
 
-import { ChevronDown } from "lucide-react";
-import { auth } from "@/auth";
+import { PackageSearch } from "lucide-react";
+import PageTitle from "@/components/dashboard/PageTitle";
 
 export default async function Home() {
-  // const layout = cookies().get("react-resizable-panels:layout:mail");
-  // const collapsed = cookies().get("react-resizable-panels:collapsed");
-
-  // const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-
-  // const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
-  const session = await auth();
-  // console.log(session);
-
   return (
     <main className="p-8">
-      <div className="flex flex-wrap gap-6 mb-10 place-items-center justify-between">
-        <div className="text_group flex flex-col gap-2">
-          <h1 className="font-clash text-4xl font-medium">
-            Welcome {"Rashid..."}
-          </h1>
-          <p className="text-sm mt-[-0.7em] opacity-60">
-            Here’s the latest data on your store {"{store name}"}
-          </p>
-        </div>
-        <Button className="px-6 pr-4">
-          Last 7 Days
-          <ChevronDown />
-        </Button>
-      </div>
-      <ChartSec className="mb-10"></ChartSec>
+      <PageTitle
+        Icon={PackageSearch}
+        title="Products"
+        subTitle="(total 20 products)"
+      />
       <div className=" opacity-65">
         Lorem ipsum odor amet, consectetuer advising elit. Litora vestibulum
         mauris fermentum ipsum leo hendrerit. Tempor malesuada sapien malesuada

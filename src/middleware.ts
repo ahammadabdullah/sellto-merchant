@@ -9,7 +9,8 @@ export async function middleware(request: any) {
   const isLoggedIn = !!session?.user;
   const { pathname } = nextUrl;
 
-  const privateRoutes = ["/dashboard", "/dashboard/:path"];
+  // const privateRoutes = ["/dashboard", "/dashboard/:path"];
+  const privateRoutes = [""];
 
   if (!isLoggedIn && privateRoutes.includes(pathname)) {
     // Handle non-public routes

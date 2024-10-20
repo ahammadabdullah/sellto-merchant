@@ -56,6 +56,7 @@ export const metadata: Metadata = {
 import SideBar from "@/components/dashboard/Sidebar";
 import TopBar from "@/components/dashboard/TopBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import SideBarProvider from "@/components/dashboard/SideBarProvider";
 import LandingNav from "@/components/nav/LandingNav";
 import Footer from "@/components/nav/Footer";
 
@@ -66,19 +67,19 @@ export default function DahsboardLayout({
 }>) {
   return (
     <>
-      <div className="w-full h-screen overflow-hidden  flex  relative">
-        <SideBar className="w-[12%]"></SideBar>
-        <div className=" h-full w-[88%] ">
+      <div className="w-full h-screen overflow-hidden flex relative">
+        <SideBar className="w-[13%] min-w-[175px]"></SideBar>
+        <div className=" h-full w-full flex flex-col overflow-hidden">
           <TopBar></TopBar>
           {/* <div className="content_wrap h-full  w-full overflow-y-scroll border-l border-t">
             {children}
           </div> */}
-          <ScrollArea className="content_wrap h-full  w-full border-l border-t rounded-tl-lg">
-            {children}
+          <ScrollArea className="content_wrap w-full h-full border-l border-t rounded-tl-lg">
+            <div>{children}</div>
           </ScrollArea>
         </div>
 
-        <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-80"></div>
+        <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-70"></div>
       </div>
       {/* {children} */}
     </>

@@ -5,55 +5,16 @@ import Image from "next/image";
 
 // components
 import { Button } from "@/components/ui/CustomButton";
-import ChartSec from "@/components/dashboard/root/ChartsSec";
-import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
-import Hero from "@/components/home/hero";
+// import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
 
-import { ChevronDown } from "lucide-react";
-import { auth } from "@/auth";
+import { Ticket } from "lucide-react";
+import PageTitle from "@/components/dashboard/PageTitle";
 
 export default async function Home() {
-  // const layout = cookies().get("react-resizable-panels:layout:mail");
-  // const collapsed = cookies().get("react-resizable-panels:collapsed");
-
-  // const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-
-  // const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
-  const session = await auth();
-  // console.log(session);
-
   return (
     <main className="p-8">
-      <div className="flex flex-wrap gap-6 mb-10 place-items-center justify-between">
-        <div className="text_group flex flex-col gap-2">
-          <h1 className="font-clash text-4xl font-medium">
-            Welcome {"Rashid..."}
-          </h1>
-          <p className="text-sm mt-[-0.7em] opacity-60">
-            Here’s the latest data on your store {"{store name}"}
-          </p>
-        </div>
-        <Button className="px-6 pr-4">
-          Last 7 Days
-          <ChevronDown />
-        </Button>
-      </div>
-      <ChartSec className="mb-10"></ChartSec>
+      <PageTitle Icon={Ticket} title="Tickets" subTitle="(total 3 tickets)" />
       <div className=" opacity-65">
-        Lorem ipsum odor amet, consectetuer advising elit. Litora vestibulum
-        mauris fermentum ipsum leo hendrerit. Tempor malesuada sapien malesuada
-        curabitur varius quis, habitasse ut sagittis. Suscipit sapien vel
-        elementum augue hac hac venenatis senectus. Ullamcorper odio pharetra
-        tempor fames donec commodo neque nam. Egestas per gravida porttitor erat
-        interdum tellus natoque. Elit aenean sagittis suspendisse vestibulum,
-        porta class hac vulputate. Ante ante bibendum ex tincidunt leo torquent,
-        et sapien. Massa auctor venenatis maximus sed eget cursus netus mauris.
-        Etiam praesent finibus turpis, nascetur litora dictumst ex viverra id.
-        Est himenaeos pulvinar molestie egestas velit per. Sem lectus fames
-        dapibus mattis blandit mauris, curabitur conubia. Primis inceptos rutrum
-        suscipit sodales posuere maecenas primis auctor. Placerat metus lacinia
-        molestie donec, rutrum facilisi. Aliquam ultricies non suscipit eget
-        laoreet. Praesent semper id pulvinar ullamcorper torquent mollis orci
         quis. Ipsum vivamus commodo accumsan odio bibendum litora. Class semper
         facilisis aliquam adipiscing porta integer. Nec ex ad mus massa cursus
         blandit. Amet eros tincidunt hac ad per sociosqu massa. Sodales
