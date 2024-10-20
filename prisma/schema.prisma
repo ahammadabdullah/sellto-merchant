@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -39,37 +33,51 @@ model User {
   updatedAt DateTime @updatedAt
   role      String   @default("merchant")
   status    String   @default("pending")
+  Order     Order[]
   shop      Shop[]
 }
 
 model Shop {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  image     String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
-  userId    Int
-  user      User      @relation(fields: [userId], references: [id])
+  id         String     @id @default(uuid())
+  name       String     @unique
+  image      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  userId     Int
+  categories Category[]
+  products   Product[]
+  user       User       @relation(fields: [userId], references: [id])
 }
 
 model Product {
-  id        String     @id @default(uuid())
-  name      String     @unique
+  name      String   @unique
   price     Float
   image     String?
   shopId    String
-  shop      Shop       @relation(fields: [shopId], references: [id])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  category  Category[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  order     Order[]
+  shop      Shop     @relation(fields: [shopId], references: [id])
 }
 
 model Category {
-  id        String   @id @default(uuid())
   name      String   @unique
-  productId String
-  product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  shopId    String
+  shop      Shop     @relation(fields: [shopId], references: [id])
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }

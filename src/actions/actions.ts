@@ -112,3 +112,80 @@ export async function signUp(prevState: State, formData: FormData) {
     };
   }
 }
+
+// get all the products by shopId
+
+export async function getAllProductsByShopId(shopId: string) {
+  const products = await prisma.product.findMany({
+    where: {
+      shopId: shopId as string,
+    },
+  });
+  return products;
+}
+
+// add a product by shopId
+
+export async function addProductByShopId(shopId: string, productData: any) {
+  const product = await prisma.product.create({
+    data: {
+      ...productData,
+      shopId,
+    },
+  });
+  return product;
+}
+
+// get a product by productId
+export async function getProductById(productId: string) {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: Number(productId),
+    },
+  });
+  return product;
+}
+
+// update a product by productId
+export async function updateProductById(productId: string, productData: any) {
+  const product = await prisma.product.update({
+    where: {
+      id: Number(productId),
+    },
+    data: {
+      ...productData,
+    },
+  });
+  return product;
+}
+
+// delete a product by productId
+export async function deleteProductById(productId: string) {
+  const product = await prisma.product.delete({
+    where: {
+      id: Number(productId),
+    },
+  });
+  return product;
+}
+
+// get all the categories by shopId
+export async function getAllCategoriesByShopId(shopId: string) {
+  const categories = await prisma.category.findMany({
+    where: {
+      shopId: shopId as string,
+    },
+  });
+  return categories;
+}
+
+// add a category by shopId
+export async function addCategoryByShopId(shopId: string, categoryData: any) {
+  const category = await prisma.category.create({
+    data: {
+      ...categoryData,
+      shopId,
+    },
+  });
+  return category;
+}
