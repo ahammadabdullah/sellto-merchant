@@ -189,3 +189,128 @@ export async function addCategoryByShopId(shopId: string, categoryData: any) {
   });
   return category;
 }
+
+// get recent orders by shopId
+
+export async function getRecentOrdersByShopId(shopId: string) {
+  const orders = await prisma.order.findMany({
+    where: {
+      shopId: shopId as string,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 5,
+  });
+  return orders;
+}
+
+// export async function addOrder() {
+//   const order = await prisma.order.createMany({
+//     data: [
+//       {
+//         userId: 2,
+//         userName: "John Doe",
+//         revenue: 150.5,
+//         productId: 1,
+//         quantity: 3,
+//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
+//         status: "completed",
+//         createdAt: "2024-10-01T10:30:00Z",
+//         updatedAt: "2024-10-03T15:00:00Z",
+//       },
+//       {
+//         userId: 2,
+//         userName: "Jane Smith",
+//         revenue: 75.0,
+//         productId: 2,
+//         quantity: 1,
+//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
+//         status: "pending",
+//         createdAt: "2024-10-02T09:15:00Z",
+//         updatedAt: "2024-10-02T09:15:00Z",
+//       },
+//       {
+//         userId: 2,
+//         userName: "Bob Johnson",
+//         revenue: 200.0,
+//         productId: 3,
+//         quantity: 5,
+//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
+//         status: "shipped",
+//         createdAt: "2024-10-04T13:45:00Z",
+//         updatedAt: "2024-10-05T11:30:00Z",
+//       },
+//       {
+//         userId: 2,
+//         userName: "Alice Brown",
+//         revenue: 320.75,
+//         productId: 4,
+//         quantity: 7,
+//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
+//         status: "delivered",
+//         createdAt: "2024-10-05T08:20:00Z",
+//         updatedAt: "2024-10-06T17:00:00Z",
+//       },
+//       {
+//         userId: 2,
+//         userName: "Charlie Wilson",
+//         revenue: 50.0,
+//         productId: 2,
+//         quantity: 2,
+//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
+//         status: "canceled",
+//         createdAt: "2024-10-06T11:10:00Z",
+//         updatedAt: "2024-10-07T09:00:00Z",
+//       },
+//     ],
+//   });
+//   return order;
+// }
+
+// export async function addShop() {
+//   try {
+//     const shop = await prisma.shop.create({
+//       data: {
+//         name: "Shop 2",
+//         image: "/shop_img.png",
+//         userId: 1,
+//       },
+//     });
+//     return shop;
+//   } catch (error) {
+//     console.error("Error creating shop:", error);
+//     throw error;
+//   }
+// }
+
+// export async function addProducts() {
+//   try {
+//     const product3 = await prisma.product.create({
+//       data: {
+//         name: "Product 3",
+//         price: 49.99,
+//         image: "/product3_img.png",
+//         shopId: "59727a20-e0e6-42f7-b673-8fdcc1c5fe88", // reference to existing shop
+//         stock: 100,
+//         type: "Apparel",
+//       },
+//     });
+
+//     const product4 = await prisma.product.create({
+//       data: {
+//         name: "Product 4",
+//         price: 99.99,
+//         image: "/product4_img.png",
+//         shopId: "59727a20-e0e6-42f7-b673-8fdcc1c5fe88", // reference to existing shop
+//         stock: 20,
+//         type: "Footwear",
+//       },
+//     });
+
+//     return { product3, product4 };
+//   } catch (error) {
+//     console.error("Error creating products:", error);
+//     throw error;
+//   }
+// }

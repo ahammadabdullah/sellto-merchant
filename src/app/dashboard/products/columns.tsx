@@ -17,7 +17,6 @@ import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
 // You can use a Zod schema here if you want.
 
 export type Product = {
-  empty: " ";
   id: string;
   product_name: string;
   image: string;
@@ -36,6 +35,7 @@ export const columns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const pd = row.original;
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { toast } = useToast();
 
       return (
@@ -76,16 +76,13 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
   },
-  {
-    accessorKey: "empty",
-    header: () => <div className=""></div>,
-  },
 
   {
     accessorKey: "id",
     header: "#ID",
     cell: ({ row }) => {
       const value: string = row.getValue("id");
+      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { toast } = useToast();
 
       return (

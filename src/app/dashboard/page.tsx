@@ -14,35 +14,12 @@ import { auth } from "@/auth";
 
 import { RecentOrders, columns } from "./columns";
 import { DataTable } from "../../components/helpers/data-table";
+import { getRecentOrdersByShopId } from "@/actions/actions";
 
 async function getRecentOrdersData(): Promise<RecentOrders[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      empty: " ",
-      id: "728ed52f",
-      customer_name: "Customer N1",
-      time_date: Date.now(),
-      revenue: 10,
-      status: "Pending",
-    },
-    {
-      empty: " ",
-      id: "728ed52f",
-      customer_name: "Customer N2",
-      time_date: Date.now(),
-      revenue: 50,
-      status: "Completed",
-    },
-    {
-      empty: " ",
-      id: "728ed52f",
-      customer_name: "Customer N3",
-      time_date: Date.now() + 3000,
-      revenue: 100,
-      status: "Pending",
-    },
-  ];
+  const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
+  const orders = await getRecentOrdersByShopId(shopId);
+  return orders;
 }
 export default async function Home() {
   // const layout = cookies().get("react-resizable-panels:layout:mail");

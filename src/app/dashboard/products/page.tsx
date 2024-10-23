@@ -18,7 +18,6 @@ async function getData(): Promise<Product[]> {
   // Fetch data from your API here.
   return [
     {
-      empty: " ",
       id: "728ed5fwaf2f",
       product_name: "Product N1",
       image: "/product_img.png",
@@ -29,7 +28,6 @@ async function getData(): Promise<Product[]> {
       price: 100,
     },
     {
-      empty: " ",
       id: "728fwfwaf2f",
       product_name: "Product N2",
       image: "/product_img.png",
@@ -40,7 +38,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728geaf2f",
       product_name: "Product N3",
       image: "/product_img.png",
@@ -51,7 +48,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728ed5fwaf2f",
       product_name: "Product N1",
       image: "/product_img.png",
@@ -62,7 +58,6 @@ async function getData(): Promise<Product[]> {
       price: 100,
     },
     {
-      empty: " ",
       id: "728fwfwaf2f",
       product_name: "Product N2",
       image: "/product_img.png",
@@ -73,7 +68,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728geaf2f",
       product_name: "Product N3",
       image: "/product_img.png",
@@ -84,7 +78,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728ed5fwaf2f",
       product_name: "Product N1",
       image: "/product_img.png",
@@ -95,7 +88,6 @@ async function getData(): Promise<Product[]> {
       price: 100,
     },
     {
-      empty: " ",
       id: "728fwfwaf2f",
       product_name: "Product N2",
       image: "/product_img.png",
@@ -106,7 +98,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728geaf2f",
       product_name: "Product N3",
       image: "/product_img.png",
@@ -117,7 +108,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728fwfwaf2f",
       product_name: "Product N2",
       image: "/product_img.png",
@@ -128,7 +118,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728geaf2f",
       product_name: "Product N3",
       image: "/product_img.png",
@@ -139,7 +128,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728ed5fwaf2f",
       product_name: "Product N1",
       image: "/product_img.png",
@@ -150,7 +138,6 @@ async function getData(): Promise<Product[]> {
       price: 100,
     },
     {
-      empty: " ",
       id: "728fwfwaf2f",
       product_name: "Product N2",
       image: "/product_img.png",
@@ -161,7 +148,6 @@ async function getData(): Promise<Product[]> {
       price: 600,
     },
     {
-      empty: " ",
       id: "728geaf2f",
       product_name: "Product N3",
       image: "/product_img.png",

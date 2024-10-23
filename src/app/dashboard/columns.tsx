@@ -13,17 +13,21 @@ import { dateFormatter } from "@/lib/utils";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type RecentOrders = {
-  empty: " ";
-  id: string;
-  customer_name: string;
-  time_date: number;
-  status: "Pending" | "Completed" | "Canceled";
+  id: string | number;
+  userId: string | number;
+  userName: string;
+  createdAt: Date;
+  productId: string | number;
+  quantity: number;
+  shopId: string;
+  updatedAt: Date;
+  status: string;
   revenue: number;
 };
 
 export const columns: ColumnDef<RecentOrders>[] = [
   {
-    accessorKey: "customer_name",
+    accessorKey: "userName",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -31,23 +35,16 @@ export const columns: ColumnDef<RecentOrders>[] = [
         className="ml-2"
       />
     ),
-    cell: ({ row }) => (
-      <div className="pl-4">{row.getValue("customer_name")}</div>
-    ),
-  },
-  {
-    accessorKey: "empty",
-    header: () => <div className=""></div>,
+    cell: ({ row }) => <div className="pl-4">{row.getValue("userName")}</div>,
   },
 
   {
-    accessorKey: "time_date",
+    accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Time & Date" />
     ),
     cell: ({ row }) => {
-      const cell_value: number = row.getValue("time_date");
-      // console.log(cell_value);
+      const cell_value: Date = row.getValue("createdAt");
       return <div className="">{dateFormatter(cell_value)}</div>;
     },
   },
@@ -57,19 +54,22 @@ export const columns: ColumnDef<RecentOrders>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const cell_value: "Pending" | "Completed" | "Canceled" =
-        row.getValue("status");
-      // let color = "#FFAE5C";
-      // if (cell_value === "Completed") color = "#1ED760";
-      // if (cell_value === "Canceled") color = "#FF5C5C";
+      const cell_value:
+        | "pending"
+        | "completed"
+        | "canceled"
+        | "delivered"
+        | "shipped" = row.getValue("status");
 
       return (
         <div
           className={cn(
             "text-center p-[0.35rem] max-w-[115px] rounded font-bold ",
-            cell_value === "Completed" && `bg-[#1ED760]/20 text-[#1ED760]`,
-            cell_value === "Canceled" && `bg-[#FF5C5C]/20 text-[#FF5C5C]`,
-            cell_value === "Pending" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`
+            cell_value === "completed" && `bg-[#1ED760]/20 text-[#1ED760]`,
+            cell_value === "canceled" && `bg-[#FF5C5C]/20 text-[#FF5C5C]`,
+            cell_value === "pending" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`,
+            cell_value === "delivered" && `bg-[#1ED760]/20 text-[#1ED760]`,
+            cell_value === "shipped" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`
           )}
         >
           {cell_value}

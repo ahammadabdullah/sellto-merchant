@@ -35,8 +35,9 @@ export const generateUniqueCode = (currentTime: any): string | null => {
   return uniqueCode;
 };
 
-export function dateFormatter(isoDateTime: number) {
-  const date = new Date(isoDateTime);
+export function dateFormatter(isoDateTime: Date | string) {
+  const date =
+    typeof isoDateTime === "string" ? new Date(isoDateTime) : isoDateTime; // Already a Date object
 
   const result = date_fns_formatter(date, "hh:mmaaa, dd LLL yyyy");
   return result;
