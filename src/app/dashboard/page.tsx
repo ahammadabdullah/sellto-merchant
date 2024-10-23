@@ -19,7 +19,6 @@ async function getRecentOrdersData(): Promise<RecentOrders[]> {
   // Fetch data from your API here.
   return [
     {
-      empty: " ",
       id: "728ed52f",
       customer_name: "Customer N1",
       time_date: Date.now(),
@@ -27,7 +26,6 @@ async function getRecentOrdersData(): Promise<RecentOrders[]> {
       status: "Pending",
     },
     {
-      empty: " ",
       id: "728ed52f",
       customer_name: "Customer N2",
       time_date: Date.now(),
@@ -35,7 +33,6 @@ async function getRecentOrdersData(): Promise<RecentOrders[]> {
       status: "Completed",
     },
     {
-      empty: " ",
       id: "728ed52f",
       customer_name: "Customer N3",
       time_date: Date.now() + 3000,

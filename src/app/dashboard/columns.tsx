@@ -13,7 +13,6 @@ import { dateFormatter } from "@/lib/utils";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type RecentOrders = {
-  empty: " ";
   id: string;
   customer_name: string;
   time_date: number;
@@ -36,7 +35,7 @@ export const columns: ColumnDef<RecentOrders>[] = [
     ),
   },
   {
-    accessorKey: "empty",
+    id: "empty",
     header: () => <div className=""></div>,
   },
 

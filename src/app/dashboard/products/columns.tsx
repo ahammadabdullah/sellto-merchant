@@ -18,7 +18,6 @@ import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
 // You can use a Zod schema here if you want.
 
 export type Product = {
-  empty: " ";
   id: string;
   product_name: string;
   image: string;
@@ -80,7 +79,7 @@ export const columns: ColumnDef<Product>[] = [
               ></CopyButton>
             </div>
             <p className="text-xs text-muted-foreground">
-              (created at{dateFormatter(pd.created_at)})
+              (created at {dateFormatter(pd.created_at)})
             </p>
           </div>
         </div>
@@ -88,7 +87,7 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "empty",
+    id: "empty",
     header: () => <div className=""></div>,
   },
 
