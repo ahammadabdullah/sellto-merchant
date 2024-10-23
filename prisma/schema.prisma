@@ -50,17 +50,18 @@ model Shop {
 }
 
 model Product {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  price     Float
-  image     String?
-  shopId    String
-  stock     Int      @default(0)
-  type      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  order     Order[]
-  shop      Shop     @relation(fields: [shopId], references: [id])
+  id           Int      @id @default(autoincrement())
+  product_name String
+  price        Float
+  image        String?
+  shopId       String
+  stock        Int      @default(0)
+  type         String
+  createdAt    DateTime @default(now())
+  status       String   @default("active")
+  updatedAt    DateTime @updatedAt
+  order        Order[]
+  shop         Shop     @relation(fields: [shopId], references: [id])
 }
 
 model Category {
@@ -73,16 +74,16 @@ model Category {
 }
 
 model Order {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  userName  String
-  revenue   Float
-  productId Int
-  quantity  Int
-  shopId    String
-  status    String   @default("pending")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  product   Product  @relation(fields: [productId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  customer_name String
+  revenue       Float
+  productId     Int
+  quantity      Int
+  shopId        String
+  status        String   @default("pending")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  product       Product  @relation(fields: [productId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
 }

@@ -13,17 +13,19 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/hooks/use-toast";
 import { toast as SonnerToast } from "sonner";
 import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
 export type Product = {
-  id: string;
+  id: number;
   product_name: string;
-  image: string;
-  created_at: number;
-  type: "file" | "image" | "video" | "audio" | "key" | "software" | "N/A";
-  stock: number | "N/A";
-  status: "Unpublished" | "Active" | "Discontinued";
+  image: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  type: string;
+  stock: number;
+  shopId: string;
   price: number;
 };
 
@@ -41,7 +43,7 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <div className="flex flex-wrap gap-2 place-items-center">
           <Image
-            src={pd.image}
+            src={pd?.image || "/path/to/fallback-image.jpg"}
             alt="img"
             width={40}
             height={40}
@@ -69,7 +71,7 @@ export const columns: ColumnDef<Product>[] = [
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              (created at{dateFormatter(pd.created_at)})
+              (created at{dateFormatter(pd.createdAt)})
             </p>
           </div>
         </div>
@@ -130,15 +132,15 @@ export const columns: ColumnDef<Product>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const cell_value: "Unpublished" | "Active" | "Discontinued" =
+      const cell_value: "unpublished" | "active" | "discontinued" =
         row.getValue("status");
       return (
         <div
           className={cn(
             "text-center p-[0.35rem] max-w-[115px] rounded font-bold ",
-            cell_value === "Unpublished" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`,
-            cell_value === "Active" && `bg-[#1ED760]/20 text-[#1ED760]`,
-            cell_value === "Discontinued" && `bg-[#FF5C5C]/20 text-[#FF5C5C]`
+            cell_value === "unpublished" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`,
+            cell_value === "active" && `bg-[#1ED760]/20 text-[#1ED760]`,
+            cell_value === "discontinued" && `bg-[#FF5C5C]/20 text-[#FF5C5C]`
           )}
         >
           {cell_value}

@@ -15,7 +15,7 @@ import { dateFormatter } from "@/lib/utils";
 export type RecentOrders = {
   id: string | number;
   userId: string | number;
-  userName: string;
+  customer_name: string;
   createdAt: Date;
   productId: string | number;
   quantity: number;
@@ -27,7 +27,7 @@ export type RecentOrders = {
 
 export const columns: ColumnDef<RecentOrders>[] = [
   {
-    accessorKey: "userName",
+    accessorKey: "customer_name",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -35,7 +35,9 @@ export const columns: ColumnDef<RecentOrders>[] = [
         className="ml-2"
       />
     ),
-    cell: ({ row }) => <div className="pl-4">{row.getValue("userName")}</div>,
+    cell: ({ row }) => (
+      <div className="pl-4">{row.getValue("customer_name")}</div>
+    ),
   },
 
   {
