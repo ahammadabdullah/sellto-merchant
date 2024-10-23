@@ -3,15 +3,16 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { Copy, Pencil, Trash2, ArrowUpDown } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CopyButton } from "@/components/CopyButton";
 
 import { DataTableColumnHeader } from "@/components/helpers/DataTableColumnHeader";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/hooks/use-toast";
-import { toast as SonnerToast } from "sonner";
+
 import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 // This type is used to define the shape of our data.
@@ -31,6 +32,31 @@ export type Product = {
 
 export const columns: ColumnDef<Product>[] = [
   {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value: any) =>
+          table.toggleAllPageRowsSelected(!!value)
+        }
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value: any) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: true,
+    enableHiding: false,
+  },
+
+  {
     accessorKey: "product_name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Product Name" />
@@ -38,7 +64,7 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const pd = row.original;
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { toast } = useToast();
+      // const { toast } = useToast();
 
       return (
         <div className="flex flex-wrap gap-2 place-items-center">
@@ -53,22 +79,10 @@ export const columns: ColumnDef<Product>[] = [
           <div className="flex flex-col">
             <div className="flex place-items-center gap-1">
               <h2 className="text-lg">{pd.product_name}</h2>
-
-              <Button
+              <CopyButton
                 className="p-1 px-3"
-                variant={"ghost"}
-                size={"sm"}
-                onClick={() => {
-                  navigator.clipboard.writeText(pd.product_name).then(() => {
-                    toast({
-                      title: "Product name copied: ",
-                      description: pd.product_name,
-                    });
-                  });
-                }}
-              >
-                <Copy size={15} />
-              </Button>
+                copyContent={pd.product_name}
+              ></CopyButton>
             </div>
             <p className="text-xs text-muted-foreground">
               (created at{dateFormatter(pd.createdAt)})
@@ -85,29 +99,11 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const value: string = row.getValue("id");
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const { toast } = useToast();
+      // const { toast } = useToast();
 
       return (
         <div className="font-medium">
-          {value}{" "}
-          <Button
-            variant={"ghost"}
-            size={"sm"}
-            onClick={() => {
-              navigator.clipboard.writeText(value).then(() => {
-                toast({ title: "ID Copied", description: "ID: " + value });
-                // SonnerToast("ID Copied", {
-                //   description: "ID: " + value,
-                //   action: {
-                //     label: "close",
-                //     onClick: () => console.log("toast closed"),
-                //   },
-                // });
-              });
-            }}
-          >
-            <Copy size={15} />
-          </Button>
+          {value} <CopyButton copyContent={value}></CopyButton>
         </div>
       );
     },
