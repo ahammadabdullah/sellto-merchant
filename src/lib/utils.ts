@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { format as date_fns_formatter } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -33,3 +34,17 @@ export const generateUniqueCode = (currentTime: any): string | null => {
   if (uniqueCode) return uniqueCode.toString();
   return uniqueCode;
 };
+
+export function dateFormatter(isoDateTime: number) {
+  const date = new Date(isoDateTime);
+
+  const result = date_fns_formatter(date, "hh:mmaaa, dd LLL yyyy");
+  return result;
+}
+
+export function capitalizeFirstLetter(
+  string: string | undefined
+): string | undefined {
+  if (!string) return string;
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

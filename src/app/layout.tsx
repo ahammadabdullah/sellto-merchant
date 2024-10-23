@@ -107,6 +107,7 @@ const ClashDisplay = localFont({
 import Nav from "@/components/Nav";
 import UseClientProvider from "@/components/helpers/UseClientProvider";
 import { Toaster } from "@/components/ui/toaster";
+import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/ui/themeButton";
 
 export default function RootLayout({
@@ -136,6 +137,7 @@ export default function RootLayout({
           <ModeToggle />
         </ThemeProvider>
         <Toaster />
+        <SonnerToaster />
       </body>
     </html>
   );

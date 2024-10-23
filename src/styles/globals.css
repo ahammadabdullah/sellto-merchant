@@ -65,6 +65,28 @@ html.lenis body {
   height: auto;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted-foreground) / 0.15);
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.26);
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
