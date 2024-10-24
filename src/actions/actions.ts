@@ -200,7 +200,20 @@ export async function getRecentOrdersByShopId(shopId: string) {
     orderBy: {
       createdAt: "desc",
     },
-    take: 5,
+    take: 2,
+  });
+  return orders;
+}
+
+// get all the orders by shopId
+export async function getAllOrdersByShopId(shopId: string) {
+  const orders = await prisma.order.findMany({
+    where: {
+      shopId: shopId as string,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return orders;
 }

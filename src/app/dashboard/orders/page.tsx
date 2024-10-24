@@ -14,11 +14,14 @@ import { DataTable } from "@/components/helpers/data-table";
 
 import PageTitle from "@/components/dashboard/PageTitle";
 
-import { getRecentOrdersByShopId } from "@/actions/actions";
+import {
+  getAllOrdersByShopId,
+  getRecentOrdersByShopId,
+} from "@/actions/actions";
 async function getData(): Promise<AllOrders[]> {
   // Fetch data from your API here.
   const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
-  const orders = await getRecentOrdersByShopId(shopId);
+  const orders = await getAllOrdersByShopId(shopId);
   return orders;
 }
 export default async function Home() {
