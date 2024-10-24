@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { SquareArrowOutUpRight, ArrowUpDown, Trash2 } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 
@@ -61,13 +62,28 @@ export const columns: ColumnDef<AllOrders>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="pl-4">{row.getValue("customer_name")}</div>
+      <div className="pl-4">
+        {row.getValue("customer_name")}{" "}
+        <CopyButton
+          copyContent={row.getValue("customer_name")}
+          alertTitle="ID Copied:"
+        ></CopyButton>
+      </div>
     ),
   },
 
   {
     accessorKey: "id",
     header: "#Order ID",
+    cell: ({ row }) => {
+      const value: string = row.getValue("id");
+      return (
+        <div className="font-medium">
+          {value}{" "}
+          <CopyButton copyContent={value} alertTitle="ID Copied:"></CopyButton>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

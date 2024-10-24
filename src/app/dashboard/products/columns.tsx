@@ -103,7 +103,8 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <div className="font-medium">
-          {value} <CopyButton copyContent={value}></CopyButton>
+          {value}{" "}
+          <CopyButton copyContent={value} alertTitle="ID Copied:"></CopyButton>
         </div>
       );
     },

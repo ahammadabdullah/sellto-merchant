@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 
-import { SquareArrowOutUpRight, ArrowUpDown } from "lucide-react";
+import { SquareArrowOutUpRight } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 import { Button } from "@/components/ui/button";
 
 import { DataTableColumnHeader } from "@/components/helpers/DataTableColumnHeader";
@@ -35,9 +36,15 @@ export const columns: ColumnDef<RecentOrders>[] = [
         className="ml-2"
       />
     ),
-    cell: ({ row }) => (
-      <div className="pl-4">{row.getValue("customer_name")}</div>
-    ),
+    cell: ({ row }) => {
+      let name: string = row.getValue("customer_name");
+      return (
+        <div className="pl-4">
+          {name}{" "}
+          <CopyButton copyContent={name} alertTitle="Name Copied:"></CopyButton>
+        </div>
+      );
+    },
   },
 
   {
@@ -82,6 +89,15 @@ export const columns: ColumnDef<RecentOrders>[] = [
   {
     accessorKey: "id",
     header: "#Order ID",
+    cell: ({ row }) => {
+      const value: string = row.getValue("id");
+      return (
+        <div className="font-medium">
+          {value}
+          <CopyButton copyContent={value} alertTitle="ID Copied:"></CopyButton>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "revenue",
