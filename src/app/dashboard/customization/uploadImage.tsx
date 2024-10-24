@@ -1,8 +1,9 @@
 "use client";
 import { FileUp } from "lucide-react";
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
-const UploadImage = () => {
+const UploadImage = ({ className }: { className?: string }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,15 +57,16 @@ const UploadImage = () => {
   };
 
   return (
-    <div>
+    <div className={cn(className)}>
       <h3 className="flex gap-2 items-center pb-5">
         <span className="text-base">Favicon</span>{" "}
         <span className="opacity-65 text-[12px]">1320x600px</span>
       </h3>
       <div
         style={{
-          width: "731px",
-          height: "241px",
+          maxWidth: "clamp(205px, 80vw, 840px)",
+          width: "100%",
+          height: "205px",
           borderRadius: "14px",
           border: isDragging ? "2px dashed #4caf50" : "2px dashed #536681",
           padding: "10px",
@@ -72,7 +74,7 @@ const UploadImage = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: isDragging ? "#f0fdf4" : "transparent",
+          backgroundColor: isDragging ? "#43ff644a" : "transparent",
         }}
         onClick={() => document.getElementById("faviconInput")?.click()}
         onDragOver={handleDragOver}
@@ -80,14 +82,17 @@ const UploadImage = () => {
         onDrop={handleDrop}
       >
         {isDragging ? (
-          <p className="text-black">Drop here</p>
+          <p className="">Drop here</p>
         ) : (
-          <div className="flex flex-col items-center text-base">
-            <FileUp size={70} className="opacity-65 pb-5" />
-            <span className="font-medium text-center">
+          <div className="flex flex-col items-center text-muted-foreground p-2">
+            <FileUp
+              size={55}
+              className="opacity-65 pb-3 text-muted-foreground"
+            />
+            <span className=" text-sm p-2 text-center leading-4 mb-1">
               Click to upload or drag and drop
             </span>
-            <span className="text-sm opacity-65">SVG, PNG, JPG or GIF</span>
+            <span className="text-xs opacity-65">svg, png, jps or gif</span>
           </div>
         )}
       </div>

@@ -1,8 +1,9 @@
 "use client";
 import { FileUp } from "lucide-react";
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 
-const UploadFavicon = () => {
+const UploadFavicon = ({ className }: { className?: string }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,15 +57,18 @@ const UploadFavicon = () => {
   };
 
   return (
-    <div>
-      <h3 className="flex gap-2 items-center pb-5">
-        <span className="text-base">Favicon</span>{" "}
-        <span className="opacity-65 text-[12px]">200x200px</span>
+    <div className={cn(className)}>
+      <h3 className="flex gap-2 place-items-center items-center pb-5">
+        <span>Favicon</span>{" "}
+        <span className="opacity-65 text-xs text-muted-foreground">
+          (200x200px)
+        </span>
       </h3>
       <div
         style={{
-          width: "235px",
-          height: "241px",
+          maxWidth: "clamp(120px, 40vw, 208px)",
+          width: "100%",
+          aspectRatio: "1",
           borderRadius: "50%",
           border: isDragging ? "2px dashed #4caf50" : "2px dashed #536681",
           padding: "10px",
@@ -72,7 +76,7 @@ const UploadFavicon = () => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: isDragging ? "#f0fdf4" : "transparent",
+          backgroundColor: isDragging ? "#43ff644a" : "transparent",
         }}
         onClick={() => document.getElementById("faviconInput")?.click()}
         onDragOver={handleDragOver}
@@ -80,14 +84,17 @@ const UploadFavicon = () => {
         onDrop={handleDrop}
       >
         {isDragging ? (
-          <p className="text-black">Drop here</p>
+          <p className="">Drop here</p>
         ) : (
-          <div className="flex flex-col items-center text-base">
-            <FileUp size={70} className="opacity-65 pb-5" />
-            <span className="font-medium w-[68%] text-center">
+          <div className="flex flex-col items-center text-muted-foreground p-2">
+            <FileUp
+              size={55}
+              className="opacity-65 pb-3 text-muted-foreground"
+            />
+            <span className=" text-sm max-w-[170px] text-center leading-4 mb-1">
               Click to upload or drag and drop
             </span>
-            <span className="text-sm opacity-65">SVG, PNG, JPG or GIF</span>
+            <span className="text-xs opacity-65">svg, png, jps or gif</span>
           </div>
         )}
       </div>
