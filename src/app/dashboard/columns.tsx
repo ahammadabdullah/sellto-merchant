@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/helpers/DataTableColumnHeader";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { cn } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
 import { dateFormatter } from "@/lib/utils";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -54,7 +54,14 @@ export const columns: ColumnDef<RecentOrders>[] = [
     ),
     cell: ({ row }) => {
       const cell_value: Date = row.getValue("createdAt");
-      return <div className="">{dateFormatter(cell_value)}</div>;
+      return (
+        <div className="flex flex-col">
+          <p>{dateFormatter(cell_value)}</p>
+          <p className="text-xs text-muted-foreground opacity-85">
+            {timeAgo(cell_value)}
+          </p>
+        </div>
+      );
     },
   },
   {

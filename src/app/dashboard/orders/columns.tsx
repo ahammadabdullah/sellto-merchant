@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/helpers/DataTableColumnHeader";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { cn } from "@/lib/utils";
+import { cn, timeAgo } from "@/lib/utils";
 import { dateFormatter } from "@/lib/utils";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -96,7 +96,7 @@ export const columns: ColumnDef<AllOrders>[] = [
         <div className="flex flex-col">
           <p>{dateFormatter(cell_value)}</p>
           <p className="text-xs text-muted-foreground opacity-85">
-            (23 hrs ago)
+            {timeAgo(cell_value)}
           </p>
         </div>
       );
