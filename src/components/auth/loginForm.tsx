@@ -70,7 +70,16 @@ export default function LoginForm() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center">
+              <Label htmlFor="password">Password</Label>
+
+              <Link
+                href="/forgotpass"
+                className="ml-auto inline-block text-xs hover:underline text-muted-foreground"
+              >
+                Forgot your password?
+              </Link>
+            </div>
             <Input name="password" id="password" type="password" required />
           </div>
           <div>

@@ -119,7 +119,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-[100dvh] bg-background font-sans antialiased  w-full ",
+          "min-h-full bg-background font-sans antialiased  w-full ",
           fontSans.variable,
           ClashDisplay.variable
         )}

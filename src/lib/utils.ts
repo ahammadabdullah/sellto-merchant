@@ -43,6 +43,21 @@ export function dateFormatter(isoDateTime: Date | string) {
   return result;
 }
 
+export function customDateFormatter({
+  isoDateTime,
+  customFormat,
+}: {
+  isoDateTime: Date | string | number;
+  customFormat?: string;
+}): string {
+  const date =
+    typeof isoDateTime === "string" ? new Date(isoDateTime) : isoDateTime; // Already a Date object
+  let format = "hh:mmaaa, dd LLL yyyy";
+  if (customFormat) format = customFormat;
+  const result = date_fns_formatter(date, format);
+  return result;
+}
+
 export function capitalizeFirstLetter(
   string: string | undefined
 ): string | undefined {

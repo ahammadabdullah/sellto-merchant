@@ -9,13 +9,12 @@ import { useGSAP } from "@gsap/react";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Facebook } from "lucide-react";
 
 import styles from "./Footer.module.css";
 
-export default function Footer() {
+export default function Footer({ className }: { className?: string }) {
   return (
-    <section className="container px-[1rem] max-[1000px]:px-[0.5rem] mt-auto">
+    <section className={cn("container px-[1rem] max-[1000px]:px-[0.5rem]")}>
       <footer className="rounded-t-lg border border-b-0 bg-card/55 text-card-foreground shadow-md sm:shadow-sm  p-10 relative overflow-hidden">
         <div className="top_wrap px-4 flex flex-wrap gap-6 justify-between mb-12">
           <div className="left_wrap  min-[770px]:max-w-[42%] min-[970px]:max-w-[90%]">
