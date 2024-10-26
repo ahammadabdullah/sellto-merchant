@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -28,6 +29,7 @@ export type Product = {
   stock: number;
   shopId: string;
   price: number;
+  shortDescription?: string;
 };
 
 export const columns: ColumnDef<Product>[] = [
@@ -69,7 +71,7 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <div className="flex flex-wrap gap-2 place-items-center">
           <Image
-            src={pd?.image || "/path/to/fallback-image.jpg"}
+            src={pd?.image || "/placeholder.png"}
             alt="img"
             width={40}
             height={40}

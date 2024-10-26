@@ -1,24 +1,82 @@
-"use client";
-
 // libraries
-import gsap from "gsap";
+// import gsap from "gsap";
+import Link from "next/link";
 import Image from "next/image";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenisProvider } from "@/components/helpers/LenisProvider";
 
 // components
-import { Button } from "@/components/ui/button";
-import TextContent from "@/components/waitlist/TextContent";
-import Form from "@/components/waitlist/form";
-import Circles from "@/components/waitlist/Ciecles";
-import Hero from "@/components/home/hero";
-import LargeInfoCardsSec from "@/components/home/LargeInfoCardsSec";
+import { Button as CustomButton } from "@/components/ui/CustomButton";
+import { ShopHero } from "@/components/shop/Hero";
+import { FeaturedProduct } from "@/components/shop/FeaturedProduct";
+import { ProductCard } from "@/components/shop/ProductCard";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ShopCtaCard } from "@/components/shop/ctaCard";
 
 export default function Home() {
   return (
-    <ReactLenis root>
-      <main className="w-full min-h-[700px] grid place-items-center">
-        hello
+    <ReactLenisProvider>
+      <main className="w-full overflow-x-hidden">
+        <ShopHero
+          className=""
+          link="/shop/products"
+          title="Some awesome heading."
+          sub_title="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        />
+        <div className="mx-auto  max-w-[1024px] max-[1025px]:px-[0.5rem]">
+          <section className="">
+            <h1 className="font-clash font-medium text-xl md:text-right w-full px-2 mb-3 text-primary2">
+              Featured
+            </h1>
+            <FeaturedProduct
+              id={"fawfhiwoah"}
+              stockCount={23}
+              title="Product name"
+              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+              price="560"
+            ></FeaturedProduct>
+          </section>
+          <section className="py-28 sm:py-20">
+            <h1 className="font-clash font-medium text-3xl sm:text-4xl w-full text-center px-2 mb-6">
+              Our <span className="text-primary2">Products</span>
+            </h1>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+              <ProductCard
+                id={"fawfhiwoah"}
+                stockCount={23}
+                title="Product name"
+                subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                price="560"
+              ></ProductCard>
+              <ProductCard
+                id={"fawfhiwoah"}
+                stockCount={23}
+                title="Product name"
+                subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                price="560"
+              ></ProductCard>
+              <ProductCard
+                className="lg:block hidden "
+                id={"fawfhiwoah"}
+                stockCount={23}
+                title="Product name"
+                subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+                price="560"
+              ></ProductCard>
+              <Skeleton className="w-full min-h-[120px]" />
+              <Skeleton className="w-full min-h-[120px] sm:block hidden" />
+              <Skeleton className="w-full min-h-[120px] lg:block hidden" />
+              <div className="w-full min-h-[10%] sm:min-h-[25%] bg-gradient-to-t from-background to-transparent  absolute bottom-0 grid place-items-center ">
+                <CustomButton asChild>
+                  <Link href={"/shop/products"}>View all products</Link>
+                </CustomButton>
+              </div>
+            </div>
+          </section>
+          <section className="py-6 sm:py-20">
+            <ShopCtaCard></ShopCtaCard>
+          </section>
+        </div>
       </main>
-    </ReactLenis>
+    </ReactLenisProvider>
   );
 }

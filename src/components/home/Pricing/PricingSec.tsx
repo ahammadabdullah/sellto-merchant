@@ -6,10 +6,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 // components
-import { Button } from "../ui/CustomButton";
+import { Button } from "../../ui/CustomButton";
 // import Circles from "@/components/waitlist/Ciecles";
 // import SectionTitle from "@/components/SecTitle";
-import PricingCard from "@/components/Pricing/PricingCard";
+import PricingCard from "@/components/home/Pricing/PricingCard";
 
 // assets
 // import img_global_map from "@/assets/home/global_map.png";

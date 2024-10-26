@@ -1,15 +1,10 @@
-"use client";
-
 // libraries
-import gsap from "gsap";
+// import gsap from "gsap";
 import Image from "next/image";
-import { ReactLenis, useLenis } from "lenis/react";
 
 // components
+import { ReactLenisProvider } from "@/components/helpers/LenisProvider";
 import { Button } from "@/components/ui/button";
-import TextContent from "@/components/waitlist/TextContent";
-import Form from "@/components/waitlist/form";
-import Circles from "@/components/waitlist/Ciecles";
 import Hero from "@/components/home/hero";
 import LargeInfoCardsSec from "@/components/home/LargeInfoCardsSec";
 import InfoCardsSec from "@/components/home/InfoCards";
@@ -19,7 +14,7 @@ import CTABanner from "@/components/home/CTABanner";
 
 export default function Home() {
   return (
-    <ReactLenis root>
+    <ReactLenisProvider>
       <main className="w-full">
         <Hero />
         <LargeInfoCardsSec></LargeInfoCardsSec>
@@ -28,6 +23,6 @@ export default function Home() {
         <Testimonials></Testimonials>
         <CTABanner></CTABanner>
       </main>
-    </ReactLenis>
+    </ReactLenisProvider>
   );
 }

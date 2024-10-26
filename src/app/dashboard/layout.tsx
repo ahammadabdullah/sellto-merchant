@@ -57,8 +57,8 @@ import SideBar from "@/components/dashboard/Sidebar";
 import TopBar from "@/components/dashboard/TopBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import SideBarProvider from "@/components/dashboard/SideBarProvider";
-import LandingNav from "@/components/nav/LandingNav";
-import Footer from "@/components/nav/Footer";
+import LandingNav from "@/components/home/nav/LandingNav";
+import Footer from "@/components/home/nav/Footer";
 
 export default function DahsboardLayout({
   children,

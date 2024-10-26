@@ -53,8 +53,8 @@ export const metadata: Metadata = {
   ],
 };
 
-import LandingNav from "@/components/nav/LandingNav";
-import Footer from "@/components/nav/Footer";
+import LandingNav from "@/components/home/nav/LandingNav";
+import Footer from "@/components/home/nav/Footer";
 
 export default function LandingLayout({
   children,

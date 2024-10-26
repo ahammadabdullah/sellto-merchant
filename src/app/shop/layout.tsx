@@ -73,7 +73,7 @@ export default function LandingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-full min-h-screen flex flex-col border">
+    <div className="w-full min-h-screen flex flex-col ">
       <ShopNav proUser={false} shopLogo={shopLogo} shopName="Short name" />
       <div className="mb-10">{children}</div>
 

@@ -1,13 +1,11 @@
-"use client";
+import PageHeading from "@/components/home/components/PageHeading";
+import PricingSec from "@/components/home/Pricing/PricingSec";
 
-import Circles from "@/components/waitlist/Ciecles";
-import PageHeading from "@/components/PageHeading";
-import PricingSec from "@/components/Pricing/PricingSec";
+import { ReactLenisProvider } from "@/components/helpers/LenisProvider";
 
-import { ReactLenis, useLenis } from "lenis/react";
 export default function Home() {
   return (
-    <ReactLenis root>
+    <ReactLenisProvider>
       <main className="w-full flex flex-col min-h-[100dvh] overflow-hidden">
         <PageHeading
           sub="Pricing"
@@ -16,6 +14,6 @@ export default function Home() {
         ></PageHeading>
         <PricingSec></PricingSec>
       </main>
-    </ReactLenis>
+    </ReactLenisProvider>
   );
 }

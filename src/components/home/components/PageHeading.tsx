@@ -12,15 +12,13 @@ import { Button } from "@/components/ui/button";
 import Circles from "@/components/waitlist/Ciecles";
 // import { AlignRight, X, ChevronLast } from "lucide-react";
 
-import card_spotlight from "@/assets/home/card_spotlight.png";
-
 export interface classProps {
   className?: string;
   sub?: string;
   text1?: string;
   text2?: string;
 }
-export default function LargeInfoCard({
+export default function PageHeading({
   className,
   sub,
   text1,

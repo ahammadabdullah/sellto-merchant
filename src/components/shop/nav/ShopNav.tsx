@@ -19,9 +19,9 @@ import styles from "./ShopLandingNav.module.css";
 
 import { LinkType } from "@/types/types";
 const NavLinks: LinkType[] = [
-  { url: "/home", label: "Home" },
-  { url: "/products", label: "Products" },
-  { url: "/contact", label: "Contact" },
+  { url: "/shop", label: "Home" },
+  { url: "/shop/products", label: "Products" },
+  { url: "/shop/contact", label: "Contact" },
 ];
 
 type ShopNavTypes = {
@@ -106,12 +106,15 @@ export default function LandingNav({
   return (
     <nav
       className={cn(
-        "rounded-lg border bg-card/55 text-card-foreground shadow-md sm:shadow-sm p-[.60rem] max-w-[1024px] w-[98%] fixed top-1 sm:top-[1rem] left-[50%] translate-x-[-50%] flex justify-between place-items-center gap-6 z-[1000] backdrop-blur-lg backdrop-saturate-150",
+        "rounded-lg border bg-card/55 text-card-foreground shadow-md sm:shadow-sm p-[.60rem] max-w-[1044px] w-[98%] fixed top-1 sm:top-[1rem] left-[50%] translate-x-[-50%] flex justify-between place-items-center gap-6 z-[1000] backdrop-blur-lg backdrop-saturate-150",
         className
       )}
     >
       <div className="hover:opacity-60 transition-opacity min-[640px]:min-w-fit max-w-fit">
-        <Link href={"/"} className="flex flex-wrap gap-1 place-items-center">
+        <Link
+          href={NavLinks[0].url}
+          className="flex flex-wrap gap-1 place-items-center"
+        >
           <Image
             src={shopLogo}
             alt="icon"
