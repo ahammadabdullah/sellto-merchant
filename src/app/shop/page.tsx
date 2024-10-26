@@ -11,6 +11,7 @@ import { FeaturedProduct } from "@/components/shop/FeaturedProduct";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ShopCtaCard } from "@/components/shop/ctaCard";
+import sampleProduct from "@/assets/sample_product.png";
 
 export default function Home() {
   return (
@@ -27,12 +28,14 @@ export default function Home() {
             <h1 className="font-clash font-medium text-xl md:text-right w-full px-2 mb-3 text-primary2">
               Featured
             </h1>
+            {/* title max length 55chr subtitle max lenght 85chr  */}
             <FeaturedProduct
               id={"fawfhiwoah"}
               stockCount={23}
               title="Product name"
               subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
               price="560"
+              image={sampleProduct}
             ></FeaturedProduct>
           </section>
           <section className="py-28 sm:py-20">
@@ -40,12 +43,15 @@ export default function Home() {
               Our <span className="text-primary2">Products</span>
             </h1>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
+              {/* title max length 55chr subtitle max lenght 85chr  */}
+
               <ProductCard
                 id={"fawfhiwoah"}
                 stockCount={23}
                 title="Product name"
                 subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
                 price="560"
+                image={sampleProduct}
               ></ProductCard>
               <ProductCard
                 id={"fawfhiwoah"}
@@ -53,6 +59,7 @@ export default function Home() {
                 title="Product name"
                 subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
                 price="560"
+                image={sampleProduct}
               ></ProductCard>
               <ProductCard
                 className="lg:block hidden "
@@ -73,7 +80,12 @@ export default function Home() {
             </div>
           </section>
           <section className="py-6 sm:py-20">
-            <ShopCtaCard></ShopCtaCard>
+            {/* title max lenght 20chr  subtitle max lenght 150chr*/}
+            <ShopCtaCard
+              title="We’re here to help"
+              subtitle="If you’re in need of support for a product you purchased or just want
+          to say hi, please contact us by tapping the button below."
+            ></ShopCtaCard>
           </section>
         </div>
       </main>

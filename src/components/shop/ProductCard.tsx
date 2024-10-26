@@ -32,13 +32,13 @@ export interface ProductCardType {
   price: string;
 }
 
-import sampleProduct from "@/assets/sample_product.png";
-
+import placeHolderProduct from "@/assets/placeholder.png";
+import { truncateString } from "@/lib/utils";
 export function ProductCard({
   className,
   id,
   stockCount,
-  image = sampleProduct,
+  image,
   title,
   subtitle,
   price,
@@ -48,20 +48,25 @@ export function ProductCard({
   return (
     <Card
       className={cn(
-        "w-full hover:opacity-85 hover:translate-y-[-7px] transition-all",
+        "w-full hover:opacity-85 hover:translate-y-[-7px] transition-all overflow-hidden",
         className
       )}
     >
-      <Link href={"/products/" + id}>
-        <div className="">
-          <div className="relative h-full ">
+      <Link href={"/products/" + id} className="">
+        <div className="relative ">
+          <div className=" relative z-10">
             <Image
               width={610}
-              src={image}
+              src={image ? image : placeHolderProduct}
               alt={"wffa"}
               className="w-full h-full rounded-t-md object-cover aspect-[16/9]"
+              placeholder="blur"
             ></Image>
-
+            {!image && (
+              <h3 className="text-3xl font-bold absolute text-muted/70 top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
+                N/A
+              </h3>
+            )}
             <Badge
               className="absolute top-2 right-2 shadow-lg"
               variant={stockCount > 0 ? "secondary" : "destructive"}
@@ -69,12 +74,14 @@ export function ProductCard({
               {stockCount > 0 ? `${stockCount} in stock` : "Out of stock"}
             </Badge>
           </div>
-          <div className=" md:flex md:flex-col justify-between relative overflow-hidden ">
+          <div className=" md:flex md:flex-col justify-between relative h-full ">
             <CardHeader>
               <CardTitle className="text-xl font-clash font-medium">
-                {title}
+                {truncateString(title, 55)}
               </CardTitle>
-              <p className="text-xs text-muted-foreground pb-4">{subtitle}</p>
+              <p className="text-xs text-muted-foreground pb-4">
+                {truncateString(subtitle, 85)}
+              </p>
               <p className="text-lg ">
                 <span className="text-primary2 font-bold">$</span>
                 {price} <span className="text-muted-foreground">USD</span>

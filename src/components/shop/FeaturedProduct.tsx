@@ -32,13 +32,13 @@ export interface FeaturedProductType {
   price: string;
 }
 
-import sampleProduct from "@/assets/sample_product.png";
-
+import placeHolderProduct from "@/assets/placeholder.png";
+import { truncateString } from "@/lib/utils";
 export function FeaturedProduct({
   className,
   id,
   stockCount,
-  image = sampleProduct,
+  image,
   title,
   subtitle,
   price,
@@ -51,10 +51,16 @@ export function FeaturedProduct({
         <div className="relative h-full ">
           <Image
             width={610}
-            src={image}
+            src={image ? image : placeHolderProduct}
             alt={"wffa"}
             className="w-full h-full md:rounded-l-md max-[767px]:rounded-t-md object-cover aspect-[16/9]"
+            placeholder="blur"
           ></Image>
+          {!image && (
+            <h3 className="text-3xl font-bold absolute text-muted/70 top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
+              N/A
+            </h3>
+          )}
 
           <Badge
             className="absolute top-2 right-2 shadow-lg"
@@ -66,9 +72,11 @@ export function FeaturedProduct({
         <div className=" md:flex md:flex-col justify-between relative overflow-hidden ">
           <CardHeader>
             <CardTitle className="text-2xl font-clash font-medium">
-              {title}
+              {truncateString(title, 55)}
             </CardTitle>
-            <p className="text-sm text-muted-foreground pb-4">{subtitle}</p>
+            <p className="text-sm text-muted-foreground pb-4">
+              {truncateString(subtitle, 85)}
+            </p>
             <p className="text-lg ">
               <span className="text-primary2 font-bold">$</span>
               {price} <span className="text-muted-foreground">USD</span>
