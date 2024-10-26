@@ -19,9 +19,9 @@ import styles from "./ShopLandingNav.module.css";
 
 import { LinkType } from "@/types/types";
 const NavLinks: LinkType[] = [
-  { url: "/shop", label: "Home" },
-  { url: "/shop/products", label: "Products" },
-  { url: "/shop/contact", label: "Contact" },
+  { url: "/", label: "Home" },
+  { url: "/products", label: "Products" },
+  { url: "/contact", label: "Contact" },
 ];
 
 type ShopNavTypes = {
