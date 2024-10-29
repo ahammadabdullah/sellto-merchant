@@ -1,12 +1,12 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const DefaultPage = () => {
-  return (
-    <div>
-      <h1>Default Page</h1>
-      <p>This is the default page.</p>
-    </div>
-  );
+  const router = useRouter();
+  router.push("/dashboard");
+  return <div></div>;
 };
 
 export default DefaultPage;
