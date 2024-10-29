@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
   // ) {
   //   return NextResponse.redirect(new URL("/login", nextUrl));
   // }
-  if (subdomain && subdomain !== "localhost:3000") {
+  if (subdomain && subdomain !== "localhost:3000" && subdomain !== "beta") {
     const url = nextUrl.clone();
     url.pathname = `/shop/${subdomain}${url.pathname}`;
     return NextResponse.rewrite(url);
