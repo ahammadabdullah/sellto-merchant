@@ -14,6 +14,7 @@ import { PackageSearch, PackagePlus } from "lucide-react";
 
 import { columns, Product } from "./columns";
 import { getAllProductsByShopId } from "@/actions/actions";
+import Link from "next/link";
 
 async function getData(): Promise<Product[]> {
   // Fetch data from your API here.
@@ -48,8 +49,13 @@ export default async function Home() {
         <DataTable columns={columns} data={data} pagination={true} />
       </div>
 
-      <Button className="fixed  z-20 top-24 right-10 shadow-xl px-5 hover:translate-y-[-5px] transition-transform">
-        Add product <PackagePlus className="ml-2" />
+      <Button
+        className="fixed  z-20 top-24 right-10 shadow-xl px-5 hover:translate-y-[-5px] transition-transform"
+        asChild
+      >
+        <Link href="/dashboard/products/new">
+          Add product <PackagePlus className="ml-2" />
+        </Link>
       </Button>
     </main>
   );

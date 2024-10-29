@@ -16,12 +16,12 @@ export async function middleware(request: NextRequest) {
   const subdomain = host?.split(".")[0];
   // const privateRoutes = ["/dashboard", "/dashboard/:path"];
   const privateRoutes = [""];
-  if (
-    !isLoggedIn &&
-    privateRoutes.some((route) => pathname.startsWith(route))
-  ) {
-    return NextResponse.redirect(new URL("/login", nextUrl));
-  }
+  // if (
+  //   !isLoggedIn &&
+  //   privateRoutes.some((route) => pathname.startsWith(route))
+  // ) {
+  //   return NextResponse.redirect(new URL("/login", nextUrl));
+  // }
   if (subdomain && subdomain !== "localhost:3000") {
     const url = nextUrl.clone();
     url.pathname = `/shop/${subdomain}${url.pathname}`;

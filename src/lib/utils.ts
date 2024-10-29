@@ -93,3 +93,29 @@ export function timeAgo(date: Date): string {
 
   return "just now";
 }
+
+export const parseString = (
+  input: string,
+  option: "newline" | "comma",
+  removeDuplicates?: boolean,
+  returnString?: boolean
+): string[] | string => {
+  const delimiter = option === "newline" ? "\n" : ",";
+  let result = input
+    .split(delimiter)
+    .map((str) => str.trim())
+    .filter(Boolean);
+  if (removeDuplicates) {
+    const uniqueResults: string[] = [];
+    result.forEach((item) => {
+      if (!uniqueResults.includes(item)) {
+        uniqueResults.push(item);
+      }
+    });
+    result = uniqueResults;
+  }
+  if (returnString) {
+    return result.join(delimiter);
+  }
+  return result;
+};
