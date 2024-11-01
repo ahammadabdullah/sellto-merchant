@@ -53,13 +53,17 @@ export function AppSidebar() {
     toggleSidebar,
   } = useSidebar();
 
+  function handleButtonClick(itemUrl: string) {
+    if (isMobile) setOpenMobile(!openMobile);
+    setActivePage(itemUrl);
+  }
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/" onClick={() => setActivePage("/")}>
+              <Link href="/" onClick={() => handleButtonClick("/")}>
                 <Image
                   src={selltoIcon}
                   alt="Sellto logo"
@@ -91,7 +95,7 @@ export function AppSidebar() {
                   <SidebarMenuButton
                     asChild
                     tooltip={item.label}
-                    onClick={() => setActivePage(item.url)}
+                    onClick={() => handleButtonClick(item.url)}
                     className={cn(
                       "h-11 [&>svg]:size-[1.3rem] rounded-none pl-4",
                       activePage === item.url
