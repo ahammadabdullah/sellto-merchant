@@ -2,6 +2,7 @@
 // libraries
 import gsap from "gsap";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import Link from "next/link";
 
 // functions
@@ -33,6 +34,7 @@ const navItems = [
 
 export default function LandingNav({ className }: { className?: string }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [activePage, setActivePage] = useState(pathname);
   // const
   // function testClick() {
