@@ -32,7 +32,7 @@ export default function LandingNav({
 }) {
   const { state, open, isMobile } = useSidebar();
   return (
-    <header className="flex justify-between sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4 z-10">
+    <header className="flex justify-between sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4 z-50">
       <div className="-ml-1 flex flex-wrap place-items-center">
         <SidebarTrigger className="[&>svg]:size-[1.3rem]" />
         {isMobile && (

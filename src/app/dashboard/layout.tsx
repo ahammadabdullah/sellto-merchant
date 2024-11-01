@@ -88,7 +88,12 @@ export default async function DahsboardLayout({
         <AppSidebar />
         <SidebarInset>
           <TopBar SidebarTrigger={SidebarTrigger} />
-          <main className="w-[100vw] md:w-[74vw] lg:w-auto">{children}</main>
+          <main className="w-[100vw] md:w-[74vw] lg:w-auto relative">
+            <div className="z-10 relative">{children}</div>
+            <div className="w-full h-full fixed right-0 bottom-0 ">
+              <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-70"></div>
+            </div>
+          </main>
         </SidebarInset>
       </SidebarProvider>
     </>
