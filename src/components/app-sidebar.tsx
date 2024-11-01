@@ -1,185 +1,122 @@
-"use client"
-
-import * as React from "react"
+"use client";
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import {
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react"
+  ArrowLeftFromLine,
+  LayoutDashboard,
+  PackageSearch,
+  ShoppingBasket,
+  Ticket,
+  Palette,
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
 import {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
   SidebarHeader,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+  useSidebar,
+} from "@/components/ui/sidebar";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+// import { selltoLogo as SelltoLogo } from "@/components/ui/custom/Logo";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+// import selltoLogo from "@/assets/sellto_logo.svg";
+import selltoIcon from "@/assets/icon.svg";
+// Menu items.
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+const navItems = [
+  { icon: LayoutDashboard, label: "Dashboard", url: "/dashboard" },
+  { icon: PackageSearch, label: "Products", url: "/dashboard/products" },
+  { icon: ShoppingBasket, label: "Orders", url: "/dashboard/orders" },
+  { icon: Ticket, label: "Tickets", url: "/dashboard/tickets" },
+  { icon: Palette, label: "Customization", url: "/dashboard/customization" },
+];
+
+export function AppSidebar() {
+  const pathname = usePathname();
+  const [activePage, setActivePage] = useState(pathname);
+  const {
+    state,
+    open,
+    setOpen,
+    openMobile,
+    setOpenMobile,
+    isMobile,
+    toggleSidebar,
+  } = useSidebar();
+
   return (
-    <Sidebar variant="inset" {...props}>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
+              <Link href="/" onClick={() => setActivePage("/")}>
+                <Image
+                  src={selltoIcon}
+                  alt="Sellto logo"
+                  width={24}
+                  height={24}
+                  className="flex aspect-square size-8 items-center justify-center p-1"
+                />
+
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-medium  font-clash text-2xl">
+                    Sellto
+                  </span>
+                  {/* <span className="truncate text-xs text-accent-foreground/60">
+                    Admin Dashboard
+                  </span> */}
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <SidebarGroup className="p-0">
+          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navItems.map((item) => (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.label}
+                    onClick={() => setActivePage(item.url)}
+                    className={cn(
+                      "h-11 [&>svg]:size-[1.3rem] rounded-none pl-4",
+                      activePage === item.url
+                        ? "bg-gradient-to-r from-primary/35  via-primary/10 via-25% hover:bg-transparent "
+                        : "text-muted-foreground hover:text-foreground  opacity-85 hover:opacity-100"
+                    )}
+                  >
+                    <Link href={item.url}>
+                      <item.icon
+                        size={60}
+                        className={cn(
+                          activePage === item.url
+                            ? "text-primary2 opacity-1"
+                            : ""
+                        )}
+                      />
+                      <span>{item.label}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

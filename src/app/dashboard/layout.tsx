@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { Viewport } from "next";
+import { cookies } from "next/headers";
 
 let siteMetadata = {
   title: "Sellto - The simplest digital store solution",
@@ -56,32 +57,40 @@ export const metadata: Metadata = {
 import SideBar from "@/components/dashboard/Sidebar";
 import TopBar from "@/components/dashboard/TopBar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import SideBarProvider from "@/components/dashboard/SideBarProvider";
 import LandingNav from "@/components/home/nav/LandingNav";
 import Footer from "@/components/home/nav/Footer";
 
-export default function DahsboardLayout({
+import {
+  SidebarProvider,
+  SidebarTrigger,
+  SidebarInset,
+} from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+
+export default async function DahsboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const defaultOpen =
+    cookieStore.get("sidebar:state")?.value === "false" ? false : true;
   return (
     <>
-      <div className="w-full h-screen overflow-hidden flex relative">
-        <SideBar className="w-[13%] min-w-[175px]"></SideBar>
-        <div className=" h-full w-full flex flex-col overflow-hidden">
-          <TopBar></TopBar>
-          {/* <div className="content_wrap h-full  w-full overflow-y-scroll border-l border-t">
-            {children}
-          </div> */}
-          <ScrollArea className="content_wrap w-full h-full border-l border-t rounded-tl-lg">
-            <div>{children}</div>
-          </ScrollArea>
-        </div>
-
-        <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-70"></div>
-      </div>
-      {/* {children} */}
+      <SidebarProvider
+        defaultOpen={defaultOpen}
+        style={{
+          // @ts-ignore
+          "--sidebar-width": "12.5rem",
+          "--sidebar-width-mobile": "20rem",
+        }}
+      >
+        <AppSidebar />
+        <SidebarInset>
+          <TopBar SidebarTrigger={SidebarTrigger} />
+          <main className="w-[100vw] md:w-[74vw] lg:w-auto">{children}</main>
+        </SidebarInset>
+      </SidebarProvider>
     </>
   );
 }

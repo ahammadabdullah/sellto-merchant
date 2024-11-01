@@ -18,18 +18,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 import styles from "./LandingNav.module.css";
 
-export default function LandingNav({ className }: { className?: string }) {
+export default function LandingNav({
+  className,
+  SidebarTrigger,
+}: {
+  className?: string;
+  SidebarTrigger: any;
+}) {
   return (
-    <div
-      className={cn(
-        "w-full h-[50px] flex place-items-center justify-end gap-2 px-5",
-        className
-      )}
-    >
+    <header className="flex justify-between sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4 z-10">
+      <SidebarTrigger className="-ml-1 [&>svg]:size-[1.3rem]" />
+      {/* <Separator orientation="vertical" className="mr-2 h-4" /> */}
+
       <DropdownMenu>
         <DropdownMenuTrigger className="flex gap-2 flex-wrap">
           <Avatar className="h-7 w-7 sm:h-9 sm:w-9">
@@ -55,6 +59,6 @@ export default function LandingNav({ className }: { className?: string }) {
           </Link>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </header>
   );
 }
