@@ -16,14 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// import {
-//   Command,
-//   CommandEmpty,
-//   CommandGroup,
-//   CommandInput,
-//   CommandItem,
-//   CommandList,
-// } from "@/components/ui/command";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
@@ -39,7 +31,7 @@ interface Variant {
   warrantyTime: string;
   warrantyText: string;
   serials: string;
-  perseadSerial: string[];
+  parsedSerial: string[];
   serialParseMethod: "comma" | "newline";
   removeDuplicates: boolean;
   serviceDescription: string;
@@ -48,35 +40,11 @@ interface Variant {
   minQuantity: string;
   maxQuantity: string;
 }
-const currencies = [
-  "USD", // United States Dollar
-  "EUR", // Euro
-  "JPY", // Japanese Yen
-  "GBP", // British Pound
-  "AUD", // Australian Dollar
-  "CAD", // Canadian Dollar
-  "CHF", // Swiss Franc
-  "CNY", // Chinese Yuan
-  "SEK", // Swedish Krona
-  "NZD", // New Zealand Dollar
-  "MXN", // Mexican Peso
-  "SGD", // Singapore Dollar
-  "HKD", // Hong Kong Dollar
-  "NOK", // Norwegian Krone
-  "KRW", // South Korean Won
-  "TRY", // Turkish Lira
-  "INR", // Indian Rupee
-  "RUB", // Russian Ruble
-  "BRL", // Brazilian Real
-  "ZAR", // South African Rand
-  "DKK", // Danish Krone
-  "PLN", // Polish Zloty
-  "THB", // Thai Baht
-  "IDR", // Indonesian Rupiah
-];
+const currencies = ["USD"];
 
 export function ProductForm() {
   const [variants, setVariants] = useState<Variant[]>([]);
+  console.log(variants);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [customDefaultWarranty, setCustomDefaultWarranty] = useState(false);
 
@@ -93,7 +61,7 @@ export function ProductForm() {
       warrantyTime: "",
       warrantyText: "",
       serials: "",
-      perseadSerial: [],
+      parsedSerial: [],
       serialParseMethod: "comma",
       removeDuplicates: false,
       serviceDescription: "",
@@ -125,29 +93,28 @@ export function ProductForm() {
     setVariants(newVariants);
   };
 
-  //   handles serial text chnage
+  //   handles serial text change
   const handleSerialTextAreaChange = ({
     index,
     field = "serials",
-    perseadSerialField = "perseadSerial",
+    parsedSerialField = "parsedSerial",
     stockKey = "stock",
     value,
-    persingMethod,
+    parsingMethod,
   }: {
     index: number;
     field?: keyof Variant;
-    perseadSerialField?: keyof Variant;
+    parsedSerialField?: keyof Variant;
     stockKey?: keyof Variant;
     value: string;
-    persingMethod: "newline" | "comma";
+    parsingMethod: "newline" | "comma";
   }) => {
-    const parsedString = parseString(value, persingMethod);
-    // console.log(parseString(value, persingMethod, rvmDuplicates, true));
+    const parsedString = parseString(value, parsingMethod);
     const newVariants = [...variants];
     newVariants[index] = {
       ...newVariants[index],
       [field]: value,
-      [perseadSerialField]: parsedString,
+      [parsedSerialField]: parsedString,
       [stockKey]: parsedString.length,
     };
     setVariants(newVariants);
@@ -155,17 +122,18 @@ export function ProductForm() {
   const handleRmvDuplicateSerials = ({
     index,
     field = "serials",
-    perseadSerialField = "perseadSerial",
+    parsedSerialField = "parsedSerial",
     stockKey = "stock",
   }: {
     index: number;
     field?: keyof Variant;
-    perseadSerialField?: keyof Variant;
+    parsedSerialField?: keyof Variant;
     stockKey?: keyof Variant;
   }) => {
     const parsedStringArray = parseString(
       variants[index].serials,
-      variants[index].serialParseMethod
+      variants[index].serialParseMethod,
+      true
     );
     const parsedString = parseString(
       variants[index].serials,
@@ -173,13 +141,12 @@ export function ProductForm() {
       true,
       true
     );
-    // console.log(parseString(value, persingMethod, rvmDuplicates, true));
     const newVariants = [...variants];
     newVariants[index] = {
       ...newVariants[index],
       [field]: parsedString,
       [stockKey]: parsedStringArray.length,
-      [perseadSerialField]: parsedStringArray,
+      [parsedSerialField]: parsedStringArray,
     };
     setVariants(newVariants);
   };
@@ -189,7 +156,7 @@ export function ProductForm() {
       <div className="space-y-6 bg-background rounded p-6 md:p-8 border">
         <div className="flex gap-2 place-items-center">
           <div className="h-8 w-1 bg-primary"></div>
-          <h2 className="text-2xl font-semibold">Defaults & General detials</h2>
+          <h2 className="text-2xl font-semibold">Defaults & General details</h2>
         </div>
         <div className="grid md:grid-cols-2 gap-2 ">
           <div className="space-y-6 bg-muted/30 p-6 rounded-md">
@@ -339,7 +306,7 @@ export function ProductForm() {
                     value="discontinued"
                     className="opacity-65 focus:opacity-100 bg-[#FF5C5C]/20 text-[#FF5C5C] focus:bg-[#FF5C5C]/30 focus:text-[#ff4d4d]"
                   >
-                    Discontinuedt
+                    Discontinued
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -554,7 +521,7 @@ export function ProductForm() {
                         onChange={(e) => {
                           handleSerialTextAreaChange({
                             index: selectedVariant,
-                            persingMethod:
+                            parsingMethod:
                               variants[selectedVariant].serialParseMethod,
                             value: e.target.value,
                           });
