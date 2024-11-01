@@ -26,6 +26,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 // import selltoLogo from "@/assets/sellto_logo.svg";
@@ -53,6 +54,10 @@ export function AppSidebar() {
     toggleSidebar,
   } = useSidebar();
 
+  useEffect(() => {
+    setActivePage(pathname);
+  }, [pathname]);
+
   function handleButtonClick(itemUrl: string) {
     if (isMobile) setOpenMobile(!openMobile);
     setActivePage(itemUrl);
@@ -63,7 +68,10 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/" onClick={() => handleButtonClick("/")}>
+              <Link
+                href={navItems[0].url}
+                onClick={() => handleButtonClick(navItems[0].url)}
+              >
                 <Image
                   src={selltoIcon}
                   alt="Sellto logo"
