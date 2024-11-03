@@ -3,6 +3,7 @@ import {
   ArrowUpIcon,
   ChevronsUpDown,
   EyeOff,
+  LucideIcon,
 } from "lucide-react";
 import { Column } from "@tanstack/react-table";
 
@@ -21,6 +22,10 @@ interface DataTableColumnHeaderProps<TData, TValue>
   column: Column<TData, TValue>;
   title: string;
   hideButton?: boolean;
+  ICON1?: LucideIcon;
+  ICON2?: LucideIcon;
+  text1?: string;
+  text2?: string;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -28,6 +33,10 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
   hideButton,
+  ICON1 = ArrowUpIcon,
+  ICON2 = ArrowDownIcon,
+  text1 = "Asc",
+  text2 = "Desc",
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
@@ -44,9 +53,9 @@ export function DataTableColumnHeader<TData, TValue>({
           >
             <span>{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" />
+              <ICON2 className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === "asc" ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" />
+              <ICON1 className="ml-2 h-4 w-4" />
             ) : (
               <ChevronsUpDown className="ml-2 h-4 w-4" />
             )}
@@ -54,12 +63,12 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
+            <ICON1 className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            {text1}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
+            <ICON2 className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            {text2}
           </DropdownMenuItem>
           {hideButton && (
             <>
