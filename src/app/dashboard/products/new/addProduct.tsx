@@ -40,6 +40,21 @@ export interface Variant {
   minQuantity: string;
   maxQuantity: string;
 }
+
+interface ProductFormData {
+  productName: string;
+  shortDescription: string;
+  fullDescription: string;
+  defaultPrice: string;
+  defaultCurrency: string;
+  customDefaultWarranty: boolean;
+  defaultWarrantyTime?: string;
+  defaultWarrantyText?: string;
+  productImage?: File;
+  visibility: string;
+  variants: Variant[];
+}
+
 const currencies = ["USD"];
 
 export function ProductForm() {
@@ -150,8 +165,43 @@ export function ProductForm() {
     setVariants(newVariants);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement;
+    const formData: ProductFormData = {
+      productName: (form.querySelector("#productName") as HTMLInputElement)
+        .value,
+      shortDescription: (
+        form.querySelector("#shortDescription") as HTMLTextAreaElement
+      ).value,
+      fullDescription: (
+        form.querySelector("#fullDescription") as HTMLTextAreaElement
+      ).value,
+      defaultPrice: (form.querySelector("#defaultPrice") as HTMLInputElement)
+        .value,
+      defaultCurrency: (form.querySelector("#visibility") as HTMLSelectElement)
+        .value,
+      customDefaultWarranty,
+      visibility: (form.querySelector("#visibility") as HTMLSelectElement)
+        .value,
+      variants,
+    };
+
+    if (customDefaultWarranty) {
+      formData.defaultWarrantyTime = (
+        form.querySelector("#defaultWarrantyTime") as HTMLInputElement
+      ).value;
+      formData.defaultWarrantyText = (
+        form.querySelector("#defaultWarrantyText") as HTMLTextAreaElement
+      ).value;
+    }
+
+    console.log("Form Data:", formData);
+  };
+
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-6 bg-background rounded p-6 md:p-8 border">
         <div className="flex gap-2 place-items-center">
           <div className="h-8 w-1 bg-primary"></div>
@@ -778,7 +828,10 @@ export function ProductForm() {
         )}
       </div>
 
-      <Button className="fixed  z-20 top-16 right-8 shadow-xl px-6 hover:translate-y-[-5px] transition-transform">
+      <Button
+        type="submit"
+        className="fixed  z-20 top-16 right-8 shadow-xl px-6 hover:translate-y-[-5px] transition-transform"
+      >
         Add product <PackagePlus className="ml-2" />
       </Button>
     </form>
