@@ -20,7 +20,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 
-interface Variant {
+export interface Variant {
   name: string;
   shortDescription: string;
   description: string;
@@ -44,7 +44,6 @@ const currencies = ["USD"];
 
 export function ProductForm() {
   const [variants, setVariants] = useState<Variant[]>([]);
-  console.log(variants);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [customDefaultWarranty, setCustomDefaultWarranty] = useState(false);
 
