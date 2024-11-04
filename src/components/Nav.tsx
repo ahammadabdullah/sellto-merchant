@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Form from "@/components/waitlist/form";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-export default function Nav() {
+export default function Nav({ className }: { className?: string }) {
   return (
     <nav className="w-full fixed top-[4rem]  sm:top-[6rem] left-0 text-center flex flex-wrap justify-center">
       <Link href={"/"}>
         <svg
-          className="max-w-[150px] sm:max-w-[200px] w-full"
+          className={cn("max-w-[150px] sm:max-w-[200px] w-full", className)}
           width="206"
           height="39"
           viewBox="0 0 206 39"

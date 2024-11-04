@@ -138,141 +138,160 @@ export default function OnboardingForm() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
-      <Progress value={progress} className="w-full" />
+      <div className="">
+        <h2 className="text-sm text-muted-foreground/80 mb-2">
+          Step <span className="text-foreground">{step}</span> of 4
+        </h2>
+        <Progress value={progress} className="w-full h-1" />
+      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {step === 1 && (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="shopName" className={LabelClass}>
-                Shop Name
+        <div className="min-h-[195px]">
+          {step === 1 && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="shopName" className={LabelClass}>
+                  Shop Name
+                  <p className="text-xs text-muted-foreground/80">
+                    (max 15 characters)
+                  </p>
+                </Label>
+                <Input id="shopName" {...register("shopName")} />
+                {errors.shopName && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.shopName.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="shopLogo" className={LabelClass}>
+                  Shop Logo
+                  <p className="text-xs text-muted-foreground/80">(optional)</p>
+                </Label>
+                <Input
+                  id="shopLogo"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+                {logoPreview && (
+                  <div className="mt-2">
+                    <Image
+                      src={logoPreview}
+                      alt="Logo preview"
+                      width={100}
+                      height={100}
+                      className="rounded-full"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="">
+              <Label className={LabelClass} htmlFor="subDomain">
+                Subdomain
                 <p className="text-xs text-muted-foreground/80">
                   (max 15 characters)
                 </p>
               </Label>
-              <Input id="shopName" {...register("shopName")} />
-              {errors.shopName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.shopName.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="shopLogo">Shop Logo (optional)</Label>
-              <Input
-                id="shopLogo"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {logoPreview && (
-                <div className="mt-2">
-                  <Image
-                    src={logoPreview}
-                    alt="Logo preview"
-                    width={100}
-                    height={100}
-                    className="rounded-full"
+              <div className="flex items-center gap-2">
+                <div className="flex items-center flex-1">
+                  <Input
+                    id="subDomain"
+                    {...register("subDomain")}
+                    className="rounded-r-none focus-visible:ring-0"
                   />
+                  <span className="bg-muted px-3 py-2 rounded-r-md">
+                    .sellto.io
+                  </span>
                 </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="">
-            <Label className={LabelClass} htmlFor="subDomain">
-              Subdomain
-              <p className="text-xs text-muted-foreground/80">
-                (max 15 characters)
-              </p>
-            </Label>
-            <div className="flex items-center gap-2">
-              <div className="flex items-center flex-1">
-                <Input
-                  id="subDomain"
-                  {...register("subDomain")}
-                  className="rounded-r-none focus-visible:ring-0"
-                />
-                <span className="bg-muted px-3 py-2 rounded-r-md">
-                  .sellto.io
-                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={generateSubdomain}
+                >
+                  Generate from name
+                </Button>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={generateSubdomain}
-              >
-                Generate from name
-              </Button>
-            </div>
-            {errors.subDomain && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.subDomain.message}
-              </p>
-            )}
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="currency">Currency</Label>
-              <Select onValueChange={(value) => setValue("currency", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  {currencies.map((currency) => (
-                    <SelectItem key={currency.code} value={currency.code}>
-                      {currency.name} ({currency.code})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.currency && (
+              {errors.subDomain && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.currency.message}
+                  {errors.subDomain.message}
                 </p>
               )}
             </div>
-            <div>
-              <Label htmlFor="description">Short Description (optional)</Label>
-              <Textarea id="description" {...register("description")} />
-              {errors.description && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.description.message}
-                </p>
-              )}
+          )}
+
+          {step === 3 && (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="currency">Currency</Label>
+                <Select onValueChange={(value) => setValue("currency", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a currency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currencies.map((currency) => (
+                      <SelectItem key={currency.code} value={currency.code}>
+                        {currency.name} ({currency.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.currency && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.currency.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="description" className={LabelClass}>
+                  Short Description{" "}
+                  <p className="text-xs text-muted-foreground/80">(optional)</p>
+                </Label>
+                <Textarea
+                  id="description"
+                  {...register("description")}
+                  rows={3}
+                />
+                {errors.description && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {step === 4 && (
-          <div>
-            <Label htmlFor="productTypes">Product Types (optional)</Label>
-            <Textarea
-              id="productTypes"
-              {...register("productTypes")}
-              placeholder="Enter product types, separated by commas"
-            />
-          </div>
-        )}
+          {step === 4 && (
+            <div>
+              <Label htmlFor="productTypes" className={LabelClass}>
+                Product Types{" "}
+                <p className="text-xs text-muted-foreground/80">(optional)</p>
+              </Label>
+              <Textarea
+                id="productTypes"
+                {...register("productTypes")}
+                placeholder="Enter product types, separated by commas"
+              />
+            </div>
+          )}
+        </div>
 
-        <div className="flex justify-between">
+        <div className="flex justify-between ">
           {step > 1 && (
             <Button type="button" onClick={prevStep} variant="outline">
               Previous
             </Button>
           )}
-          {step < 4 ? (
+          {step < 4 && (
             <Button type="button" onClick={nextStep}>
               Next
             </Button>
-          ) : (
-            <Button type="submit">Submit</Button>
           )}
+          {step === 4 && <Button type="submit">Submit</Button>}
         </div>
       </form>
     </div>
