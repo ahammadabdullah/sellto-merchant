@@ -9,13 +9,13 @@ datasource db {
 }
 
 model WaitList {
-  id        String   @id @unique @default(cuid())
+  id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
 }
 
 model Merchant {
-  id        String   @id @unique @default(cuid())
+  id        String   @id @default(cuid())
   name      String
   email     String   @unique
   shopName  String   @unique
@@ -24,7 +24,7 @@ model Merchant {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   password  String
@@ -33,61 +33,97 @@ model User {
   updatedAt DateTime @updatedAt
   role      String   @default("merchant")
   status    String   @default("pending")
-  Order     Order[]
-  shop      Shop[]
+  shopId    String   @unique
+  Shop      Shop?
 }
 
 model Shop {
-  id          String     @id @default(uuid())
-  name        String     @unique
-  image       String?
-  subdomain   String     @unique
-  subTitle    String?
-  description String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  userId      Int
-  categories  Category[]
-  products    Product[]
-  user        User       @relation(fields: [userId], references: [id])
-  theme       Json?
+  id           String     @id @default(cuid())
+  name         String     @unique
+  image        String?
+  subdomain    String     @unique
+  subTitle     String?
+  description  String?
+  productTypes String?
+  currency     String     @default("USD")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  userId       String     @unique
+  categories   Category[]
+  products     Product[]
+  user         User       @relation(fields: [userId], references: [id])
+  theme        Json?
+  orders       Order[]
 }
 
 model Product {
-  id           Int      @id @default(autoincrement())
-  product_name String
-  price        Float
-  image        String?
-  shopId       String
-  stock        Int      @default(0)
-  type         String
-  createdAt    DateTime @default(now())
-  status       String   @default("active")
-  updatedAt    DateTime @updatedAt
-  order        Order[]
-  shop         Shop     @relation(fields: [shopId], references: [id])
+  id                    String    @id @default(cuid())
+  productName           String
+  shortDescription      String?
+  fullDescription       String?
+  price                 Float
+  image                 String?
+  shopId                String
+  stock                 Int       @default(0)
+  type                  String
+  createdAt             DateTime  @default(now())
+  status                String    @default("active")
+  updatedAt             DateTime  @updatedAt
+  visibility            String
+  customDefaultWarranty Boolean
+  defaultWarrantyTime   String?
+  defaultWarrantyText   String?
+  orders                Order[]
+  shop                  Shop      @relation(fields: [shopId], references: [id])
+  variants              Variant[]
+}
+
+model Variant {
+  id                 String   @id @default(cuid())
+  name               String
+  shortDescription   String?
+  description        String?
+  price              Float
+  currency           String   @default("USD")
+  productType        String
+  customWarranty     Boolean  @default(false)
+  warrantyTime       String?
+  warrantyText       String?
+  serials            String?
+  parsedSerial       Json?
+  serialParseMethod  String?
+  removeDuplicates   Boolean  @default(false)
+  serviceDescription String?
+  unlimitedStock     Boolean  @default(false)
+  stock              Int      @default(0)
+  minQuantity        Int?
+  maxQuantity        Int?
+  productId          String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  product            Product  @relation(fields: [productId], references: [id])
 }
 
 model Category {
+  id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  id        Int      @id @default(autoincrement())
   shopId    String
   shop      Shop     @relation(fields: [shopId], references: [id])
 }
 
 model Order {
-  id            Int      @id @default(autoincrement())
-  userId        Int
+  id            String   @id @default(cuid())
+  userId        String
   customer_name String
   revenue       Float
-  productId     Int
+  productId     String
   quantity      Int
   shopId        String
   status        String   @default("pending")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   product       Product  @relation(fields: [productId], references: [id])
-  user          User     @relation(fields: [userId], references: [id])
+  shop          Shop     @relation(fields: [shopId], references: [id])
 }
