@@ -102,7 +102,7 @@ const DUMMY_PRODUCT: ProductProps = {
   ],
 };
 
-export default function Component({
+export default function ProductPage({
   name = DUMMY_PRODUCT.name,
   soldAmount = DUMMY_PRODUCT.soldAmount,
   shortDescription = DUMMY_PRODUCT.shortDescription,
