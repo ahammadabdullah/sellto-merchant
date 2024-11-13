@@ -24,13 +24,13 @@ export async function middleware(request: NextRequest) {
   ];
 
   // Redirect to onboarding if user is logged in but has no shopId
-  if (
-    isLoggedIn &&
-    !session.user.shopId &&
-    !pathname.startsWith("/onboarding")
-  ) {
-    return NextResponse.redirect(new URL("/onboarding", nextUrl));
-  }
+  // if (
+  //   isLoggedIn &&
+  //   !session.user.shopId &&
+  //   !pathname.startsWith("/onboarding")
+  // ) {
+  //   return NextResponse.redirect(new URL("/onboarding", nextUrl));
+  // }
 
   // Protect private routes for unauthenticated users
   if (

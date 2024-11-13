@@ -22,7 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
 
 import styles from "./LandingNav.module.css";
-import { signOut } from "@/auth";
+import { signOut } from "next-auth/react";
 
 export default function LandingNav({
   className,
@@ -33,7 +33,7 @@ export default function LandingNav({
 }) {
   const { state, open, isMobile } = useSidebar();
   const handleLogOut = async () => {
-    await signOut({ redirectTo: "/login" });
+    await signOut({ redirectTo: "/" });
   };
   return (
     <header className="flex justify-between sticky top-0 bg-background h-16 shrink-0 items-center gap-2 border-b px-4 z-50">

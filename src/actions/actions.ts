@@ -52,7 +52,7 @@ export async function login(prevState: State, formData: FormData) {
         email: email as string,
       },
     });
-    if (!user?.shopId) {
+    if (user?.shopId === null || user?.shopId === undefined) {
       return {
         errors: {},
         message: null,
