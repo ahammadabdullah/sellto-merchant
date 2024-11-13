@@ -28,10 +28,12 @@ export default function Home() {
   // const RecentOrdersData = await getRecentOrdersData();
 
   const router = useRouter();
-  if (session?.user.shopId === null) {
-    console.log("redirecting to onboarding");
-    router.push("/onboarding");
-  }
+  console.log(session?.user, "from dashboard");
+  // if (session?.user.shopId === null) {
+  //   console.log(session.user.shopId);
+  //   console.log("redirecting to onboarding");
+  //   router.push("/onboarding");
+  // }
 
   return (
     <main className="p-8">

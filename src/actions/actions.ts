@@ -182,6 +182,7 @@ export async function onboardingUser(formData: FormData) {
         shopId: res.id,
       },
     });
+    session.user.shopId = res.id;
     return {
       errors: {},
       message: "Onboarding successful!",

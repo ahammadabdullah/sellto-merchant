@@ -20,8 +20,13 @@ import { Progress } from "@/components/ui/progress";
 import { onboardingForm } from "@/schema/zod-schema";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { onboardingUser } from "@/actions/actions";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { uploadFileToApiRoute } from "@/lib/utils";
+import { generateUploader } from "@uploadthing/react";
+import { OurFileRouter } from "../api/uploadthing/core";
+import { useUploadThing } from "@/lib/hooks";
+import { FileEsque } from "uploadthing/types";
+import { onboardingUser } from "@/actions/actions";
 
 // This is a mock list of currencies. In a real application, you'd fetch this from an API or database.
 const currencies = [
@@ -48,12 +53,10 @@ export default function OnboardingForm() {
   const [progress, setProgress] = useState(25);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [state, setState] = useState(initialState);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
   const session = useSession();
   const router = useRouter();
-  function handleLogout() {
-    signOut({ callbackUrl: "/login" });
-  }
-  // handleLogout();
+
   if (!session) {
     router.push("/login");
   }
@@ -77,13 +80,20 @@ export default function OnboardingForm() {
   });
 
   const watchAllFields = watch();
-
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onUploadError(err) {
+      console.log(err, "from onboarding form");
+    },
+    onClientUploadComplete(res) {
+      setImgUrl(res[0].url);
+      console.log(res, "from onboarding form");
+    },
+  });
   const onSubmit = async (data: z.infer<typeof onboardingForm>) => {
-    console.log(data);
+    await startUpload([data.shopLogo]);
     const formData = new FormData();
     formData.append("shopName", data.shopName);
-    // formData.append("shopLogo", data.shopLogo as File);
-    // upload the file to a cloud storage service and get the URL
+    formData.append("shopLogo", imgUrl || "");
     formData.append("subDomain", data.subDomain);
     formData.append("currency", data.currency);
     formData.append("description", data.description || "");

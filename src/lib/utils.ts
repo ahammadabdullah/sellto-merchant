@@ -119,3 +119,27 @@ export const parseString = (
   }
   return result;
 };
+
+// file upload
+export async function uploadFileToApiRoute(file: File) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch("/api/uploadthing", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    console.log(result, "from actions");
+    return result; // Assuming the response includes a `url` field
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    throw error;
+  }
+}

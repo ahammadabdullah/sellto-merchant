@@ -18,9 +18,10 @@ export async function middleware(request: NextRequest) {
     "/about",
     "/contact",
     "/login",
+    "/signup",
     "/onboarding",
     "/dashboard",
-    "/dashboard/:path*",
+    "/api",
   ];
 
   // Redirect to onboarding if user is logged in but has no shopId
@@ -40,23 +41,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
-  // Rewrite subdomain URLs to `/shop/:subdomain`
+  const isMainDomainRoute = (pathname: string) => {
+    return (
+      mainDomainRoutes.includes(pathname) ||
+      mainDomainRoutes.some((route) => pathname.startsWith(route + "/"))
+    );
+  };
+
   if (
     subdomain &&
     subdomain !== "localhost" &&
     subdomain !== "beta" &&
-    !mainDomainRoutes.includes(pathname)
+    !isMainDomainRoute(pathname)
   ) {
     const url = nextUrl.clone();
     url.pathname = `/shop/${subdomain}${url.pathname}`;
     return NextResponse.rewrite(url);
   }
-  // Allow other requests to proceed as usual
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    "/((?!api|api/auth|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
   ],
 };
