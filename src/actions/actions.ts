@@ -2,9 +2,10 @@
 
 import { signIn } from "@/auth";
 import prisma from "@/lib/db";
-import { LoginSchema } from "@/schema/zod-schema";
+import { LoginSchema, onboardingForm } from "@/schema/zod-schema";
 import bcrypt from "bcryptjs";
-import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import { getSession } from "next-auth/react";
 
 export type State = {
   message: string | null;
@@ -35,6 +36,7 @@ export async function login(prevState: State, formData: FormData) {
       password,
       redirect: false,
     });
+
     if (res.error) {
       return {
         errors: {
@@ -43,6 +45,18 @@ export async function login(prevState: State, formData: FormData) {
         },
         message: null,
         redirectUrl: null,
+      };
+    }
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email as string,
+      },
+    });
+    if (!user?.shopId) {
+      return {
+        errors: {},
+        message: null,
+        redirectUrl: "/onboarding",
       };
     }
     return { errors: {}, message: null, redirectUrl: "/dashboard" };
@@ -96,19 +110,91 @@ export async function signUp(prevState: State, formData: FormData) {
         password: hashedPassword,
       },
     });
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
     return {
       errors: {},
       message: "Signup successful!",
-      redirectUrl: "/login",
+      redirectUrl: "/onboarding",
     };
   } catch (error) {
     console.error("Signup failed", error);
     return {
       errors: {
-        email: ["Wrong email or password"],
+        email: ["Please try again later"],
       },
       message: null,
       redirectUrl: null,
+    };
+  }
+}
+// onboarding user
+export async function onboardingUser(formData: FormData) {
+  const session = await auth();
+  const email = session?.user?.email;
+  const id = session?.user?.id;
+  if (!email || !id) {
+    return {
+      errors: {
+        email: ["Not authorized"],
+      },
+      message: null,
+      redirectUrl: "/login",
+    };
+  }
+  const fields = onboardingForm.safeParse({
+    shopName: formData.get("shopName"),
+    shopLogo: formData.get("shopLogo"),
+    subDomain: formData.get("subDomain"),
+    currency: formData.get("currency"),
+    description: formData.get("description"),
+    productTypes: formData.get("productTypes"),
+  });
+  if (!fields.success) {
+    return {
+      errors: fields.error.flatten().fieldErrors,
+      message: null,
+      redirectUrl: null,
+    };
+  }
+  const { shopName, shopLogo, subDomain, currency, description, productTypes } =
+    fields.data;
+  try {
+    const res = await prisma.shop.create({
+      data: {
+        name: shopName,
+        image: shopLogo as string,
+        userId: id,
+        subDomain,
+        currency,
+        description,
+        productTypes,
+      },
+    });
+    await prisma.user.update({
+      where: {
+        email: email as string,
+      },
+      data: {
+        shopId: res.id,
+      },
+    });
+    return {
+      errors: {},
+      message: "Onboarding successful!",
+      redirectUrl: "/dashboard",
+    };
+  } catch (error) {
+    console.error("Onboarding failed", error);
+    return {
+      errors: {
+        email: ["Please try again later"],
+      },
+      message: null,
+      redirectUrl: "/onboarding",
     };
   }
 }
@@ -140,7 +226,7 @@ export async function addProductByShopId(shopId: string, productData: any) {
 export async function getProductById(productId: string) {
   const product = await prisma.product.findFirst({
     where: {
-      id: Number(productId),
+      id: productId as string,
     },
   });
   return product;
@@ -150,7 +236,7 @@ export async function getProductById(productId: string) {
 export async function updateProductById(productId: string, productData: any) {
   const product = await prisma.product.update({
     where: {
-      id: Number(productId),
+      id: productId as string,
     },
     data: {
       ...productData,
@@ -163,7 +249,7 @@ export async function updateProductById(productId: string, productData: any) {
 export async function deleteProductById(productId: string) {
   const product = await prisma.product.delete({
     where: {
-      id: Number(productId),
+      id: productId as string,
     },
   });
   return product;

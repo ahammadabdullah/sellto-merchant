@@ -109,6 +109,7 @@ import UseClientProvider from "@/components/helpers/UseClientProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ModeToggle } from "@/components/ui/themeButton";
+import { SessionProvider } from "next-auth/react";
 
 export default function RootLayout({
   children,
@@ -124,18 +125,20 @@ export default function RootLayout({
           ClashDisplay.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <UseClientProvider>
-            {/* <LandingNav /> */}
-            {children}
-          </UseClientProvider>
-          <ModeToggle />
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <UseClientProvider>
+              {/* <LandingNav /> */}
+              {children}
+            </UseClientProvider>
+            <ModeToggle />
+          </ThemeProvider>
+        </SessionProvider>
         <Toaster />
         <SonnerToaster />
       </body>

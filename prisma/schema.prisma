@@ -33,7 +33,7 @@ model User {
   updatedAt DateTime @updatedAt
   role      String   @default("merchant")
   status    String   @default("pending")
-  shopId    String   @unique
+  shopId    String?  @unique
   Shop      Shop?
 }
 
@@ -41,26 +41,23 @@ model Shop {
   id           String     @id @default(cuid())
   name         String     @unique
   image        String?
-  subdomain    String     @unique
+  subDomain    String     @unique
   subTitle     String?
   description  String?
-  productTypes String?
-  currency     String     @default("USD")
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   userId       String     @unique
+  theme        Json?
+  currency     String     @default("USD")
+  productTypes String?
   categories   Category[]
+  orders       Order[]
   products     Product[]
   user         User       @relation(fields: [userId], references: [id])
-  theme        Json?
-  orders       Order[]
 }
 
 model Product {
   id                    String    @id @default(cuid())
-  productName           String
-  shortDescription      String?
-  fullDescription       String?
   price                 Float
   image                 String?
   shopId                String
@@ -69,10 +66,13 @@ model Product {
   createdAt             DateTime  @default(now())
   status                String    @default("active")
   updatedAt             DateTime  @updatedAt
-  visibility            String
   customDefaultWarranty Boolean
-  defaultWarrantyTime   String?
   defaultWarrantyText   String?
+  defaultWarrantyTime   String?
+  fullDescription       String?
+  productName           String
+  shortDescription      String?
+  visibility            String
   orders                Order[]
   shop                  Shop      @relation(fields: [shopId], references: [id])
   variants              Variant[]
@@ -105,10 +105,10 @@ model Variant {
 }
 
 model Category {
-  id        String   @id @default(cuid())
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  id        String   @id @default(cuid())
   shopId    String
   shop      Shop     @relation(fields: [shopId], references: [id])
 }

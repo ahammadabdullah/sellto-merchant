@@ -37,16 +37,19 @@ export default function LoginForm() {
 
     const result = await login(state, formData);
     setPending(false);
-
     if ("email" in result?.errors || "password" in result?.errors) {
       setState((prev) => ({
         ...prev,
         errors: result?.errors || {},
-        message: result?.message || null,
       }));
     } else if (result?.redirectUrl) {
       router.push(result?.redirectUrl);
     }
+    setState((prev) => ({
+      ...prev,
+      message: result?.message || null,
+    }));
+    console.log(result);
   }
 
   return (
@@ -127,6 +130,11 @@ export default function LoginForm() {
               {state?.errors?.email && <p>{state?.errors?.email}</p>}
               {state?.errors?.password && <p>{state?.errors?.password}</p>}
             </AlertDescription>
+          </Alert>
+        )}
+        {state.message && (
+          <Alert variant="default">
+            <AlertDescription>{state.message}</AlertDescription>
           </Alert>
         )}
       </CardFooter>

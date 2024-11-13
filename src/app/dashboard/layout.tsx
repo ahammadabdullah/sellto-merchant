@@ -66,6 +66,8 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 export default async function DahsboardLayout({
   children,
@@ -75,27 +77,31 @@ export default async function DahsboardLayout({
   const cookieStore = await cookies();
   const defaultOpen =
     cookieStore.get("sidebar:state")?.value === "false" ? false : true;
+  const session = auth();
+
   return (
     <>
-      <SidebarProvider
-        defaultOpen={defaultOpen}
-        style={{
-          // @ts-ignore
-          "--sidebar-width": "12.5rem",
-          "--sidebar-width-mobile": "20rem",
-        }}
-      >
-        <AppSidebar />
-        <SidebarInset>
-          <TopBar SidebarTrigger={SidebarTrigger} />
-          <main className="w-[100vw] md:w-[74vw] lg:w-auto relative">
-            <div className="z-10 relative">{children}</div>
-            <div className="w-full h-full fixed right-0 bottom-0 ">
-              <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-70"></div>
-            </div>
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
+      <SessionProvider>
+        <SidebarProvider
+          defaultOpen={defaultOpen}
+          style={{
+            // @ts-ignore
+            "--sidebar-width": "12.5rem",
+            "--sidebar-width-mobile": "20rem",
+          }}
+        >
+          <AppSidebar />
+          <SidebarInset>
+            <TopBar SidebarTrigger={SidebarTrigger} />
+            <main className="w-[100vw] md:w-[74vw] lg:w-auto relative">
+              <div className="z-10 relative">{children}</div>
+              <div className="w-full h-full fixed right-0 bottom-0 ">
+                <div className="circel bg_primary_radial_gradient w-[150%] sm:w-full aspect-square rounded-full absolute right-[-40%] top-0 max-[1200px]:top-[90%]  pointer-events-none z-[-3] opacity-70"></div>
+              </div>
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </SessionProvider>
     </>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 // import { cookies } from "next/headers";
 // libraries
 // import gsap from "gsap";
@@ -8,28 +9,34 @@ import { Button } from "@/components/ui/CustomButton";
 import ChartSec from "@/components/dashboard/root/ChartsSec";
 import ResizableHandle from "@/components/dashboard/root/ResizableLayout";
 import Hero from "@/components/home/hero";
+import { useSession } from "next-auth/react";
 
 import { ChevronDown } from "lucide-react";
-import { auth } from "@/auth";
 
 import { RecentOrders, columns } from "./columns";
 import { DataTable } from "../../components/helpers/data-table";
 import { getRecentOrdersByShopId } from "@/actions/actions";
+import { useRouter } from "next/navigation";
 
 async function getRecentOrdersData(): Promise<RecentOrders[]> {
   const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
   const orders = await getRecentOrdersByShopId(shopId);
   return orders;
 }
-export default async function Home() {
+export default function Home() {
   // const layout = cookies().get("react-resizable-panels:layout:mail");
   // const collapsed = cookies().get("react-resizable-panels:collapsed");
 
   // const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   // const defaultCollapsed = collapsed ? JSON.parse(collapsed.value) : undefined;
-  const session = await auth();
-  const RecentOrdersData = await getRecentOrdersData();
+  const { data: session } = useSession();
+  // const RecentOrdersData = await getRecentOrdersData();
+
+  const router = useRouter();
+  // if (!session?.user.shopId) {
+  // router.push("/onboarding");
+  // }
   // console.log(session);
 
   return (
@@ -59,7 +66,7 @@ export default async function Home() {
           Export to Excel
         </Button> */}
         </div>
-        <DataTable columns={columns} data={RecentOrdersData} />
+        {/* <DataTable columns={columns} data={RecentOrdersData} /> */}
       </div>
     </main>
   );

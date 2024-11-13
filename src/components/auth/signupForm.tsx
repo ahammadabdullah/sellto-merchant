@@ -35,7 +35,6 @@ export default function LoginForm() {
     setPending(true);
     const result = await signUp(state, formData);
     setPending(false);
-
     if ("email" in result?.errors || "password" in result?.errors) {
       setState((prev) => ({
         ...prev,

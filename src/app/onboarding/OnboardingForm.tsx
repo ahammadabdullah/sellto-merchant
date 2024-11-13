@@ -17,6 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { onboardingForm } from "@/schema/zod-schema";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { onboardingUser } from "@/actions/actions";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // This is a mock list of currencies. In a real application, you'd fetch this from an API or database.
 const currencies = [
@@ -26,33 +31,32 @@ const currencies = [
   { code: "JPY", name: "Japanese Yen" },
   { code: "CAD", name: "Canadian Dollar" },
 ];
-
-const formSchema = z.object({
-  shopName: z
-    .string()
-    .min(1, "Shop name is required")
-    .max(15, "Max 15 characters"),
-  shopLogo: z.any().optional(),
-  subDomain: z
-    .string()
-    .min(1, "Subdomain is required")
-    .regex(
-      /^[a-zA-Z0-9-]+$/,
-      "Subdomain can only contain letters, numbers, and hyphens"
-    ),
-  currency: z.string().min(1, "Currency is required"),
-  description: z
-    .string()
-    .max(500, "Description must be 500 characters or less")
-    .optional(),
-  productTypes: z.string().optional(),
-});
-
+const initialState = {
+  message: null as string | null,
+  errors: {} as {
+    email?: string[];
+    shopName?: string[];
+    shopLogo?: string[];
+    subDomain?: string[];
+    currency?: string[];
+    description?: string[];
+    productTypes?: string[];
+  },
+};
 export default function OnboardingForm() {
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(25);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
+  const [state, setState] = useState(initialState);
+  const session = useSession();
+  const router = useRouter();
+  function handleLogout() {
+    signOut({ callbackUrl: "/login" });
+  }
+  // handleLogout();
+  if (!session) {
+    router.push("/login");
+  }
   const {
     register,
     handleSubmit,
@@ -61,7 +65,7 @@ export default function OnboardingForm() {
     setValue,
     trigger,
   } = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(onboardingForm),
     defaultValues: {
       shopName: "",
       shopLogo: null,
@@ -74,10 +78,31 @@ export default function OnboardingForm() {
 
   const watchAllFields = watch();
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof onboardingForm>) => {
     console.log(data);
-    // Here you would typically send the data to your backend
-    alert("Form submitted successfully!");
+    const formData = new FormData();
+    formData.append("shopName", data.shopName);
+    // formData.append("shopLogo", data.shopLogo as File);
+    // upload the file to a cloud storage service and get the URL
+    formData.append("subDomain", data.subDomain);
+    formData.append("currency", data.currency);
+    formData.append("description", data.description || "");
+    formData.append("productTypes", data.productTypes || "");
+    const result = await onboardingUser(formData);
+    console.log(result);
+    if ("email" in result?.errors) {
+      setState((prev) => ({
+        ...prev,
+        errors: result?.errors || {},
+      }));
+    }
+    if (result?.redirectUrl) {
+      router.push(result?.redirectUrl);
+    }
+    setState((prev) => ({
+      ...prev,
+      message: result?.message || null,
+    }));
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -294,6 +319,18 @@ export default function OnboardingForm() {
           {step === 4 && <Button type="submit">Submit</Button>}
         </div>
       </form>
+      {Object.keys(state.errors).length > 0 && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            {state?.errors?.email && <p>{state?.errors?.email}</p>}
+          </AlertDescription>
+        </Alert>
+      )}
+      {state.message && (
+        <Alert variant="default">
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }
