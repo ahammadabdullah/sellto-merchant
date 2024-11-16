@@ -33,11 +33,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               dbUser.password
             ))
           ) {
-            // Return only needed user data, excluding the password
             const { password, ...userWithoutPassword } = dbUser;
             return userWithoutPassword;
           }
-          return null; // Explicitly return null if credentials do not match
+          return null;
         } catch (error) {
           console.error("Authorization error:", error);
           return null;
@@ -46,28 +45,43 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/",
     signOut: "/",
-    error: "/login",
+    error: "/",
   },
   callbacks: {
-    jwt({ token, user, trigger, session }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: {
+            id: true,
+            email: true,
+            role: true,
+            status: true,
+            shopId: true,
+          },
+        });
+        if (dbUser) {
+          token.id = dbUser.id as string;
+          token.role = dbUser.role as string;
+          token.status = dbUser.status as string;
+          token.shopId = (dbUser.shopId as string) || "dbUser.shopId";
+        }
+      }
       if (user) {
         token.id = user.id as string;
         token.role = user.role as string;
         token.status = user.status as string;
-        token.shopId = user.shopId as string;
-      }
-      if (trigger === "update" && session) {
-        token = { ...token, ...session };
+        token.shopId = (user.shopId as string) || "user.shopId";
       }
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as string;
       session.user.status = token.status as string;
-      session.user.shopId = token.shopId as string;
+      session.user.shopId = (token.shopId as string) || "session.shopId";
       return session;
     },
   },

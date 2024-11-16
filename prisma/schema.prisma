@@ -41,7 +41,6 @@ model Shop {
   id           String     @id @default(cuid())
   name         String     @unique
   image        String?
-  subDomain    String     @unique
   subTitle     String?
   description  String?
   createdAt    DateTime   @default(now())
@@ -50,6 +49,7 @@ model Shop {
   theme        Json?
   currency     String     @default("USD")
   productTypes String?
+  subDomain    String     @unique
   categories   Category[]
   orders       Order[]
   products     Product[]
@@ -61,10 +61,7 @@ model Product {
   price                 Float
   image                 String?
   shopId                String
-  stock                 Int       @default(0)
-  type                  String
   createdAt             DateTime  @default(now())
-  status                String    @default("active")
   updatedAt             DateTime  @updatedAt
   customDefaultWarranty Boolean
   defaultWarrantyText   String?
@@ -95,7 +92,7 @@ model Variant {
   removeDuplicates   Boolean  @default(false)
   serviceDescription String?
   unlimitedStock     Boolean  @default(false)
-  stock              Int      @default(0)
+  stock              Int?     @default(0)
   minQuantity        Int?
   maxQuantity        Int?
   productId          String

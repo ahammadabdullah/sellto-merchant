@@ -38,6 +38,7 @@ export async function middleware(request: NextRequest) {
     !isLoggedIn &&
     privateRoutes.some((route) => pathname.startsWith(route))
   ) {
+    console.log("from middleware");
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 

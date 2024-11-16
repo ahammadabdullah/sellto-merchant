@@ -17,6 +17,7 @@ import { RecentOrders, columns } from "./columns";
 import { DataTable } from "../../components/helpers/data-table";
 import { getRecentOrdersByShopId } from "@/actions/actions";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 async function getRecentOrdersData(): Promise<RecentOrders[]> {
   const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
@@ -25,16 +26,29 @@ async function getRecentOrdersData(): Promise<RecentOrders[]> {
 }
 export default function Home() {
   const { data: session } = useSession();
-  // const RecentOrdersData = await getRecentOrdersData();
-
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  console.log(session?.user, "from dashboard");
-  // if (session?.user.shopId === null) {
-  //   console.log(session.user.shopId);
-  //   console.log("redirecting to onboarding");
-  //   router.push("/onboarding");
-  // }
 
+  // useEffect(() => {
+  //   const fetchSession = async () => {
+  //     await update();
+  //     setIsLoading(false);
+  //   };
+  //   fetchSession();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     console.log(session?.user.shopId, "from dashboard");
+  //     console.log("Redirecting to onboarding");
+  //     // if (session?.user.shopId === null) {
+  //     //   router.push("/onboarding");
+  //     // }
+  //   }
+  // }, [isLoading, session?.user.shopId]);
+  console.log(session?.user, "from dashboard");
+  // console.log("Redirecting to onboarding");
+  // const RecentOrdersData = await getRecentOrdersData();
   return (
     <main className="p-8">
       <div className="flex flex-wrap gap-6 mb-10 place-items-center justify-between">

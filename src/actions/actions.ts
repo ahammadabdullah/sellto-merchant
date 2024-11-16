@@ -6,6 +6,10 @@ import { LoginSchema, onboardingForm } from "@/schema/zod-schema";
 import bcrypt from "bcryptjs";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
+import { redirect } from "next/dist/server/api-utils";
+import { ProductFormData } from "@/app/dashboard/products/new/addProduct";
+import { Currency } from "lucide-react";
+import { Prisma } from "@prisma/client";
 
 export type State = {
   message: string | null;
@@ -182,7 +186,7 @@ export async function onboardingUser(formData: FormData) {
         shopId: res.id,
       },
     });
-    session.user.shopId = res.id;
+
     return {
       errors: {},
       message: "Onboarding successful!",
@@ -213,15 +217,99 @@ export async function getAllProductsByShopId(shopId: string) {
 
 // add a product by shopId
 
-export async function addProductByShopId(shopId: string, productData: any) {
-  const product = await prisma.product.create({
-    data: {
-      ...productData,
-      shopId,
-    },
-  });
-  return product;
+export async function addProductByShopId(formData: ProductFormData) {
+  const session = await auth();
+  const shopId = session?.user?.shopId;
+  if (!shopId) {
+    return {
+      errors: {
+        email: ["Not authorized, Contact support"],
+      },
+      message: null,
+      redirectUrl: "/login",
+    };
+  }
+  const price = parseFloat(formData.defaultPrice as string);
+  const image = formData.image as string;
+  const customDefaultWarranty =
+    formData.customDefaultWarranty as unknown as boolean;
+  const defaultWarrantyText = formData.defaultWarrantyText as string;
+  const defaultWarrantyTime = formData.defaultWarrantyTime as string;
+  const fullDescription = formData.fullDescription as string;
+  const shortDescription = formData.shortDescription as string;
+  const productName = formData.productName as string;
+  const visibility = formData.visibility as string;
+  const variants = formData.variants;
+  try {
+    const newProduct = await prisma.product.create({
+      data: {
+        shopId: shopId as string,
+        price,
+        image,
+        customDefaultWarranty,
+        defaultWarrantyText,
+        defaultWarrantyTime,
+        fullDescription,
+        shortDescription,
+        productName,
+        visibility,
+      },
+    });
+    if (variants && variants.length > 0) {
+      const newVariants = variants.map((variant) => {
+        return {
+          productId: newProduct.id,
+          name: variant.name,
+          price: parseFloat(variant.price),
+          stock: parseInt(variant.stock),
+          shortDescription: variant.shortDescription as string,
+          description: variant.description as string,
+          currency: variant.currency as string,
+          productType: variant.productType as string,
+          customWarranty: variant.customWarranty as unknown as boolean,
+          warrantyText: variant.warrantyText as string,
+          warrantyTime: variant.warrantyTime as string,
+          serials: variant.serials as string,
+          parsedSerial:
+            variant.parsedSerial as unknown as Prisma.InputJsonValue,
+          serialParseMethod: variant.serialParseMethod as string,
+          removeDuplicates: variant.removeDuplicates as unknown as boolean,
+          serviceDescription: variant.serviceDescription as string,
+          unlimitedStock: variant.unlimitedStock as unknown as boolean,
+          minQuantity: parseInt(variant.minQuantity),
+          maxQuantity: parseInt(variant.maxQuantity),
+        };
+      });
+      await prisma.variant.createMany({
+        data: newVariants,
+      });
+    }
+    return {
+      errors: {},
+      message: "Product added successfully!",
+      redirectUrl: "/dashboard/products",
+    };
+  } catch (error) {
+    console.error("Error creating product:", error);
+    return {
+      errors: {
+        email: ["Please try again later"],
+      },
+      message: null,
+      redirectUrl: null,
+    };
+  }
 }
+
+// export async function addProductByShopId(shopId: string, productData: any) {
+//   const product = await prisma.product.create({
+//     data: {
+//       ...productData,
+//       shopId,
+//     },
+//   });
+//   return product;
+// }
 
 // get a product by productId
 export async function getProductById(productId: string) {

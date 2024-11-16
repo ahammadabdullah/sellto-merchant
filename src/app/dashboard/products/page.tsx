@@ -15,26 +15,17 @@ import { PackageSearch, PackagePlus } from "lucide-react";
 import { columns, Product } from "./columns";
 import { getAllProductsByShopId } from "@/actions/actions";
 import Link from "next/link";
+import { auth } from "@/auth";
 
-async function getData(): Promise<Product[]> {
-  // Fetch data from your API here.
-  const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
-  const products = await getAllProductsByShopId(shopId);
-  // console.log(products);
+async function getData() {
+  const session = await auth();
+  const shopId = session?.user.shopId;
+  let products: Product[] = [];
+  if (shopId) {
+    const products = await getAllProductsByShopId(shopId);
+    return products;
+  }
   return products;
-  // return [
-  //   {
-  //     id: "728ed5fwaf2f",
-  //     product_name: "Product N1",
-  //     image: "/product_img.png",
-  //     created_at: Date.now(),
-  //     type: "file",
-  //     stock: 100,
-  //     status: "Active",
-  //     price: 100,
-  //   },
-  //
-  // ];
 }
 export default async function Home() {
   const data = await getData();

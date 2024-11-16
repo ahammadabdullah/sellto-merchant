@@ -19,6 +19,12 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import NewProductImage from "./newProductImage";
+import { useUploadThing } from "@/lib/hooks";
+import { boolean } from "zod";
+import { addProductByShopId } from "@/actions/actions";
+import { useRouter } from "next/navigation";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export interface Variant {
   name: string;
@@ -41,7 +47,7 @@ export interface Variant {
   maxQuantity: string;
 }
 
-interface ProductFormData {
+export interface ProductFormData {
   productName: string;
   shortDescription: string;
   fullDescription: string;
@@ -53,14 +59,34 @@ interface ProductFormData {
   productImage?: File;
   visibility: string;
   variants: Variant[];
+  image?: string | null;
 }
-
+const initialState = {
+  message: null as string | null,
+  errors: {} as {
+    email?: string[];
+  },
+};
 const currencies = ["USD"];
 
 export function ProductForm() {
   const [variants, setVariants] = useState<Variant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [customDefaultWarranty, setCustomDefaultWarranty] = useState(false);
+  const [productImage, setProductImage] = useState<File | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [visibility, setVisibility] = useState<string>("unpublished");
+  const [state, setState] = useState(initialState);
+
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onUploadError(err) {
+      console.log(err, "from onboarding form");
+    },
+    onClientUploadComplete(res) {
+      setImgUrl(res[0].url);
+      console.log(res, "from onboarding form");
+    },
+  });
 
   const LabelClass = "ml-1 flex flex-wrap place-items-center gap-1 mb-2";
   const addVariant = () => {
@@ -164,10 +190,12 @@ export function ProductForm() {
     };
     setVariants(newVariants);
   };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    if (productImage) {
+      await startUpload([productImage]);
+    }
     const form = e.target as HTMLFormElement;
     const formData: ProductFormData = {
       productName: (form.querySelector("#productName") as HTMLInputElement)
@@ -180,13 +208,15 @@ export function ProductForm() {
       ).value,
       defaultPrice: (form.querySelector("#defaultPrice") as HTMLInputElement)
         .value,
-      defaultCurrency: (form.querySelector("#visibility") as HTMLSelectElement)
-        .value,
-      customDefaultWarranty,
-      visibility: (form.querySelector("#visibility") as HTMLSelectElement)
-        .value,
+      defaultCurrency: (
+        form.querySelector("#defaultCurrency") as HTMLSelectElement
+      ).value,
+      customDefaultWarranty: customDefaultWarranty as boolean,
+      visibility,
       variants,
     };
+
+    formData.image = imgUrl;
 
     if (customDefaultWarranty) {
       formData.defaultWarrantyTime = (
@@ -198,6 +228,20 @@ export function ProductForm() {
     }
 
     console.log("Form Data:", formData);
+    const result = await addProductByShopId(formData);
+    if ("email" in result?.errors) {
+      setState((prev) => ({
+        ...prev,
+        errors: result?.errors || {},
+      }));
+    }
+    if (result?.redirectUrl) {
+      router.push(result?.redirectUrl);
+    }
+    setState((prev) => ({
+      ...prev,
+      message: result?.message || null,
+    }));
   };
 
   return (
@@ -256,7 +300,10 @@ export function ProductForm() {
                     className="max-w-[220px]"
                   />
                   <Select>
-                    <SelectTrigger id="visibility" className="max-w-[80px]">
+                    <SelectTrigger
+                      id="defaultCurrency"
+                      className="max-w-[80px]"
+                    >
                       <SelectValue placeholder="USD" />
                     </SelectTrigger>
                     <SelectContent>
@@ -315,27 +362,18 @@ export function ProductForm() {
                   (1920x1080px / 16:9)
                 </p>
               </Label>
-              <div className="aspect-[19/9] border-2 border-dashed rounded-lg flex items-center justify-center">
-                <div className="flex flex-col items-center text-muted-foreground p-2">
-                  <FileUp
-                    size={55}
-                    className="opacity-65 pb-3 text-muted-foreground"
-                  />
-                  <span className=" text-sm p-2 text-center leading-4 mb-1">
-                    Click to upload or drag and drop
-                  </span>
-                  <span className="text-xs opacity-65">
-                    svg, png, jps or gif
-                  </span>
-                </div>
-              </div>
+              <NewProductImage
+                className="h-full aspect-[19/9] "
+                setProductImage={setProductImage}
+                image={productImage}
+              />
             </div>
             <div>
               <Label className={LabelClass} htmlFor="visibility">
                 Visibility status
               </Label>
-              <Select>
-                <SelectTrigger id="visibility">
+              <Select onValueChange={(value) => setVisibility(value)}>
+                <SelectTrigger>
                   <SelectValue placeholder="Select product visibility" />
                 </SelectTrigger>
                 <SelectContent className="">
@@ -834,6 +872,18 @@ export function ProductForm() {
       >
         Add product <PackagePlus className="ml-2" />
       </Button>
+      {Object.keys(state.errors).length > 0 && (
+        <Alert variant="destructive">
+          <AlertDescription>
+            {state?.errors?.email && <p>{state?.errors?.email}</p>}
+          </AlertDescription>
+        </Alert>
+      )}
+      {state.message && (
+        <Alert variant="default">
+          <AlertDescription>{state.message}</AlertDescription>
+        </Alert>
+      )}
     </form>
   );
 }

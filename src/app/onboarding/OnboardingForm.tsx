@@ -54,7 +54,7 @@ export default function OnboardingForm() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [state, setState] = useState(initialState);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const session = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
 
   if (!session) {
@@ -78,7 +78,7 @@ export default function OnboardingForm() {
       productTypes: "",
     },
   });
-
+  console.log(session?.user, "from onboarding form");
   const watchAllFields = watch();
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onUploadError(err) {
@@ -90,7 +90,9 @@ export default function OnboardingForm() {
     },
   });
   const onSubmit = async (data: z.infer<typeof onboardingForm>) => {
-    await startUpload([data.shopLogo]);
+    if (data.shopLogo) {
+      await startUpload([data.shopLogo]);
+    }
     const formData = new FormData();
     formData.append("shopName", data.shopName);
     formData.append("shopLogo", imgUrl || "");
@@ -106,6 +108,7 @@ export default function OnboardingForm() {
         errors: result?.errors || {},
       }));
     }
+    update();
     if (result?.redirectUrl) {
       router.push(result?.redirectUrl);
     }

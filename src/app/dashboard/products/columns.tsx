@@ -21,7 +21,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export type Product = {
   id: number;
-  product_name: string;
+  productName: string;
   image: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -59,7 +59,7 @@ export const columns: ColumnDef<Product>[] = [
   },
 
   {
-    accessorKey: "product_name",
+    accessorKey: "productName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Product Name" />
     ),
@@ -80,10 +80,10 @@ export const columns: ColumnDef<Product>[] = [
           />
           <div className="flex flex-col">
             <div className="flex place-items-center gap-1">
-              <h2 className="text-lg">{pd.product_name}</h2>
+              <h2 className="text-lg">{pd.productName}</h2>
               <CopyButton
                 className="p-1 px-3"
-                copyContent={pd.product_name}
+                copyContent={pd.productName}
               ></CopyButton>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -126,13 +126,13 @@ export const columns: ColumnDef<Product>[] = [
     },
   },
   {
-    accessorKey: "status",
+    accessorKey: "visibility",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="visibility" />
     ),
     cell: ({ row }) => {
       const cell_value: "unpublished" | "active" | "discontinued" =
-        row.getValue("status");
+        row.getValue("visibility");
       return (
         <div
           className={cn(
