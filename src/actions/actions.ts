@@ -2,7 +2,7 @@
 
 import { signIn } from "@/auth";
 import prisma from "@/lib/db";
-import { LoginSchema, onboardingForm } from "@/schema/zod-schema";
+import { LoginSchema, onboardingForm, shopSchema } from "@/schema/zod-schema";
 import bcrypt from "bcryptjs";
 import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
@@ -203,6 +203,72 @@ export async function onboardingUser(formData: FormData) {
     };
   }
 }
+
+// get shop by shopId
+export const getShop = async (id: string) => {
+  const res = await prisma.shop.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  return res;
+};
+
+// update shop by shopId
+export const updateShop = async (id: string, formData: FormData) => {
+  try {
+    const fields = shopSchema.safeParse({
+      name: formData.get("name"),
+      subTitle: formData.get("subTitle"),
+      description: formData.get("description"),
+      favicon: formData.get("favicon"),
+      image: formData.get("image"),
+    });
+
+    if (!fields.success) {
+      return {
+        errors: fields.error.flatten().fieldErrors,
+        message: null,
+        redirectUrl: null,
+      };
+    }
+
+    const { name, subTitle, description, favicon, image } = fields.data;
+
+    const updatedData: any = {};
+
+    if (name !== undefined && name !== null) updatedData.name = name;
+    if (subTitle !== undefined && name !== null)
+      updatedData.subTitle = subTitle;
+    if (description !== undefined && name !== null)
+      updatedData.description = description;
+    if (favicon !== undefined && favicon !== null)
+      updatedData.favicon = favicon;
+    if (image !== undefined && image !== null) updatedData.image = image;
+
+    const shop = await prisma.shop.update({
+      where: {
+        id: id,
+      },
+      data: updatedData,
+    });
+
+    return {
+      errors: {},
+      message: "Shop updated successfully!",
+      redirectUrl: "/dashboard",
+    };
+  } catch (error) {
+    console.error("Error updating shop:", error);
+    return {
+      errors: {
+        error: ["Please try again later"],
+      },
+      message: null,
+      redirectUrl: null,
+    };
+  }
+};
 
 // get all the products by shopId
 

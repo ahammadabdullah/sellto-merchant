@@ -15,6 +15,9 @@ export const InputWithLable = ({
   maxLength,
   placeholder = "Your details...",
   textarea,
+  defaultValue,
+  readOnly,
+  name,
   ...props
 }: {
   id: string;
@@ -26,6 +29,9 @@ export const InputWithLable = ({
   maxLength?: number;
   placeholder?: string;
   textarea?: boolean;
+  defaultValue?: string;
+  readOnly?: boolean;
+  name?: string;
 }) => {
   return (
     <div className={cn(className)}>
@@ -40,9 +46,14 @@ export const InputWithLable = ({
           {...props}
           id={id}
           className={cn(inputClassName)}
+          defaultValue={defaultValue}
+          name={name}
         />
       ) : (
         <Input
+          name={name}
+          readOnly={readOnly}
+          defaultValue={defaultValue}
           type={type}
           maxLength={maxLength}
           placeholder={placeholder}

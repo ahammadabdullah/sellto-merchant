@@ -29,3 +29,11 @@ export const onboardingForm = z.object({
     .optional(),
   productTypes: z.string().optional(),
 });
+
+export const shopSchema = z.object({
+  name: z.string().min(1, "Shop name is required").optional(),
+  subTitle: z.string().max(30, "Max 30 characters").optional().nullable(),
+  description: z.string().max(150, "Max 150 characters").optional().nullable(),
+  favicon: z.any().optional().optional().nullable(),
+  image: z.any().optional().optional().nullable(),
+});

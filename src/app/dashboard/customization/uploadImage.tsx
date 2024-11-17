@@ -1,11 +1,28 @@
 "use client";
 import { FileUp } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
-const UploadImage = ({ className }: { className?: string }) => {
+const UploadImage = ({
+  className,
+  setImageFile,
+  image,
+}: {
+  className?: string;
+  setImageFile: (image: File) => void;
+  image?: string;
+}) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -15,18 +32,23 @@ const UploadImage = ({ className }: { className?: string }) => {
   };
 
   const checkImageDimensions = (file: File) => {
-    const img = new Image();
+    const img = new window.Image();
     const objectUrl = URL.createObjectURL(file);
 
     img.onload = () => {
       const { width, height } = img;
       URL.revokeObjectURL(objectUrl);
-      console.log("width:", width, "height:", height);
-      if (width === 200 && height === 200) {
-        console.log("Favicon selected:", file);
+      console.log("Image dimensions:", width, height);
+
+      // Ensure the image adheres to the max 1320x600 constraint or maintains the aspect ratio.
+      if (width <= 1320 && height <= 600 && width / height === 1320 / 600) {
+        setImageFile(file);
+        setPreviewUrl(URL.createObjectURL(file)); // Set preview
         setError(null);
       } else {
-        setError("Image dimensions must be 200x200 pixels.");
+        setError(
+          "Image must be 1320x600 pixels or maintain the same aspect ratio."
+        );
       }
     };
 
@@ -59,8 +81,8 @@ const UploadImage = ({ className }: { className?: string }) => {
   return (
     <div className={cn(className)}>
       <h3 className="flex gap-2 items-center pb-5">
-        <span className="text-base">Favicon</span>{" "}
-        <span className="opacity-65 text-[12px]">1320x600px</span>
+        <span className="text-base">Upload Image</span>
+        <span className="opacity-65 text-[12px]">Max 1320x600px</span>
       </h3>
       <div
         style={{
@@ -76,28 +98,37 @@ const UploadImage = ({ className }: { className?: string }) => {
           alignItems: "center",
           backgroundColor: isDragging ? "#43ff644a" : "transparent",
         }}
-        onClick={() => document.getElementById("faviconInput")?.click()}
+        onClick={() => document.getElementById("imageInput")?.click()}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        {isDragging ? (
-          <p className="">Drop here</p>
+        {image || previewUrl ? (
+          <Image
+            src={image || previewUrl || ""}
+            alt="Preview"
+            width={image ? 1320 : 0}
+            height={image ? 600 : 0}
+            className="object-cover"
+            style={{ width: "100%", height: "100%" }}
+          />
+        ) : isDragging ? (
+          <p>Drop here</p>
         ) : (
           <div className="flex flex-col items-center text-muted-foreground p-2">
             <FileUp
               size={55}
               className="opacity-65 pb-3 text-muted-foreground"
             />
-            <span className=" text-sm p-2 text-center leading-4 mb-1">
+            <span className="text-sm p-2 text-center leading-4 mb-1">
               Click to upload or drag and drop
             </span>
-            <span className="text-xs opacity-65">svg, png, jps or gif</span>
+            <span className="text-xs opacity-65">svg, png, jpg, or gif</span>
           </div>
         )}
       </div>
       <input
-        id="faviconInput"
+        id="imageInput"
         type="file"
         accept="image/*"
         className="hidden"

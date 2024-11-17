@@ -41,6 +41,7 @@ model Shop {
   id           String     @id @default(cuid())
   name         String     @unique
   image        String?
+  favicon      String?
   subTitle     String?
   description  String?
   createdAt    DateTime   @default(now())
