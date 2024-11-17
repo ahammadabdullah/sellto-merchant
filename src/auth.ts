@@ -51,9 +51,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user, trigger, session }) {
+      if (user) {
+        // When a user signs in, populate the token with user data
+        token.id = user.id as string;
+        token.role = user.role;
+        token.status = user.status;
+        token.shopId = user.shopId;
+      }
+
       if (trigger === "update" && session) {
+        // When session is updated, fetch the user again from the database
         const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
+          where: { id: token.id },
           select: {
             id: true,
             email: true,
@@ -63,25 +72,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
         if (dbUser) {
-          token.id = dbUser.id as string;
-          token.role = dbUser.role as string;
-          token.status = dbUser.status as string;
-          token.shopId = (dbUser.shopId as string) || "dbUser.shopId";
+          token.id = dbUser.id;
+          token.role = dbUser.role;
+          token.status = dbUser.status;
+          token.shopId = dbUser.shopId as string;
         }
-      }
-      if (user) {
-        token.id = user.id as string;
-        token.role = user.role as string;
-        token.status = user.status as string;
-        token.shopId = (user.shopId as string) || "user.shopId";
       }
       return token;
     },
-    async session({ session, token }) {
+
+    session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as string;
       session.user.status = token.status as string;
-      session.user.shopId = (token.shopId as string) || "session.shopId";
+      session.user.shopId = token.shopId as string;
       return session;
     },
   },

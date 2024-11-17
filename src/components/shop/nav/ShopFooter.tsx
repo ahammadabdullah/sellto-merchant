@@ -66,8 +66,7 @@ export default function ShopFooter({
                     alt="icon"
                     width={45}
                     height={45}
-                    objectFit="cover"
-                    className="rounded-full"
+                    className="rounded-full object-cover"
                   ></Image>
                   <h1 className="font-clash max-w-[400px] min-[380px]:text-2xl text-xl">
                     {shopName}
@@ -83,10 +82,10 @@ export default function ShopFooter({
               <div className="links_wrap">
                 <h2 className="font-clash text-xl">Useful Links</h2>
                 <ul className="ml-2 flex flex-col gap-1 text-sm">
-                  {usefulLinks.map((link) => (
+                  {usefulLinks.map((link, idx) => (
                     <li
                       className="hover:opacity-100 opacity-70 transition-opacity w-[fit-content]"
-                      key={link.url}
+                      key={idx}
                     >
                       {" "}
                       <Link href={link.url}>{link.label}</Link>
@@ -97,11 +96,8 @@ export default function ShopFooter({
               <div className="links_wrap">
                 <h2 className="font-clash text-xl">Contact us</h2>
                 <ul className="ml-2 flex flex-col gap-1 text-sm">
-                  {contactList?.map((contact) => (
-                    <li
-                      className="w-[fit-content] opacity-85"
-                      key={contact.url}
-                    >
+                  {contactList?.map((contact, idx) => (
+                    <li className="w-[fit-content] opacity-85" key={idx}>
                       {contact.label}:{" "}
                       <Link
                         href={contact.url}

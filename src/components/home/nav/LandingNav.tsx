@@ -293,7 +293,7 @@ export default function LandingNav() {
               Log in
             </Button>
           </Link>
-          <Link href="/dashboard" className="w-full sm:w-auto">
+          <Link href="/signup" className="w-full sm:w-auto">
             <Button
               className={cn(styles.link_button, "justify-start")}
               onClick={() => navHandlder("closer")}

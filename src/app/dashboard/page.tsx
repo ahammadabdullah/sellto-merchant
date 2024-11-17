@@ -17,47 +17,46 @@ import { RecentOrders, columns } from "./columns";
 import { DataTable } from "../../components/helpers/data-table";
 import { getRecentOrdersByShopId } from "@/actions/actions";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+import useUser from "@/components/hooks/use-user";
+import useShop from "@/components/hooks/use-shop";
 
-async function getRecentOrdersData(): Promise<RecentOrders[]> {
-  const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
+async function getRecentOrdersData(shopId: string): Promise<RecentOrders[]> {
   const orders = await getRecentOrdersByShopId(shopId);
   return orders;
 }
 export default function Home() {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
+  const [RecentOrdersData, setRecentOrdersData] = useState<RecentOrders[]>([]);
   const router = useRouter();
+  console.log(session?.user, "from home");
+  const { user, loading } = useUser();
+  const { shop } = useShop();
+  useEffect(() => {
+    if (user?.shopId) {
+      getRecentOrdersData(user.shopId).then((data) => {
+        setRecentOrdersData(data);
+        setIsLoading(false);
+      });
+    } else {
+      setIsLoading(false);
+    }
+  }, [user?.shopId]);
 
-  // useEffect(() => {
-  //   const fetchSession = async () => {
-  //     await update();
-  //     setIsLoading(false);
-  //   };
-  //   fetchSession();
-  // }, []);
+  if (session?.user && !session.user.shopId) {
+    router.push("/onboarding");
+  }
 
-  // useEffect(() => {
-  //   if (!isLoading) {
-  //     console.log(session?.user.shopId, "from dashboard");
-  //     console.log("Redirecting to onboarding");
-  //     // if (session?.user.shopId === null) {
-  //     //   router.push("/onboarding");
-  //     // }
-  //   }
-  // }, [isLoading, session?.user.shopId]);
-  console.log(session?.user, "from dashboard");
-  // console.log("Redirecting to onboarding");
-  // const RecentOrdersData = await getRecentOrdersData();
   return (
     <main className="p-8">
       <div className="flex flex-wrap gap-6 mb-10 place-items-center justify-between">
         <div className="text_group flex flex-col gap-2">
           <h1 className="font-clash text-4xl font-medium">
-            Welcome {"Rashid..."}
+            Welcome {shop?.name}
           </h1>
           <p className="text-sm mt-[-0.7em] opacity-60">
-            Here’s the latest data on your store {"{store name}"}
+            Here’s the latest data on your store {shop?.name}
           </p>
         </div>
         <Button className="px-6 pr-4">

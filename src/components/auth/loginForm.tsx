@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { login } from "@/actions/actions";
+import { useSession } from "next-auth/react";
 const initialState = {
   message: null as string | null,
   errors: {} as {
@@ -29,7 +30,7 @@ export default function LoginForm() {
   const [state, setState] = useState(initialState);
   const [pending, setPending] = useState(false);
   const router = useRouter();
-
+  const { update } = useSession();
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -49,6 +50,7 @@ export default function LoginForm() {
       ...prev,
       message: result?.message || null,
     }));
+    update();
     console.log(result);
   }
 

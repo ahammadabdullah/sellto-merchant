@@ -77,7 +77,8 @@ export default async function DahsboardLayout({
   const cookieStore = await cookies();
   const defaultOpen =
     cookieStore.get("sidebar:state")?.value === "false" ? false : true;
-  const session = auth();
+  const session = await auth();
+  // console.log("--------------------", session, "-----------------------");
 
   return (
     <>

@@ -9,12 +9,14 @@ export async function middleware(request: NextRequest) {
   const session = await auth();
   const isLoggedIn = !!session?.user;
   const { pathname } = nextUrl;
+  console.log("Host Header:", request.headers.get("host"));
 
   const host = request.headers.get("host");
   const subdomain = host?.split(".")[0];
+  console.log("Rewriting URL to:", `/shop/${subdomain}${nextUrl.pathname}`);
+
   const privateRoutes = ["/dashboard", "/dashboard/:path*"];
   const mainDomainRoutes = [
-    "/",
     "/about",
     "/contact",
     "/login",
@@ -33,6 +35,23 @@ export async function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL("/onboarding", nextUrl));
   // }
 
+  const isMainDomainRoute = (pathname: string) => {
+    return (
+      mainDomainRoutes.includes(pathname) ||
+      mainDomainRoutes.some((route) => pathname.startsWith(route + "/"))
+    );
+  };
+  if (
+    subdomain &&
+    subdomain !== "localhost" &&
+    subdomain !== "localhost:3000" &&
+    subdomain !== "beta" &&
+    !isMainDomainRoute(pathname)
+  ) {
+    const url = nextUrl.clone();
+    url.pathname = `/shop/${subdomain}${url.pathname}`;
+    return NextResponse.rewrite(url);
+  }
   // Protect private routes for unauthenticated users
   if (
     !isLoggedIn &&
@@ -42,23 +61,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
-  const isMainDomainRoute = (pathname: string) => {
-    return (
-      mainDomainRoutes.includes(pathname) ||
-      mainDomainRoutes.some((route) => pathname.startsWith(route + "/"))
-    );
-  };
-
-  if (
-    subdomain &&
-    subdomain !== "localhost" &&
-    subdomain !== "beta" &&
-    !isMainDomainRoute(pathname)
-  ) {
-    const url = nextUrl.clone();
-    url.pathname = `/shop/${subdomain}${url.pathname}`;
-    return NextResponse.rewrite(url);
-  }
   return NextResponse.next();
 }
 

@@ -18,7 +18,6 @@ import { useParams } from "next/navigation";
 export default function Home() {
   const params = useParams();
   const subdomain = params.subdomain;
-
   return (
     <ReactLenisProvider>
       <main className="w-full overflow-x-hidden">

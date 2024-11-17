@@ -11,7 +11,6 @@ import { EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
-// import { useToast } from "@/components/hooks/use-toast";
 
 interface CopyButton {
   className?: string;

@@ -27,6 +27,7 @@ import { OurFileRouter } from "../api/uploadthing/core";
 import { useUploadThing } from "@/lib/hooks";
 import { FileEsque } from "uploadthing/types";
 import { onboardingUser } from "@/actions/actions";
+import useUser from "@/components/hooks/use-user";
 
 // This is a mock list of currencies. In a real application, you'd fetch this from an API or database.
 const currencies = [
@@ -57,7 +58,8 @@ export default function OnboardingForm() {
   const { data: session, update } = useSession();
   const router = useRouter();
 
-  if (!session) {
+  if (!session?.user) {
+    console.log(session?.user, "from onboarding form");
     router.push("/login");
   }
   const {
@@ -78,17 +80,15 @@ export default function OnboardingForm() {
       productTypes: "",
     },
   });
-  console.log(session?.user, "from onboarding form");
   const watchAllFields = watch();
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
-    onUploadError(err) {
-      console.log(err, "from onboarding form");
-    },
+    onUploadError(err) {},
     onClientUploadComplete(res) {
       setImgUrl(res[0].url);
-      console.log(res, "from onboarding form");
     },
   });
+  const { refetch } = useUser();
+
   const onSubmit = async (data: z.infer<typeof onboardingForm>) => {
     if (data.shopLogo) {
       await startUpload([data.shopLogo]);
@@ -109,6 +109,8 @@ export default function OnboardingForm() {
       }));
     }
     update();
+    refetch();
+
     if (result?.redirectUrl) {
       router.push(result?.redirectUrl);
     }

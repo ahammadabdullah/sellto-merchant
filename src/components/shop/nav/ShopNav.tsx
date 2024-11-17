@@ -120,8 +120,7 @@ export default function LandingNav({
             alt="icon"
             width={35}
             height={35}
-            objectFit="cover"
-            className="rounded-full"
+            className="rounded-full object-cover"
           ></Image>
           <h1 className="font-clash font-medium max-w-[400px] text-lg overflow-hidden">
             {shopName}
@@ -145,8 +144,7 @@ export default function LandingNav({
                 alt="icon"
                 width={35}
                 height={35}
-                objectFit="cover"
-                className="rounded-full"
+                className="rounded-full object-cover"
               ></Image>
               <h1 className="font-clash max-w-[400px] text-lg overflow-hidden">
                 {shopName}

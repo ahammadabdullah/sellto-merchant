@@ -62,8 +62,7 @@ export async function login(prevState: State, formData: FormData) {
         message: null,
         redirectUrl: "/onboarding",
       };
-    }
-    return { errors: {}, message: null, redirectUrl: "/dashboard" };
+    } else return { errors: {}, message: null, redirectUrl: "/dashboard" };
   } catch (error) {
     console.error("Login failed", error);
     return {
@@ -364,6 +363,28 @@ export async function addProductByShopId(formData: ProductFormData) {
       message: null,
       redirectUrl: null,
     };
+  }
+}
+
+// get user
+export async function getUser(email: string) {
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        status: true,
+        shopId: true,
+      },
+    });
+    return user;
+  } catch {
+    return {};
   }
 }
 
