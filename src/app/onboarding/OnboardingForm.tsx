@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,8 +26,10 @@ import { generateUploader } from "@uploadthing/react";
 import { OurFileRouter } from "../api/uploadthing/core";
 import { useUploadThing } from "@/lib/hooks";
 import { FileEsque } from "uploadthing/types";
-import { onboardingUser } from "@/actions/actions";
+import { getShopDetailsForOnboarding, onboardingUser } from "@/actions/actions";
 import useUser from "@/components/hooks/use-user";
+import { CheckCircle, CircleCheck, Loader } from "lucide-react";
+import { FaExclamationCircle } from "react-icons/fa";
 
 // This is a mock list of currencies. In a real application, you'd fetch this from an API or database.
 const currencies = [
@@ -49,12 +51,25 @@ const initialState = {
     productTypes?: string[];
   },
 };
+interface ShopDetails {
+  subDomain: string;
+  name: string;
+}
+
 export default function OnboardingForm() {
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(25);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [state, setState] = useState(initialState);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [nameError, setNameError] = useState("");
+  const [subdomainError, setSubdomainError] = useState("");
+  const [shopDetails, setShopDetails] = useState<ShopDetails[]>([]);
+  const [name, setName] = useState("");
+  const [subdomain, setSubdomain] = useState("");
+
   const { data: session, update } = useSession();
   const router = useRouter();
 
@@ -80,6 +95,17 @@ export default function OnboardingForm() {
       productTypes: "",
     },
   });
+
+  useEffect(() => {
+    const fetchShopDetails = async () => {
+      const response = await getShopDetailsForOnboarding();
+      if (response) {
+        setShopDetails(response);
+      }
+    };
+    fetchShopDetails();
+  }, []);
+  console.log(shopDetails, "shop details");
   const watchAllFields = watch();
   const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onUploadError(err) {},
@@ -133,15 +159,49 @@ export default function OnboardingForm() {
     }
   };
 
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const value = e.target.value;
+    setName(value);
+
+    if (value) {
+      const exists = shopDetails.some(
+        (shop: ShopDetails) =>
+          shop.name.toLocaleLowerCase() === value.toLocaleLowerCase()
+      );
+      setNameError(exists ? "Name already exists." : "");
+    } else {
+      setNameError("");
+    }
+    setLoading(false);
+  };
+
+  const handleSubdomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    const value = e.target.value;
+    setSubdomain(value);
+    if (value) {
+      const exists = shopDetails.some(
+        (shop) =>
+          shop.subDomain.toLocaleLowerCase() === value.toLocaleLowerCase()
+      );
+      setSubdomainError(exists ? "Subdomain already exists." : "");
+    } else {
+      setSubdomainError("");
+    }
+    setLoading(false);
+  };
+  console.log(nameError, "name error");
+  console.log(subdomainError, "subdomain error");
   const nextStep = async () => {
     let isValid = false;
 
     switch (step) {
       case 1:
-        isValid = await trigger("shopName");
+        isValid = (await trigger("shopName")) && !nameError;
         break;
       case 2:
-        isValid = await trigger("subDomain");
+        isValid = (await trigger("subDomain")) && !subdomainError;
         break;
       case 3:
         isValid = await trigger("currency");
@@ -196,11 +256,30 @@ export default function OnboardingForm() {
                     (max 15 characters)
                   </p>
                 </Label>
-                <Input id="shopName" {...register("shopName")} />
+                <div className="relative">
+                  <Input
+                    id="shopName"
+                    {...register("shopName")}
+                    onChange={handleNameChange}
+                  />
+                  {/* <span className={` absolute top-2 right-6`}>
+                    {loading && <Loader className="animate-spin" />}
+                    {loading ? (
+                      <Loader />
+                    ) : nameError ? (
+                      <FaExclamationCircle title="Name already exists" />
+                    ) : (
+                      <CircleCheck />
+                    )}
+                  </span> */}
+                </div>
                 {errors.shopName && (
                   <p className="text-red-500 text-sm mt-1">
                     {errors.shopName.message}
                   </p>
+                )}
+                {nameError && (
+                  <p className="text-red-500 text-sm mt-1">{nameError}</p>
                 )}
               </div>
               <div>
@@ -242,6 +321,7 @@ export default function OnboardingForm() {
                   <Input
                     id="subDomain"
                     {...register("subDomain")}
+                    onChange={handleSubdomainChange}
                     className="rounded-r-none focus-visible:ring-0"
                   />
                   <span className="bg-muted px-3 py-2 rounded-r-md">
@@ -260,6 +340,9 @@ export default function OnboardingForm() {
                 <p className="text-red-500 text-sm mt-1">
                   {errors.subDomain.message}
                 </p>
+              )}
+              {subdomainError && (
+                <p className="text-red-500 text-sm mt-1">{subdomainError}</p>
               )}
             </div>
           )}

@@ -44,9 +44,9 @@ export default function Home() {
     }
   }, [user?.shopId]);
   console.log(session?.user, "from home");
-  // if (session?.user && !session.user.shopId) {
-  //   router.push("/onboarding");
-  // }
+  if (session?.user && !session.user.shopId) {
+    router.push("/onboarding");
+  }
 
   return (
     <main className="p-8">

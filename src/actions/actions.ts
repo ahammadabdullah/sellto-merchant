@@ -205,6 +205,23 @@ export async function onboardingUser(formData: FormData) {
   }
 }
 
+// get shopDetails
+
+export async function getShopDetailsForOnboarding() {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) {
+    return null;
+  }
+  const shops = await prisma.shop.findMany({
+    select: {
+      name: true,
+      subDomain: true,
+    },
+  });
+  return shops;
+}
+
 // get shop by shopId
 export const getShop = async (id: string) => {
   const res = await prisma.shop.findUnique({
