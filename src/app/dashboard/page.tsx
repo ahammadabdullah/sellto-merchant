@@ -43,10 +43,10 @@ export default function Home() {
       setIsLoading(false);
     }
   }, [user?.shopId]);
-
-  if (session?.user && !session.user.shopId) {
-    router.push("/onboarding");
-  }
+  console.log(session?.user, "from home");
+  // if (session?.user && !session.user.shopId) {
+  //   router.push("/onboarding");
+  // }
 
   return (
     <main className="p-8">

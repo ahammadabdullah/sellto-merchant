@@ -108,7 +108,7 @@ export default function OnboardingForm() {
         errors: result?.errors || {},
       }));
     }
-    update();
+    update({ shopId: result.data?.id });
     refetch();
 
     if (result?.redirectUrl) {

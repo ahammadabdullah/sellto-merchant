@@ -185,8 +185,10 @@ export async function onboardingUser(formData: FormData) {
         shopId: res.id,
       },
     });
+    // await signIn("credentials", {});
 
     return {
+      data: res,
       errors: {},
       message: "Onboarding successful!",
       redirectUrl: "/dashboard",

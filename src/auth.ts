@@ -2,7 +2,13 @@ import NextAuth from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import prisma from "./lib/db";
 import bcrypt from "bcryptjs";
-export const { handlers, signIn, signOut, auth } = NextAuth({
+import { authConfig } from "./auth.config";
+export const { handlers, signIn, signOut, auth } = NextAuth(authConfig);
+
+/**
+ * 
+ 
+{
   secret: process.env.AUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -52,6 +58,46 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user, trigger, session }) {
       if (user) {
+        return {
+          ...token,
+          id: user.id as string,
+          role: user.role as string,
+          status: user.status as string,
+          shopId: user.shopId as string,
+          email: user.email as string,
+        };
+      }
+      if (trigger === "update" && session.shopId) {
+        return {
+          ...token,
+          id: session.user.id as string,
+          role: session.user.role as string,
+          status: session.user.status as string,
+          shopId: session.user.shopId as string,
+          email: session.user.email as string,
+        };
+      }
+      return token;
+    },
+
+    session({ session, token }) {
+      session.user.id = token.id as string;
+      session.user.role = token.role as string;
+      session.user.status = token.status as string;
+      session.user.shopId = token.shopId as string;
+      session.user.email = token.email as string;
+      return session;
+    },
+  },
+}
+
+
+ * 
+ * * */
+
+/*****
+ async jwt({ token, user, trigger, session }) {
+      if (user) {
         // When a user signs in, populate the token with user data
         token.id = user.id as string;
         token.role = user.role;
@@ -81,12 +127,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
 
-    session({ session, token }) {
-      session.user.id = token.id as string;
-      session.user.role = token.role as string;
-      session.user.status = token.status as string;
-      session.user.shopId = token.shopId as string;
-      return session;
-    },
-  },
-});
+
+***/
