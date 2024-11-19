@@ -1,16 +1,11 @@
-// "use client";
-// import * as React from "react";
-// import gsap from "gsap";
-// import Link from "next/link";
-// import Image from "next/image";
+"use client";
 
-// icon
-import { EyeOff } from "lucide-react";
-
-// componets
+// components
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { CartItem } from "../productProfile";
 
 interface CopyButton {
   className?: string;
@@ -24,7 +19,30 @@ export function CartButton({
   navCloserFunc,
   amount = 0,
 }: CopyButton) {
-  // const { toast } = useToast();
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = localStorage.getItem("cart");
+      if (cart) {
+        const items = JSON.parse(cart);
+        const total = items.reduce(
+          (sum: number, item: CartItem) => sum + item.quantity,
+          0
+        );
+        setTotalItems(total);
+      } else {
+        setTotalItems(0);
+      }
+    };
+
+    updateCartCount();
+    window.addEventListener("cart-updated", updateCartCount);
+
+    return () => {
+      window.removeEventListener("cart-updated", updateCartCount);
+    };
+  }, []);
   return (
     <Button
       className={cn(
@@ -36,7 +54,9 @@ export function CartButton({
       onClick={() => navCloserFunc("closer")}
     >
       <ShoppingCart size={23} />
-      <p className=" top-[-20%] right-[-20%] font-sans opacity-65">{amount}</p>
+      <p className=" top-[-20%] right-[-20%] font-sans opacity-65">
+        {totalItems}
+      </p>
     </Button>
   );
 }

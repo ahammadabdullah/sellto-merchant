@@ -178,7 +178,13 @@ export default function LandingNav({
           ))}
         </div>
         <div className="right_wrap flex flex-wrap flex-col sm:flex-row  gap-1 w-full sm:w-auto">
-          <CartButton navCloserFunc={navHandlder} styles={styles} amount={0} />
+          <Link href={"/cart"}>
+            <CartButton
+              navCloserFunc={navHandlder}
+              styles={styles}
+              amount={0}
+            />
+          </Link>
         </div>
       </div>
       {/* mobile hamberg */}

@@ -14,38 +14,44 @@ import { Separator } from "@/components/ui/separator";
 import { capitalizeFirstLetter, truncateString } from "@/lib/utils";
 
 export interface ProductProfileProps {
+  data: Product;
+}
+export interface CartItem {
+  id: string;
+  variant: string;
+  quantity: number;
+  price: string;
   name: string;
-  soldAmount: number;
-  shortDescription: string;
-  image?: string | null;
-  fullDescription: string;
-  warranty: string;
-  defaultVariant: string;
-  variants: Variant[];
+  image: string | null;
+  shortDescription?: string;
 }
 import placeHolderProduct from "@/assets/placeholder.png";
-import { Variant } from "@/types/types";
+import { Product, Variant } from "@/types/types";
+import { toast } from "@/components/hooks/use-toast";
 
-export default function ProductProfile({
-  name,
-  soldAmount,
-  shortDescription,
-  image,
-  fullDescription,
-  warranty,
-  defaultVariant,
-  variants,
-}: ProductProfileProps) {
+export default function ProductProfile({ data }: ProductProfileProps) {
+  const {
+    productName,
+    image,
+    soldCount,
+    shortDescription,
+    fullDescription,
+    defaultWarrantyText,
+    variants,
+  } = data;
+  const defaultVariant = variants[0]?.name;
   const [selectedVariant, setSelectedVariant] = useState<Variant>(
     variants.find((v) => v.name === defaultVariant) || variants[0]
   );
-  const [quantity, setQuantity] = useState(selectedVariant.minQuantity);
+  const [quantity, setQuantity] = useState<number>(
+    Number(selectedVariant.minQuantity)
+  );
 
   const handleVariantChange = (variantName: string) => {
     const newVariant =
       variants.find((v) => v.name === variantName) || variants[0];
     setSelectedVariant(newVariant);
-    setQuantity(newVariant.minQuantity);
+    setQuantity(Number(newVariant.minQuantity));
   };
 
   const totalPrice = Number(selectedVariant.price) * Number(quantity);
@@ -59,14 +65,47 @@ export default function ProductProfile({
       Number(selectedVariant.stock)
     );
   };
-  console.log(image, "from productProfile.tsx");
+  const handleAddToCart = () => {
+    let item = {} as CartItem;
+    item.id = data.id;
+    item.name = productName;
+    item.variant = selectedVariant.name;
+    item.quantity = quantity;
+    item.price = Number(selectedVariant.price).toFixed(2);
+    item.image = image || null;
+    item.shortDescription =
+      selectedVariant.shortDescription || item.shortDescription;
+    const cart = localStorage.getItem("cart");
+    if (cart) {
+      const cartItems = JSON.parse(cart) as CartItem[];
+      const itemIndex = cartItems.findIndex(
+        (i) => i.id === item.id && i.variant === item.variant
+      );
+      if (itemIndex !== -1) {
+        cartItems[itemIndex].quantity += item.quantity;
+      } else {
+        cartItems.push(item);
+      }
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    } else {
+      const cartItems: CartItem[] = [item];
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
+    const event = new Event("cart-updated");
+    window.dispatchEvent(event);
+    toast({
+      title: "Success",
+      description: `${productName}- ${selectedVariant.name} added to cart`,
+      variant: "default",
+    });
+  };
   return (
     <>
       <div className="grid md:grid-cols-2 gap-8">
         <div>
           <Image
             src={image ? image : placeHolderProduct}
-            alt={name}
+            alt={productName}
             width={500}
             height={500}
             className="rounded-lg object-cover w-full"
@@ -74,10 +113,10 @@ export default function ProductProfile({
         </div>
         <div>
           <div>
-            <h1 className="text-2xl font-bold mb-2">{name}</h1>
-            <p className="text-xs text-gray-500 mb-4">{soldAmount} sold</p>
+            <h1 className="text-2xl font-bold mb-2">{productName}</h1>
+            <p className="text-xs text-gray-500 mb-4">{soldCount} sold</p>
             <p className="text-sm mb-4">
-              {truncateString(shortDescription, 85)}
+              {truncateString(shortDescription || "", 85)}
             </p>
           </div>
           <div className="mt-8">
@@ -210,7 +249,11 @@ export default function ProductProfile({
           </div>
 
           <div className="flex flex-wrap gap-4 mb-8">
-            <Button className="flex-1" variant="secondary">
+            <Button
+              onClick={handleAddToCart}
+              className="flex-1"
+              variant="secondary"
+            >
               Add to Cart
             </Button>
             <Button className="flex-1">Buy Now</Button>
@@ -230,13 +273,13 @@ export default function ProductProfile({
         <p className="mb-2">
           {selectedVariant.customWarranty
             ? selectedVariant.warrantyText
-            : warranty}
+            : defaultWarrantyText || "No warranty information available"}
         </p>
         <p>
           Warranty period:{" "}
           {selectedVariant.customWarranty
             ? selectedVariant.warrantyTime
-            : warranty}
+            : defaultWarrantyText || "No warranty information available"}
         </p>
       </div>
     </>

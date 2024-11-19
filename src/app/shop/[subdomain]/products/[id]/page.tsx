@@ -48,18 +48,7 @@ export default async function ProductPage({
           className="mx-auto mt-28 max-w-[1024px] max-[1025px]:px-6 mb-16"
           id="product_details"
         >
-          <ProductProfile
-            name={product.productName}
-            soldAmount={product.soldCount}
-            image={product.image}
-            shortDescription={product?.shortDescription || ""}
-            fullDescription={product?.fullDescription || ""}
-            warranty={
-              product.defaultWarrantyText || "No warranty information available"
-            }
-            defaultVariant={product.variants[0]?.name || "default"}
-            variants={product?.variants}
-          />
+          <ProductProfile data={product} />
         </div>
         <div className="circle bg_primary_radial_gradient w-[100%] aspect-square rounded-full fixed top-[-100%] left-[50%] translate-x-[-50%] pointer-events-none opacity-40 z-[-1]"></div>
       </main>
