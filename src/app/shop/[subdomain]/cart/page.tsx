@@ -19,10 +19,13 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CartItem } from "@/components/shop/productProfile";
 import placeHolderProduct from "@/assets/placeholder.png";
+import { loadStripe } from "@stripe/stripe-js";
+import { Loader } from "lucide-react";
 
 export default function Component() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const cartItems = localStorage.getItem("cart");
     if (cartItems) {
@@ -59,6 +62,33 @@ export default function Component() {
     localStorage.setItem("cart", JSON.stringify(updatedCartItems));
     const event = new Event("cart-updated");
     window.dispatchEvent(event);
+  };
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+  );
+  const handleCheckout = async () => {
+    setLoading(true);
+    try {
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Stripe failed to load.");
+
+      const response = await fetch(`/api/stripe/checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems }),
+      })
+        .then((res) => res.json())
+        .then((data) => data.session.id);
+      if (!response) {
+        throw new Error("Something went wrong.");
+      }
+      await stripe.redirectToCheckout({ sessionId: response });
+    } catch (error: any) {
+      console.error("Checkout Error:", error.message);
+      alert(error.message || "Failed to proceed to checkout.");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="grid md:grid-cols-[1fr_300px] gap-8 mx-auto  max-w-[1024px] max-[1025px]:px-[0.5rem] px-4 md:px-6 py-12 my-20">
@@ -142,8 +172,12 @@ export default function Component() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button size="lg" className="w-full">
-              Proceed to Checkout
+            <Button size="lg" className="w-full" onClick={handleCheckout}>
+              {loading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                "Proceed to Checkout"
+              )}
             </Button>
           </CardFooter>
         </Card>

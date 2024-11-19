@@ -24,6 +24,8 @@ export interface CartItem {
   name: string;
   image: string | null;
   shortDescription?: string;
+  productId: string;
+  variantId: string;
 }
 import placeHolderProduct from "@/assets/placeholder.png";
 import { Product, Variant } from "@/types/types";
@@ -75,11 +77,13 @@ export default function ProductProfile({ data }: ProductProfileProps) {
     item.image = image || null;
     item.shortDescription =
       selectedVariant.shortDescription || item.shortDescription;
+    item.productId = data.id;
+    item.variantId = selectedVariant.id;
     const cart = localStorage.getItem("cart");
     if (cart) {
       const cartItems = JSON.parse(cart) as CartItem[];
       const itemIndex = cartItems.findIndex(
-        (i) => i.id === item.id && i.variant === item.variant
+        (i) => i.id === item.id && i.variantId === item.variantId
       );
       if (itemIndex !== -1) {
         cartItems[itemIndex].quantity += item.quantity;
