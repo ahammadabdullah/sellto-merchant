@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { useState } from "react";
 import { IoSend } from "react-icons/io5";
+import { cn } from "@/lib/utils";
 
 const contactFormSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
@@ -53,7 +54,7 @@ export default function ContactForm({ className }: ContactFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className={cn("space-y-4", className)}>
       <div className="space-y-2">
         <Label htmlFor="subject">Subject</Label>
         <Input

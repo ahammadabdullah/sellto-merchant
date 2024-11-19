@@ -53,13 +53,13 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(url);
   }
   // Protect private routes for unauthenticated users
-  if (
-    !isLoggedIn &&
-    privateRoutes.some((route) => pathname.startsWith(route))
-  ) {
-    console.log("from middleware");
-    return NextResponse.redirect(new URL("/login", nextUrl));
-  }
+  // if (
+  //   !isLoggedIn &&
+  //   privateRoutes.some((route) => pathname.startsWith(route))
+  // ) {
+  //   console.log("from middleware");
+  //   return NextResponse.redirect(new URL("/login", nextUrl));
+  // }
 
   return NextResponse.next();
 }

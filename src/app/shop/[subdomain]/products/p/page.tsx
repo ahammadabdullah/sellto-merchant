@@ -77,7 +77,7 @@ export default function ProductPage() {
             variants={DUMMY_PRODUCT.variants}
           />
         </div>
-        <div className="circle bg_primary_radial_gradient w-[100%] aspect-square rounded-full fixed top-[-100%] left-[50%] translate-x-[-50%] pointer-events-none opacity-40 z-[-1]"></div>
+        <div className="circel bg_primary_radial_gradient w-[100%] aspect-square rounded-full fixed top-[-100%] left-[50%] translate-x-[-50%] pointer-events-none opacity-40 z-[-1]"></div>
       </main>
     </ReactLenisProvider>
   );
