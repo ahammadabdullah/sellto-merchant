@@ -1,87 +1,63 @@
-// libraries
-// import gsap from "gsap";
-import Link from "next/link";
-import Image from "next/image";
 import { ReactLenisProvider } from "@/components/helpers/LenisProvider";
-
-// components
-import { Button as CustomButton } from "@/components/ui/CustomButton";
-import { Button } from "@/components/ui/button";
 import { ProductHero } from "@/components/shop/ProductHero";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { Input as IconInput } from "@/components/ui/inputWithIcon";
 import { ProductCard } from "@/components/shop/ProductCard";
+import prisma from "@/lib/db";
+import SearchBar from "@/components/shop/SearchBar";
+import placeHolderProduct from "@/assets/placeholder.png";
 
-export default function Home() {
+interface ProductsPageProps {
+  searchParams: { query: string };
+  params: { subdomain: string };
+}
+
+export default async function ProductsPage({
+  searchParams,
+  params,
+}: ProductsPageProps) {
+  const searchQuery = searchParams.query || "";
+  const { subdomain } = params;
+  console.log(subdomain, "from products page");
+  const products = await prisma.product.findMany({
+    where: {
+      productName: {
+        contains: searchQuery,
+        mode: "insensitive",
+      },
+      shopSubDomain: subdomain,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   return (
     <ReactLenisProvider>
       <main className="w-full overflow-x-hidden">
-        {/* <h1 className="font-clash font-medium text-3xl sm:text-4xl w-full text-center px-2 py-10 mt-20">
-          Our <span className="text-primary2">Products</span>
-        </h1> */}
-        <ProductHero></ProductHero>
-        <section className="mx-auto  max-w-[1024px] max-[1025px]:px-[0.5rem] mb-16">
+        <ProductHero />
+        <section className="mx-auto max-w-[1024px] max-[1025px]:px-[0.5rem] mb-16">
           <div className="my-10">
-            <IconInput
-              placeholder="Search a product.."
-              className="py-6"
-              startIcon={Search}
-            ></IconInput>
+            <SearchBar initialQuery={searchQuery} />
           </div>
 
           <div className="flex flex-wrap justify-center sm:grid-cols-2 lg:grid-cols-3 gap-6 relative">
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
-
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
-
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
-
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
-            <ProductCard
-              className="sm:basis-[325px]"
-              id={"fawfhiwoah"}
-              stockCount={23}
-              title="Product name"
-              subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
-              price="560"
-            ></ProductCard>
+            {products.length === 0 ? (
+              <p>No products found</p>
+            ) : (
+              products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  className="sm:basis-[325px]"
+                  id={product.id}
+                  stockCount={0}
+                  title={product.productName}
+                  subtitle={
+                    product.shortDescription || "No description available"
+                  }
+                  price={product.price.toString()}
+                  image={product.image || placeHolderProduct}
+                />
+              ))
+            )}
           </div>
         </section>
       </main>

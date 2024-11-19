@@ -191,8 +191,7 @@ export default function OnboardingForm() {
     }
     setLoading(false);
   };
-  console.log(nameError, "name error");
-  console.log(subdomainError, "subdomain error");
+
   const nextStep = async () => {
     let isValid = false;
 

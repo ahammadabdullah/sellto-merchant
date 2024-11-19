@@ -34,27 +34,28 @@ model User {
   role      String   @default("merchant")
   status    String   @default("pending")
   shopId    String?  @unique
-  Shop      Shop?
+  Shop      Shop?    @relation("userToShop", fields: [shopId], references: [id])
 }
 
 model Shop {
-  id           String     @id @default(cuid())
-  name         String     @unique
-  image        String?
-  favicon      String?
-  subTitle     String?
-  description  String?
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  userId       String     @unique
-  theme        Json?
-  currency     String     @default("USD")
-  productTypes String?
-  subDomain    String     @unique
-  categories   Category[]
-  orders       Order[]
-  products     Product[]
-  user         User       @relation(fields: [userId], references: [id])
+  id                  String     @id @default(cuid())
+  name                String     @unique
+  image               String?
+  favicon             String?
+  subTitle            String?
+  description         String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  userId              String     @unique
+  theme               Json?
+  currency            String     @default("USD")
+  productTypes        String?
+  subDomain           String     @unique
+  categories          Category[]
+  orders              Order[]
+  products            Product[]  @relation("ShopToProductById")
+  productsBySubDomain Product[]  @relation("ShopToProductBySubDomain")
+  User                User[]     @relation("userToShop")
 }
 
 model Product {
@@ -62,6 +63,7 @@ model Product {
   price                 Float
   image                 String?
   shopId                String
+  shopSubDomain         String
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
   customDefaultWarranty Boolean
@@ -71,8 +73,10 @@ model Product {
   productName           String
   shortDescription      String?
   visibility            String
+  soldCount             Int       @default(0)
   orders                Order[]
-  shop                  Shop      @relation(fields: [shopId], references: [id])
+  shop                  Shop      @relation("ShopToProductById", fields: [shopId], references: [id])
+  shopBySubDomain       Shop      @relation("ShopToProductBySubDomain", fields: [shopSubDomain], references: [subDomain])
   variants              Variant[]
 }
 

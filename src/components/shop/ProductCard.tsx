@@ -57,11 +57,13 @@ export function ProductCard({
           <div className=" relative z-10">
             <Image
               width={610}
-              src={image ? image : placeHolderProduct}
-              alt={"wffa"}
+              height={343}
+              src={image || placeHolderProduct}
+              alt={"product"}
               className="w-full h-full rounded-t-md object-cover aspect-[16/9]"
               placeholder="blur"
-            ></Image>
+              blurDataURL={"https://www.sellto.io/og_img2.webp"}
+            />
             {!image && (
               <h3 className="text-3xl font-bold absolute text-muted/70 top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]">
                 N/A

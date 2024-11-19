@@ -20,16 +20,17 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 // You can use a Zod schema here if you want.
 
 export type Product = {
-  id: number;
+  id: string;
   productName: string;
   image: string | null;
   createdAt: Date;
   updatedAt: Date;
-  type: string;
-  stock: number;
+  type?: string;
+  stock?: number;
   shopId: string;
   price: number;
-  shortDescription?: string;
+  shortDescription?: string | null;
+  shopSubDomain: string;
 };
 
 export const columns: ColumnDef<Product>[] = [

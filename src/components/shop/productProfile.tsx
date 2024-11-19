@@ -13,32 +13,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { capitalizeFirstLetter, truncateString } from "@/lib/utils";
 
-interface Variant {
-  name: string;
-  shortDescription: string;
-  description: string;
-  price: string;
-  currency: "USD" | "EURO";
-  customWarranty: boolean;
-  warrantyTime: string;
-  warrantyText: string;
-  unlimitedStock: boolean;
-  stock: string;
-  minQuantity: string;
-  maxQuantity: string;
-}
-
 export interface ProductProfileProps {
   name: string;
   soldAmount: number;
   shortDescription: string;
-  image?: string;
+  image?: string | null;
   fullDescription: string;
   warranty: string;
   defaultVariant: string;
   variants: Variant[];
 }
 import placeHolderProduct from "@/assets/placeholder.png";
+import { Variant } from "@/types/types";
 
 export default function ProductProfile({
   name,
@@ -73,7 +59,7 @@ export default function ProductProfile({
       Number(selectedVariant.stock)
     );
   };
-
+  console.log(image, "from productProfile.tsx");
   return (
     <>
       <div className="grid md:grid-cols-2 gap-8">
@@ -193,8 +179,8 @@ export default function ProductProfile({
             <div>
               <h3 className="text-sm font-medium mb-2">Quantity</h3>
               <Select
-                value={quantity}
-                onValueChange={(value) => setQuantity(value)}
+                value={quantity?.toString()}
+                onValueChange={(value) => setQuantity(Number(value))}
               >
                 <SelectTrigger className="w-32 max-w-[90px] bg-transparent">
                   <SelectValue

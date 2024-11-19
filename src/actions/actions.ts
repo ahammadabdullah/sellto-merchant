@@ -291,6 +291,7 @@ export const updateShop = async (id: string, formData: FormData) => {
 // get all the products by shopId
 
 export async function getAllProductsByShopId(shopId: string) {
+  console.log(shopId, "shopId");
   const products = await prisma.product.findMany({
     where: {
       shopId: shopId as string,
@@ -313,6 +314,22 @@ export async function addProductByShopId(formData: ProductFormData) {
       redirectUrl: "/login",
     };
   }
+  const shop = await prisma.shop.findUnique({
+    where: {
+      id: shopId as string,
+    },
+  });
+
+  if (!shop) {
+    return {
+      errors: {
+        email: ["Shop not found, Contact support"],
+      },
+      message: null,
+      redirectUrl: "/login",
+    };
+  }
+
   const price = parseFloat(formData.defaultPrice as string);
   const image = formData.image as string;
   const customDefaultWarranty =
@@ -337,6 +354,7 @@ export async function addProductByShopId(formData: ProductFormData) {
         shortDescription,
         productName,
         visibility,
+        shopSubDomain: shop.subDomain as string,
       },
     });
     if (variants && variants.length > 0) {
