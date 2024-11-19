@@ -18,7 +18,6 @@ export async function middleware(request: NextRequest) {
   const privateRoutes = ["/dashboard", "/dashboard/:path*"];
   const mainDomainRoutes = [
     "/about",
-    "/contact",
     "/login",
     "/signup",
     "/onboarding",

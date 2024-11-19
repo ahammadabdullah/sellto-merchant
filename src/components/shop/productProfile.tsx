@@ -30,6 +30,7 @@ export interface CartItem {
 import placeHolderProduct from "@/assets/placeholder.png";
 import { Product, Variant } from "@/types/types";
 import { toast } from "@/components/hooks/use-toast";
+import Link from "next/link";
 
 export default function ProductProfile({ data }: ProductProfileProps) {
   const {
@@ -260,7 +261,9 @@ export default function ProductProfile({ data }: ProductProfileProps) {
             >
               Add to Cart
             </Button>
-            <Button className="flex-1">Buy Now</Button>
+            <Button onClick={handleAddToCart} className="flex-1">
+              <Link href={"/cart"}>Buy Now</Link>
+            </Button>
           </div>
         </div>
       </div>

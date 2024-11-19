@@ -17,10 +17,16 @@ export async function POST(req: NextRequest) {
       session.payment_intent as string
     );
     const data = {
-      customer: session.customer_details,
-      session,
+      customer: {
+        email: session.customer_details?.email,
+        name: session.customer_details?.name,
+      },
+      productData: session.metadata?.productData,
       lineItems,
-      paymentIntent,
+      orderData: {
+        paymentId: paymentIntent.id,
+        amount: paymentIntent.amount,
+      },
     };
 
     return NextResponse.json(data);

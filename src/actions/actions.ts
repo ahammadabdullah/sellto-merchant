@@ -10,6 +10,7 @@ import { redirect } from "next/dist/server/api-utils";
 import { ProductFormData } from "@/app/dashboard/products/new/addProduct";
 import { Currency } from "lucide-react";
 import { Prisma } from "@prisma/client";
+import { StripeSession } from "@/app/shop/[subdomain]/success/page";
 
 export type State = {
   message: string | null;
@@ -341,6 +342,10 @@ export async function addProductByShopId(formData: ProductFormData) {
   const productName = formData.productName as string;
   const visibility = formData.visibility as string;
   const variants = formData.variants;
+  const stock = variants.reduce(
+    (total, variant) => total + parseInt(variant.stock),
+    0
+  );
   try {
     const newProduct = await prisma.product.create({
       data: {
@@ -354,6 +359,7 @@ export async function addProductByShopId(formData: ProductFormData) {
         shortDescription,
         productName,
         visibility,
+        stock,
         shopSubDomain: shop.subDomain as string,
       },
     });
@@ -517,112 +523,98 @@ export async function getAllOrdersByShopId(shopId: string) {
   return orders;
 }
 
-// export async function addOrder() {
-//   const order = await prisma.order.createMany({
-//     data: [
-//       {
-//         userId: 2,
-//         userName: "John Doe",
-//         revenue: 150.5,
-//         productId: 1,
-//         quantity: 3,
-//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
-//         status: "completed",
-//         createdAt: "2024-10-01T10:30:00Z",
-//         updatedAt: "2024-10-03T15:00:00Z",
-//       },
-//       {
-//         userId: 2,
-//         userName: "Jane Smith",
-//         revenue: 75.0,
-//         productId: 2,
-//         quantity: 1,
-//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
-//         status: "pending",
-//         createdAt: "2024-10-02T09:15:00Z",
-//         updatedAt: "2024-10-02T09:15:00Z",
-//       },
-//       {
-//         userId: 2,
-//         userName: "Bob Johnson",
-//         revenue: 200.0,
-//         productId: 3,
-//         quantity: 5,
-//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
-//         status: "shipped",
-//         createdAt: "2024-10-04T13:45:00Z",
-//         updatedAt: "2024-10-05T11:30:00Z",
-//       },
-//       {
-//         userId: 2,
-//         userName: "Alice Brown",
-//         revenue: 320.75,
-//         productId: 4,
-//         quantity: 7,
-//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
-//         status: "delivered",
-//         createdAt: "2024-10-05T08:20:00Z",
-//         updatedAt: "2024-10-06T17:00:00Z",
-//       },
-//       {
-//         userId: 2,
-//         userName: "Charlie Wilson",
-//         revenue: 50.0,
-//         productId: 2,
-//         quantity: 2,
-//         shopId: "1279cc87-a710-4b17-bd7f-96aadde2fdc0",
-//         status: "canceled",
-//         createdAt: "2024-10-06T11:10:00Z",
-//         updatedAt: "2024-10-07T09:00:00Z",
-//       },
-//     ],
-//   });
-//   return order;
-// }
+// get shopId by subDomain
+export async function getShopIdBySubDomain(subDomain: string) {
+  try {
+    const shop = await prisma.shop.findFirst({
+      where: {
+        subDomain: subDomain,
+      },
+    });
+    return shop?.id;
+  } catch {
+    return null;
+  }
+}
 
-// export async function addShop() {
-//   try {
-//     const shop = await prisma.shop.create({
-//       data: {
-//         name: "Shop 2",
-//         image: "/shop_img.png",
-//         userId: 1,
-//       },
-//     });
-//     return shop;
-//   } catch (error) {
-//     console.error("Error creating shop:", error);
-//     throw error;
-//   }
-// }
+// handle payment success
 
-// export async function addProducts() {
-//   try {
-//     const product3 = await prisma.product.create({
-//       data: {
-//         name: "Product 3",
-//         price: 49.99,
-//         image: "/product3_img.png",
-//         shopId: "59727a20-e0e6-42f7-b673-8fdcc1c5fe88", // reference to existing shop
-//         stock: 100,
-//         type: "Apparel",
-//       },
-//     });
+export const handlePaymentSuccess = async (
+  StripeSession: StripeSession,
+  shopId: string
+) => {
+  const { customer, productData, lineItems, orderData } = StripeSession;
+  const products = JSON.parse(productData);
+  try {
+    const enrichedLineItems = lineItems.data.map(
+      (lineItem: any, index: number) => ({
+        ...lineItem,
+        productId: products[index].productId,
+        variantId: products[index].variantId,
+        quantity: products[index].quantity,
+      })
+    );
+    // Check if the order already exists to prevent duplicates
+    const existingOrder = await prisma.order.findFirst({
+      where: { paymentId: orderData.paymentId },
+    });
 
-//     const product4 = await prisma.product.create({
-//       data: {
-//         name: "Product 4",
-//         price: 99.99,
-//         image: "/product4_img.png",
-//         shopId: "59727a20-e0e6-42f7-b673-8fdcc1c5fe88", // reference to existing shop
-//         stock: 20,
-//         type: "Footwear",
-//       },
-//     });
+    if (existingOrder) {
+      console.log("Order already created");
+      return existingOrder; // Return existing order
+    }
+    const order = {
+      customer_name: customer.name,
+      customer_email: customer.email,
+      revenue: orderData.amount / 100,
+      paymentId: orderData.paymentId,
+      productIds: enrichedLineItems.map((item: any) => item.productId),
+      variantIds: enrichedLineItems.map((item: any) => item.variantId),
+      quantities: enrichedLineItems.map((item: any) => item.quantity),
+      productNames: enrichedLineItems.map((item: any) => item.description),
+      shopId,
+    };
 
-//     return { product3, product4 };
-//   } catch (error) {
-//     console.error("Error creating products:", error);
-//     throw error;
-//   }
-// }
+    // Create order in the database
+    const orderRes = await prisma.order.create({
+      data: order,
+    });
+
+    // Update stock
+    for (const product of products) {
+      const { variantId, productId, quantity } = product;
+
+      // Update variant stock
+      const variant = await prisma.variant.findFirst({
+        where: { id: variantId },
+      });
+      if (variant) {
+        const newStock = Number(variant.stock) - Number(quantity);
+        await prisma.variant.update({
+          where: { id: variantId },
+          data: { stock: newStock },
+        });
+      }
+
+      // Update product stock
+      const productData = await prisma.product.findFirst({
+        where: { id: productId },
+      });
+      if (productData) {
+        const newProductStock = Number(productData.stock) - Number(quantity);
+        await prisma.product.update({
+          where: { id: productId },
+          data: {
+            stock: newProductStock,
+            soldCount: productData.soldCount + Number(quantity),
+          },
+        });
+      }
+    }
+
+    return orderRes;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

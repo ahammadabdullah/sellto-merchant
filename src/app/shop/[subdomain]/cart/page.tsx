@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { CartItem } from "@/components/shop/productProfile";
 import placeHolderProduct from "@/assets/placeholder.png";
 import { loadStripe } from "@stripe/stripe-js";
-import { Loader } from "lucide-react";
+import { Loader, Trash } from "lucide-react";
 
 export default function Component() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -129,6 +129,10 @@ export default function Component() {
                 </div>
                 <div className="flex items-center justify-end gap-2">
                   <span className="font-medium">${item.price}</span>
+                  <Trash
+                    className="cursor-pointer"
+                    onClick={() => handleChangeQty("0", idx)}
+                  />
                   <Select
                     onValueChange={(val) => handleChangeQty(val, idx)}
                     defaultValue={item.quantity.toString()}
@@ -145,6 +149,12 @@ export default function Component() {
                       <SelectItem value="5">5</SelectItem>
                     </SelectContent>
                   </Select>
+                  <div>
+                    <Trash
+                      className="cursor-pointer"
+                      onClick={() => handleChangeQty("0", idx)}
+                    />
+                  </div>
                 </div>
               </div>
             ))}

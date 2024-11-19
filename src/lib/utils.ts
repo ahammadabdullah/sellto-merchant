@@ -12,7 +12,10 @@ export function isValidEmail(email: string) {
 }
 
 // string shortner
-export function truncateString(str: string | undefined, maxStrLength: number): string {
+export function truncateString(
+  str: string | undefined,
+  maxStrLength: number
+): string {
   if (!str) return "";
   if (str.length > maxStrLength) {
     return str.slice(0, maxStrLength) + "...";

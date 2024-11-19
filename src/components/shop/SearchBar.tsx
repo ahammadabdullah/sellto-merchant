@@ -1,4 +1,4 @@
-"use client"; // This will make this component a Client Component
+"use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
