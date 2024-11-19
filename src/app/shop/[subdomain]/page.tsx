@@ -37,6 +37,9 @@ export default async function ShopPage({
     where: { subDomain: subdomain },
     include: {
       products: {
+        where: {
+          visibility: "active",
+        },
         take: 6,
         orderBy: { createdAt: "desc" },
       },

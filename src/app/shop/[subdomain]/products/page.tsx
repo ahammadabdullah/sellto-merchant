@@ -19,6 +19,7 @@ export default async function ProductsPage({
   console.log(subdomain, "from products page");
   const products = await prisma.product.findMany({
     where: {
+      visibility: "active",
       productName: {
         contains: searchQuery,
         mode: "insensitive",

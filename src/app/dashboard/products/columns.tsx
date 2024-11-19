@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 
 import { dateFormatter, capitalizeFirstLetter } from "@/lib/utils";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { deleteProduct } from "@/lib/api";
+import { toast } from "@/components/hooks/use-toast";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -31,6 +33,21 @@ export type Product = {
   price: number;
   shortDescription?: string | null;
   shopSubDomain: string;
+};
+
+const handleDelete = async (id: string) => {
+  if (confirm("Are you sure you want to delete this product?")) {
+    console.log(id);
+    const res = await deleteProduct(id);
+    console.log(res);
+    if (res.success) {
+      toast({
+        title: "Success",
+        description: "Product deleted successfully",
+        variant: "default",
+      });
+    }
+  }
 };
 
 export const columns: ColumnDef<Product>[] = [
@@ -76,8 +93,7 @@ export const columns: ColumnDef<Product>[] = [
             alt="img"
             width={40}
             height={40}
-            objectFit="cover"
-            className="max-w-[50px] aspect-square rounded"
+            className="max-w-[50px] aspect-square rounded object-cover"
           />
           <div className="flex flex-col">
             <div className="flex place-items-center gap-1">
@@ -189,7 +205,7 @@ export const columns: ColumnDef<Product>[] = [
             className="text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
             variant={"ghost"}
             size={"icon"}
-            onClick={() => console.log("link: api/product/dlt/" + rowData.id)}
+            onClick={() => handleDelete(rowData.id)}
           >
             <Trash2 size={18} />
           </Button>

@@ -16,13 +16,14 @@ import { columns, Product } from "./columns";
 import { getAllProductsByShopId } from "@/actions/actions";
 import Link from "next/link";
 import { auth } from "@/auth";
+import { getAllProducts } from "@/lib/api";
 
 async function getData() {
   const session = await auth();
   const shopId = session?.user.shopId;
   let products: Product[] = [];
   if (shopId) {
-    const products = await getAllProductsByShopId(shopId);
+    const { products } = await getAllProducts(shopId);
     return products;
   }
   return products;
