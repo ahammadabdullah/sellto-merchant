@@ -645,7 +645,7 @@ export async function getRecentOrdersByShopId(shopId: string) {
     orderBy: {
       createdAt: "desc",
     },
-    take: 2,
+    take: 5,
   });
   return orders;
 }

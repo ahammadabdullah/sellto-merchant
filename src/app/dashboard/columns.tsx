@@ -15,15 +15,17 @@ import { dateFormatter } from "@/lib/utils";
 // You can use a Zod schema here if you want.
 export type RecentOrders = {
   id: string | number;
-  userId: string | number;
   customer_name: string;
-  createdAt: Date;
-  productId: string | number;
-  quantity: number;
   shopId: string;
+  createdAt: Date;
   updatedAt: Date;
   status: string;
   revenue: number;
+  paymentId: string;
+  productIds: string[];
+  variantIds: string[];
+  quantities: number[];
+  productNames: string[];
 };
 
 export const columns: ColumnDef<RecentOrders>[] = [

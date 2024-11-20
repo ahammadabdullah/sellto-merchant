@@ -27,7 +27,7 @@ export interface classProps {
   title: string;
   icon?: any;
   metric: string;
-  percentage: string | number;
+  percentage?: string | number;
   previousMetric: string;
   danger?: boolean;
 }

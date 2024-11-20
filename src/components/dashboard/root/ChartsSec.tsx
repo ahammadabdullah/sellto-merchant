@@ -1,14 +1,10 @@
-// import Image from "next/image";
-// import Link from "next/link";
-
-// functions
 import { cn } from "@/lib/utils";
 
-// components
-// import SectionTitle from "@/components/SecTitle";
 import MetricsCard from "@/components/dashboard/root/MetricsCardSmall";
 import MainChart from "@/components/dashboard/root/MainChart";
 import RadialChart from "@/components/dashboard/root/RadialChart";
+import { getChartData, getDashboardStatistics } from "@/actions/statistics";
+import { auth } from "@/auth";
 
 const chartData = [
   { Xtitle: "Bin", revenue: 186, orders: 80 },
@@ -21,14 +17,18 @@ const chartData = [
   { Xtitle: "faw", revenue: 274, orders: 140 },
 ];
 
-// assets
-// import img_global_map from "@/assets/home/global_map.png";
-
-// import { ChevronDown } from "lucide-react";
 export interface classProps {
   className?: string;
 }
-export default function Component({ className }: classProps) {
+export default async function Component({ className }: classProps) {
+  const session = await auth();
+  const shopId = session?.user?.shopId;
+  if (!shopId) {
+    return null;
+  }
+  const data = await getDashboardStatistics(shopId);
+  const chartData = await getChartData();
+  console.log(chartData);
   return (
     <section className={cn(className, "")}>
       <div className="wrap flex flex-col gap-5">
@@ -36,40 +36,42 @@ export default function Component({ className }: classProps) {
           <MetricsCard
             icon="$"
             title="Total Revenue"
-            metric="176.52 USD"
-            percentage={"+50%"}
-            previousMetric="Last week 130$"
-          ></MetricsCard>
+            metric={data?.totalRevenue.thisWeek.toString() + " USD"}
+            percentage={
+              (data?.totalRevenue.growth > 0 ? "+" : "") +
+              data?.totalRevenue.growth.toString() +
+              "%"
+            }
+            previousMetric={`Last week ${data.totalRevenue.lastWeek} $ `}
+          />
           <MetricsCard
             icon="$"
-            title="Total Revenue"
-            metric="176.52 USD"
-            danger={true}
-            percentage={"+50%"}
-            previousMetric="Last week 130$"
-          ></MetricsCard>
+            title="Orders"
+            metric={data?.totalOrders.thisWeek.toString()}
+            percentage={
+              (data?.totalOrders.growth > 0 ? "+" : "") +
+              data?.totalOrders.growth.toString() +
+              "%"
+            }
+            previousMetric={`Last week ${data.totalOrders.lastWeek}  `}
+          />
           <MetricsCard
             icon="$"
-            title="Total Revenue"
-            metric="176.52 USD"
-            percentage={"+50%"}
-            previousMetric="Last week 130$"
-          ></MetricsCard>
+            title="Average Order Value"
+            metric={data?.averageOrderValue.thisWeek.toFixed(2) + " USD"}
+            percentage={
+              (data?.averageOrderValue.growth > 0 ? "+" : "") +
+              data?.averageOrderValue.growth.toString() +
+              "%"
+            }
+            previousMetric={`Last week $${data.averageOrderValue.lastWeek}  `}
+          />
           <MetricsCard
             icon="$"
-            title="Total Revenue"
-            metric="176.52 USD"
-            danger={true}
-            percentage={"+50%"}
-            previousMetric="Last week 130$"
-          ></MetricsCard>
-          <MetricsCard
-            icon="$"
-            title="Total Revenue"
-            metric="176.52 USD"
-            percentage={"+50%"}
-            previousMetric="Last week 130$"
-          ></MetricsCard>
+            title="Total Tickets"
+            metric={data?.totalTickets.allTime.toString()}
+            previousMetric={`Open Tickets ${data.totalTickets.openTicketsAllTime}  `}
+          />
         </div>
         <div className="bottom_row flex max-[900px]:flex-wrap gap-5">
           <MainChart chartData={chartData}></MainChart>

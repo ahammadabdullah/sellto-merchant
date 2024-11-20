@@ -7,7 +7,6 @@ const { auth } = NextAuth(authConfig as NextAuthConfig);
 export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const session = await auth();
-  console.log(session, "from middleware");
   const isLoggedIn = !!session?.user;
   const { pathname } = nextUrl;
   console.log("Host Header:", request.headers.get("host"));

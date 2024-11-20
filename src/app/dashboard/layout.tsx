@@ -67,7 +67,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { auth } from "@/auth";
-import { SessionProvider } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default async function DahsboardLayout({
   children,
@@ -78,7 +78,13 @@ export default async function DahsboardLayout({
   const defaultOpen =
     cookieStore.get("sidebar:state")?.value === "false" ? false : true;
   const session = await auth();
-  // console.log("--------------------", session, "-----------------------");
+  if (!session) {
+    return null;
+  }
+  if (!session.user?.shopId) {
+    redirect("/onboarding");
+    return null;
+  }
 
   return (
     <>
