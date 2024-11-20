@@ -16,11 +16,8 @@ import { dateFormatter } from "@/lib/utils";
 // You can use a Zod schema here if you want.
 export type AllOrders = {
   id: string | number;
-  userId: string | number;
   customer_name: string;
   createdAt: Date;
-  productId: string | number;
-  quantity: number;
   shopId: string;
   updatedAt: Date;
   status: string;

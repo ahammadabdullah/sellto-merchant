@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusCircle, X, PackagePlus, FileUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import NewProductImage from "./newProductImage";
 import { useUploadThing } from "@/lib/hooks";
 import { boolean } from "zod";
-import { addProductByShopId } from "@/actions/actions";
+import { addProductByShopId, updateProductById } from "@/actions/actions";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export interface Variant {
+  id?: string;
   name: string;
   shortDescription: string;
   description: string;
@@ -69,24 +70,25 @@ const initialState = {
 };
 const currencies = ["USD"];
 
-export function ProductForm() {
+export function ProductForm({ data }: { data: any }) {
   const [variants, setVariants] = useState<Variant[]>([]);
   const [selectedVariant, setSelectedVariant] = useState<number | null>(null);
   const [customDefaultWarranty, setCustomDefaultWarranty] = useState(false);
   const [productImage, setProductImage] = useState<File | null>(null);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
-  const [visibility, setVisibility] = useState<string>("unpublished");
+  const [imageURL, setImageURL] = useState<string | null>(data.image);
+  const [visibility, setVisibility] = useState<string>(data.visibility);
   const [state, setState] = useState(initialState);
 
-  const { startUpload, isUploading } = useUploadThing("imageUploader", {
-    onUploadError(err) {
-      console.log(err, "from onboarding form");
-    },
-    onClientUploadComplete(res) {
-      setImgUrl(res[0].url);
-      console.log(res, "from onboarding form");
-    },
-  });
+  useEffect(() => {
+    const initializedVariants =
+      data?.variants?.map((variant: any) => ({
+        ...variant,
+      })) || [];
+
+    setVariants(initializedVariants);
+  }, [data]);
+
+  const { startUpload, isUploading } = useUploadThing("imageUploader");
 
   const LabelClass = "ml-1 flex flex-wrap place-items-center gap-1 mb-2";
   const addVariant = () => {
@@ -200,9 +202,7 @@ export function ProductForm() {
       }));
       return;
     }
-    if (productImage) {
-      await startUpload([productImage]);
-    }
+
     const form = e.target as HTMLFormElement;
     const formData: ProductFormData = {
       productName: (form.querySelector("#productName") as HTMLInputElement)
@@ -222,8 +222,13 @@ export function ProductForm() {
       visibility,
       variants,
     };
-
-    formData.image = imgUrl;
+    if (productImage) {
+      const res = await startUpload([productImage]);
+      if (res) {
+        formData.image = res[0].url || res[0].appUrl;
+      }
+    }
+    console.log(formData, "after adding image url");
 
     if (customDefaultWarranty) {
       formData.defaultWarrantyTime = (
@@ -235,7 +240,7 @@ export function ProductForm() {
     }
 
     console.log("Form Data:", formData);
-    const result = await addProductByShopId(formData);
+    const result = await updateProductById(data.id, formData);
     if ("email" in result?.errors) {
       setState((prev) => ({
         ...prev,
@@ -267,7 +272,11 @@ export function ProductForm() {
                   (max 55 characters)
                 </p>
               </Label>
-              <Input id="productName" placeholder="Enter the product name" />
+              <Input
+                defaultValue={data.productName}
+                id="productName"
+                placeholder="Enter the product name"
+              />
             </div>
             <div>
               <Label className={LabelClass} htmlFor="shortDescription">
@@ -277,6 +286,7 @@ export function ProductForm() {
                 </p>
               </Label>
               <Textarea
+                defaultValue={data.shortDescription}
                 id="shortDescription"
                 placeholder="Brief overview of the product"
               />
@@ -289,6 +299,7 @@ export function ProductForm() {
                 </p>
               </Label>
               <Textarea
+                defaultValue={data.fullDescription}
                 id="fullDescription"
                 placeholder="Detailed description of the product"
                 rows={6}
@@ -301,12 +312,13 @@ export function ProductForm() {
                 </Label>
                 <div className="flex gap-2">
                   <Input
+                    defaultValue={data.price}
                     id="defaultPrice"
                     type="number"
                     placeholder="0000"
                     className="max-w-[220px]"
                   />
-                  <Select>
+                  <Select defaultValue={data.customDefaultWarranty}>
                     <SelectTrigger
                       id="defaultCurrency"
                       className="max-w-[80px]"
@@ -344,6 +356,7 @@ export function ProductForm() {
                     Custom warranty Time
                   </Label>
                   <Input
+                    defaultValue={data.defaultWarrantyTime}
                     id="defaultWarrantyTime"
                     placeholder="e.g., 1 year, 6 months"
                   />
@@ -353,6 +366,7 @@ export function ProductForm() {
                     Custom warranty Text
                   </Label>
                   <Textarea
+                    defaultValue={data.defaultWarrantyText}
                     id="defaultWarrantyText"
                     placeholder="Describe the warranty terms"
                     rows={2}
@@ -373,13 +387,17 @@ export function ProductForm() {
                 className="h-full aspect-[19/9] "
                 setProductImage={setProductImage}
                 image={productImage}
+                imgUrl={data.image}
               />
             </div>
             <div>
               <Label className={LabelClass} htmlFor="visibility">
                 Visibility status
               </Label>
-              <Select onValueChange={(value) => setVisibility(value)}>
+              <Select
+                defaultValue={data.visibility}
+                onValueChange={(value) => setVisibility(value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select product visibility" />
                 </SelectTrigger>
@@ -414,7 +432,6 @@ export function ProductForm() {
             <div className="h-8 w-1 bg-primary"></div>
             <h2 className="text-2xl font-semibold">Variants</h2>
           </div>
-
           <Button onClick={addVariant} type="button" variant={"secondary"}>
             <PlusCircle className="mr-2 h-4 w-4" /> Add Variant
           </Button>
@@ -877,7 +894,7 @@ export function ProductForm() {
         type="submit"
         className="fixed  z-20 top-16 right-8 shadow-xl px-6 hover:translate-y-[-5px] transition-transform"
       >
-        Add product <PackagePlus className="ml-2" />
+        Update product <PackagePlus className="ml-2" />
       </Button>
       {Object.keys(state.errors).length > 0 && (
         <Alert variant="destructive">

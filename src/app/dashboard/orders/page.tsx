@@ -14,18 +14,19 @@ import { DataTable } from "@/components/helpers/data-table";
 
 import PageTitle from "@/components/dashboard/PageTitle";
 
-import {
-  getAllOrdersByShopId,
-  getRecentOrdersByShopId,
-} from "@/actions/actions";
-async function getData(): Promise<AllOrders[]> {
-  // Fetch data from your API here.
-  const shopId = "1279cc87-a710-4b17-bd7f-96aadde2fdc0";
+import { getAllOrdersByShopId } from "@/actions/actions";
+import { auth } from "@/auth";
+async function getData(shopId: string): Promise<AllOrders[]> {
   const orders = await getAllOrdersByShopId(shopId);
   return orders;
 }
 export default async function Home() {
-  const data = await getData();
+  const session = await auth();
+  const shopId = session?.user?.shopId;
+  if (!shopId) {
+    return null;
+  }
+  const data = await getData(shopId);
   return (
     <main className="p-8">
       <PageTitle

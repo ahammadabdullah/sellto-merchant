@@ -199,7 +199,10 @@ export const columns: ColumnDef<Product>[] = [
               console.log("link: /dashboard/products/" + rowData.id)
             }
           >
-            <Pencil size={18} />
+            <Link href={`/dashboard/products/edit/${rowData.id}`}>
+              {" "}
+              <Pencil size={18} />
+            </Link>
           </Button>
           <Button
             className="text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"

@@ -8,6 +8,7 @@ import { auth } from "@/auth";
 import { getSession } from "next-auth/react";
 import { redirect } from "next/dist/server/api-utils";
 import { ProductFormData } from "@/app/dashboard/products/new/addProduct";
+import { ProductFormData as ProductFormData2 } from "@/app/dashboard/products/edit/EditProduct";
 import { Currency } from "lucide-react";
 import { Prisma } from "@prisma/client";
 import { StripeSession } from "@/app/shop/[subdomain]/success/page";
@@ -303,7 +304,7 @@ export async function getAllProductsByShopId(shopId: string) {
 
 // add a product by shopId
 
-export async function addProductByShopId(formData: ProductFormData) {
+export async function addProductByShopId(formData: ProductFormData2) {
   const session = await auth();
   const shopId = session?.user?.shopId;
   if (!shopId) {
@@ -388,6 +389,7 @@ export async function addProductByShopId(formData: ProductFormData) {
           maxQuantity: parseInt(variant.maxQuantity),
         };
       });
+      console.log(newVariants, "newVariants");
       await prisma.variant.createMany({
         data: newVariants,
       });
@@ -399,6 +401,144 @@ export async function addProductByShopId(formData: ProductFormData) {
     };
   } catch (error) {
     console.error("Error creating product:", error);
+    return {
+      errors: {
+        email: ["Please try again later"],
+      },
+      message: null,
+      redirectUrl: null,
+    };
+  }
+}
+
+export async function updateProductById(
+  productId: string,
+  formData: ProductFormData
+) {
+  const session = await auth();
+  const shopId = session?.user?.shopId;
+  if (!shopId) {
+    return {
+      errors: {
+        email: ["Not authorized, Contact support"],
+      },
+      message: null,
+      redirectUrl: "/login",
+    };
+  }
+  const shop = await prisma.shop.findUnique({
+    where: {
+      id: shopId as string,
+    },
+  });
+
+  if (!shop) {
+    return {
+      errors: {
+        email: ["Shop not found, Contact support"],
+      },
+      message: null,
+      redirectUrl: "/login",
+    };
+  }
+
+  const existingProduct = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+
+  if (!existingProduct) {
+    return {
+      errors: {
+        email: ["Product not found"],
+      },
+      message: null,
+      redirectUrl: "/dashboard/products",
+    };
+  }
+
+  const updateData: any = {};
+
+  // Only update fields that are provided in the form data
+  if (formData.defaultPrice)
+    updateData.price = parseFloat(formData.defaultPrice as string);
+  if (formData.image) updateData.image = formData.image as string;
+  if (formData.customDefaultWarranty !== undefined)
+    updateData.customDefaultWarranty =
+      formData.customDefaultWarranty as boolean;
+  if (formData.defaultWarrantyText)
+    updateData.defaultWarrantyText = formData.defaultWarrantyText as string;
+  if (formData.defaultWarrantyTime)
+    updateData.defaultWarrantyTime = formData.defaultWarrantyTime as string;
+  if (formData.fullDescription)
+    updateData.fullDescription = formData.fullDescription as string;
+  if (formData.shortDescription)
+    updateData.shortDescription = formData.shortDescription as string;
+  if (formData.productName)
+    updateData.productName = formData.productName as string;
+  if (formData.visibility)
+    updateData.visibility = formData.visibility as string;
+
+  const variants = formData.variants;
+  let updatedStock = 0;
+
+  if (variants) {
+    const updatedVariants = variants.map((variant) => {
+      updatedStock += parseInt(variant.stock); // Calculate total stock
+      return {
+        id: variant.id as string,
+        productId: productId,
+        name: variant.name,
+        price: parseFloat(variant.price),
+        stock: parseInt(variant.stock),
+        shortDescription: variant.shortDescription as string,
+        description: variant.description as string,
+        currency: variant.currency as string,
+        productType: variant.productType as string,
+        customWarranty: variant.customWarranty as unknown as boolean,
+        warrantyText: variant.warrantyText as string,
+        warrantyTime: variant.warrantyTime as string,
+        serials: variant.serials as string,
+        parsedSerial: variant.parsedSerial as unknown as Prisma.InputJsonValue,
+        serialParseMethod: variant.serialParseMethod as string,
+        removeDuplicates: variant.removeDuplicates as unknown as boolean,
+        serviceDescription: variant.serviceDescription as string,
+        unlimitedStock: variant.unlimitedStock as unknown as boolean,
+        minQuantity: parseInt(variant.minQuantity),
+        maxQuantity: parseInt(variant.maxQuantity),
+      };
+    });
+
+    // Update variants (use upsert or updateMany based on your use case)
+    for (const variant of updatedVariants) {
+      await prisma.variant.upsert({
+        where: { id: variant.id as string },
+        update: variant,
+        create: variant,
+      });
+    }
+  }
+
+  try {
+    // Update product with the new data
+    const updatedProduct = await prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        ...updateData,
+        stock: updatedStock, // Update stock based on variants
+      },
+    });
+
+    return {
+      errors: {},
+      message: "Product updated successfully!",
+      redirectUrl: "/dashboard/products",
+    };
+  } catch (error) {
+    console.error("Error updating product:", error);
     return {
       errors: {
         email: ["Please try again later"],
@@ -451,18 +591,18 @@ export async function getProductById(productId: string) {
   return product;
 }
 
-// update a product by productId
-export async function updateProductById(productId: string, productData: any) {
-  const product = await prisma.product.update({
-    where: {
-      id: productId as string,
-    },
-    data: {
-      ...productData,
-    },
-  });
-  return product;
-}
+// // update a product by productId
+// export async function updateProductById(productId: string, productData: any) {
+//   const product = await prisma.product.update({
+//     where: {
+//       id: productId as string,
+//     },
+//     data: {
+//       ...productData,
+//     },
+//   });
+//   return product;
+// }
 
 // delete a product by productId
 export async function deleteProductById(productId: string) {
