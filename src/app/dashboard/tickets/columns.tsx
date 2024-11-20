@@ -16,21 +16,25 @@ import { CopyButton } from "@/components/CopyButton";
 import { DataTableColumnHeader } from "@/components/helpers/DataTableColumnHeader";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { cn } from "@/lib/utils";
+import { cn, getFormattedDate, getTimeFromDate } from "@/lib/utils";
 
-import { dateFormatter, truncateString } from "@/lib/utils";
+import { truncateString } from "@/lib/utils";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+interface Messages {
+  id: number | string;
+  content: string;
+  email: string;
+  createdAt: Date;
+}
 
 export type TicketsList = {
   id: number | string;
   subject: string;
-  email: string | null;
-  lastUpdate: Date | number;
-  status: "pending reply" | "active" | "closed";
+  email: string;
+  status: string;
+  messages: Messages[];
+  createdAt: Date;
 };
-
 export const columns: ColumnDef<TicketsList>[] = [
   {
     id: "select",
@@ -97,13 +101,13 @@ export const columns: ColumnDef<TicketsList>[] = [
     },
   },
   {
-    accessorKey: "lastUpdate",
+    accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Time & Date" />
     ),
     cell: ({ row }) => {
-      const cell_value: Date = row.getValue("lastUpdate");
-      return <div className="">{dateFormatter(cell_value)}</div>;
+      const cell_value: Date = row.getValue("createdAt");
+      return <div className="">{getFormattedDate(cell_value)}</div>;
     },
   },
   {
@@ -112,14 +116,12 @@ export const columns: ColumnDef<TicketsList>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const cell_value: "pending reply" | "active" | "closed" =
-        row.getValue("status");
+      const cell_value: "open" | "closed" = row.getValue("status");
       return (
         <div
           className={cn(
             "text-center p-[0.35rem] max-w-[115px] rounded font-bold ",
-            cell_value === "pending reply" && `bg-[#FFAE5C]/20 text-[#FFAE5C]`,
-            cell_value === "active" && `bg-[#1ED760]/20 text-[#1ED760]`,
+            cell_value === "open" && `bg-[#1ED760]/20 text-[#1ED760]`,
             cell_value === "closed" && `bg-[#FF5C5C]/20 text-[#FF5C5C]`
           )}
         >
@@ -136,20 +138,19 @@ export const columns: ColumnDef<TicketsList>[] = [
       const rowData = row.original;
       return (
         <div className="mr-[-2rem]  pr-0 max-w-[fit-content]">
-          <Button
-            className="text-muted-foreground hover:bg-muted-foreground/25"
-            variant={"ghost"}
-            size={"icon"}
-            onClick={() =>
-              console.log("link: /dashboard/products/" + rowData.id)
-            }
-          >
-            {rowData.status === "active" && <MessageCircleMore size={22} />}
-            {rowData.status === "pending reply" && (
-              <MessageCircleReply size={22} />
-            )}
-            {rowData.status === "closed" && <MessageCircle size={22} />}
-          </Button>
+          <Link href={` /dashboard/tickets/chat/${rowData.id}`}>
+            <Button
+              className="text-muted-foreground hover:bg-muted-foreground/25"
+              variant={"ghost"}
+              size={"icon"}
+              onClick={() =>
+                console.log("link: /dashboard/tickets/chat/" + rowData.id)
+              }
+            >
+              {rowData.status === "open" && <MessageCircleReply size={22} />}
+              {rowData.status === "closed" && <MessageCircle size={22} />}
+            </Button>
+          </Link>
           <Button
             className="text-muted-foreground hover:bg-destructive hover:text-destructive-foreground"
             variant={"ghost"}

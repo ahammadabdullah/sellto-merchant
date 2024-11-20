@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/CustomButton";
 
 import { Ticket } from "lucide-react";
 import PageTitle from "@/components/dashboard/PageTitle";
-import { Chat, TMessage } from "./_components/chat";
+import { Chat, TMessage } from "../_components/chat";
+import { getChatData } from "@/lib/api";
+import { getShop } from "@/actions/actions";
 
 const defaultChatData = {
   ticketTopic: "Product Inquiry",
@@ -45,18 +47,33 @@ const defaultChatData = {
     },
   ],
 };
+const TicketData = async (ticketId: string) => {
+  const res = await fetch(`${process.env.SERVER_URL}/api/tickets/${ticketId}`);
+  const data = await res.json();
+  return data;
+};
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: { ticketId: string };
+}) {
+  const ticketId = params.ticketId;
+  const chats = await getChatData(ticketId);
+  const ticket = await TicketData(ticketId);
+  const shop = await getShop(ticket.shopId);
   return (
     <main className="p-8">
       <PageTitle Icon={Ticket} title="Tickets" subTitle="(total 3 tickets)" />
       <Chat
-        ticketTopic={defaultChatData.ticketTopic}
-        customerName={defaultChatData.customerName}
-        sellerName={defaultChatData.sellerName}
-        customerAvatar={defaultChatData.customerAvatar}
-        sellerAvatar={defaultChatData.sellerAvatar}
-        initialMessages={defaultChatData.initialMessages as TMessage[]}
+        ticketTopic={ticket.subject}
+        customerName={ticket.email}
+        sellerName={shop?.name || "Seller"}
+        customerAvatar={`https://ui-avatars.com/api/?name=${ticket.email}`}
+        sellerAvatar={
+          shop?.favicon || `https://ui-avatars.com/api/?name=${shop?.name}`
+        }
+        initialMessages={chats as TMessage[]}
       ></Chat>
       {/* <div className="bg-background rounded p-4 border"></div> */}
     </main>

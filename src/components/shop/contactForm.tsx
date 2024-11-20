@@ -5,9 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoSend } from "react-icons/io5";
 import { cn } from "@/lib/utils";
+import { getShopIdBySubDomain } from "@/actions/actions";
+import { toast } from "../hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const contactFormSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
@@ -16,7 +19,7 @@ const contactFormSchema = z.object({
   message: z.string().min(1, "Message is required"),
 });
 
-type ContactFormData = z.infer<typeof contactFormSchema>;
+export type ContactFormData = z.infer<typeof contactFormSchema>;
 
 interface ContactFormProps {
   className?: string;
@@ -29,17 +32,54 @@ export default function ContactForm({ className }: ContactFormProps) {
     invoiceId: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  let subDomain: string;
+  if (typeof window !== "undefined") {
+    subDomain = window.location.hostname.split(".")[0];
+  }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+  useEffect(() => {
+    const ticketId = localStorage.getItem("ticketId");
+    if (ticketId) {
+      const fetchTicket = async () => {
+        const res = await fetch(`/api/tickets/${ticketId}`);
+        const data = await res.json();
+        if (data && data.status === "open") {
+          router.push(`/contact/chat/${ticketId}`);
+        }
+      };
+      fetchTicket();
+    }
+  }, [router]);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    setLoading(true);
     try {
       const validatedData = contactFormSchema.parse(formData);
       console.log("Form data:", validatedData);
+      const shopId = await getShopIdBySubDomain(subDomain);
+      const data = { ...validatedData, shopId: shopId };
+      const res = await fetch(`/api/tickets`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then((res) => res.json());
+      const { ticketId } = res;
+
+      if (ticketId) {
+        toast({
+          title: "Ticket Created!",
+          variant: "default",
+        });
+        router.push(`/contact/chat/${ticketId}`);
+        localStorage.setItem("ticketId", ticketId);
+      }
     } catch (error) {
       if (error instanceof z.ZodError) {
         console.error("Validation error:", error.errors);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,7 +138,11 @@ export default function ContactForm({ className }: ContactFormProps) {
           onChange={handleChange}
         />
       </div>
-      <Button type="submit" className="w-full gap-2 place-items-center">
+      <Button
+        loading={loading}
+        type="submit"
+        className="w-full gap-2 place-items-center"
+      >
         Send Message <IoSend className="w-4 h-4" />
       </Button>
     </form>

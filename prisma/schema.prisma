@@ -131,3 +131,23 @@ model Category {
   shopId    String
   shop      Shop     @relation(fields: [shopId], references: [id])
 }
+
+model Ticket {
+  id        String    @id @default(cuid())
+  subject   String
+  email     String
+  invoiceId String?
+  shopId    String
+  status    String    @default("open")
+  messages  Message[]
+  createdAt DateTime  @default(now())
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  sender    String
+  content   String
+  createdAt DateTime @default(now())
+}

@@ -21,10 +21,10 @@ import { use, useEffect, useState } from "react";
 import useUser from "@/components/hooks/use-user";
 import useShop from "@/components/hooks/use-shop";
 
-async function getRecentOrdersData(shopId: string): Promise<RecentOrders[]> {
-  const orders = await getRecentOrdersByShopId(shopId);
-  return orders;
-}
+// async function getRecentOrdersData(shopId: string): Promise<RecentOrders[]> {
+//   const orders = await getRecentOrdersByShopId(shopId);
+//   return orders;
+// }
 export default function Home() {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState(true);
@@ -33,16 +33,16 @@ export default function Home() {
   console.log(session?.user, "from home");
   const { user, loading } = useUser();
   const { shop } = useShop();
-  useEffect(() => {
-    if (user?.shopId) {
-      getRecentOrdersData(user.shopId).then((data) => {
-        setRecentOrdersData(data);
-        setIsLoading(false);
-      });
-    } else {
-      setIsLoading(false);
-    }
-  }, [user?.shopId]);
+  // useEffect(() => {
+  //   if (user?.shopId) {
+  //     getRecentOrdersData(user.shopId).then((data) => {
+  //       setRecentOrdersData(data);
+  //       setIsLoading(false);
+  //     });
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, [user?.shopId]);
   console.log(session?.user, "from home");
   if (session?.user && !session.user.shopId) {
     router.push("/onboarding");

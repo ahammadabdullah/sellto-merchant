@@ -146,3 +146,40 @@ export async function uploadFileToApiRoute(file: File) {
     throw error;
   }
 }
+
+export const getTimeFromDate = (date: Date): string => {
+  const newDate = new Date(date);
+  let hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12 || 12;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  return `${hours}:${formattedMinutes} ${ampm}`;
+};
+
+export const getFormattedDate = (date: string | Date): string => {
+  console.log(date, "from getFormattedDate");
+  const newDate = new Date(date);
+
+  if (isNaN(newDate.getTime())) {
+    // Handle invalid date input
+    return "Invalid Date";
+  }
+
+  // Get the time in 12-hour format
+  let hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+  const ampm = hours >= 12 ? "PM" : "AM";
+
+  hours = hours % 12 || 12; // Convert to 12-hour format
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  // Get the day and month
+  const day = newDate.getDate();
+  const month = newDate.toLocaleString("default", { month: "short" });
+
+  // Return formatted time and date
+  return `${hours}:${formattedMinutes} ${ampm} | ${day}-${month}`;
+};

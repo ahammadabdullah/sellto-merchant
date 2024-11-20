@@ -42,7 +42,7 @@ export function Chat({
   initialMessages,
 }: ChatProps) {
   const [newMessage, setNewMessage] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -54,9 +54,10 @@ export function Chat({
   }, [initialMessages]);
 
   const handleSendMessage = async () => {
+    setLoading(true);
     if (newMessage.trim()) {
       const message = {
-        sender: "seller",
+        sender: "user",
         content: newMessage.trim(),
       };
       const res = await fetch(
@@ -69,6 +70,7 @@ export function Chat({
       revalidateMessage();
       setNewMessage("");
     }
+    setLoading(false);
   };
 
   return (
@@ -82,34 +84,32 @@ export function Chat({
             <div
               key={message.id}
               className={`flex mb-4 ${
-                message.sender === "seller" ? "justify-end" : "justify-start"
+                message.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
               <div
                 className={`flex flex-col ${
-                  message.sender === "seller" ? "items-end" : "items-start"
+                  message.sender === "user" ? "items-end" : "items-start"
                 }`}
               >
                 <div
                   className={`flex ${
-                    message.sender === "seller"
-                      ? "flex-row-reverse"
-                      : "flex-row"
+                    message.sender === "user" ? "flex-row-reverse" : "flex-row"
                   } items-center gap-2`}
                 >
                   <Avatar className="w-8 h-8">
                     <AvatarImage
                       src={
-                        message.sender === "seller"
+                        message.sender === "user"
                           ? sellerAvatar
                           : customerAvatar
                       }
                       alt={
-                        message.sender === "seller" ? sellerName : customerName
+                        message.sender === "user" ? sellerName : customerName
                       }
                     />
                     <AvatarFallback>
-                      {message.sender === "seller"
+                      {message.sender === "user"
                         ? sellerName.charAt(0)
                         : customerName.charAt(0)}
                     </AvatarFallback>
@@ -117,14 +117,14 @@ export function Chat({
                   <div>
                     <div
                       className={`font-semibold text-xs mb-1  ${
-                        message.sender === "seller" ? "text-right" : "text-left"
+                        message.sender === "user" ? "text-right" : "text-left"
                       }`}
                     >
                       {message.sender === "seller" ? sellerName : customerName}
                     </div>
                     <div
                       className={`rounded-lg p-3 w-full  ${
-                        message.sender === "seller"
+                        message.sender === "user"
                           ? "bg-primary text-primary-foreground"
                           : "bg-secondary text-secondary-foreground"
                       }`}
@@ -135,9 +135,7 @@ export function Chat({
                 </div>
                 <div
                   className={`text-xs text-muted-foreground mt-1 flex items-center ${
-                    message.sender === "seller"
-                      ? "justify-end"
-                      : "justify-start"
+                    message.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   <span>{getTimeFromDate(message.createdAt)}</span>
@@ -171,7 +169,11 @@ export function Chat({
                 }
               }}
             />
-            <Button type="submit" className="h-full lg:py-4 grow lg:grow-0">
+            <Button
+              loading={loading}
+              type="submit"
+              className="h-full lg:py-4 grow lg:grow-0"
+            >
               <Send />
             </Button>
           </div>
