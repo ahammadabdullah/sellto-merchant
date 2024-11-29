@@ -614,27 +614,6 @@ export async function deleteProductById(productId: string) {
   return product;
 }
 
-// get all the categories by shopId
-export async function getAllCategoriesByShopId(shopId: string) {
-  const categories = await prisma.category.findMany({
-    where: {
-      shopId: shopId as string,
-    },
-  });
-  return categories;
-}
-
-// add a category by shopId
-export async function addCategoryByShopId(shopId: string, categoryData: any) {
-  const category = await prisma.category.create({
-    data: {
-      ...categoryData,
-      shopId,
-    },
-  });
-  return category;
-}
-
 // get recent orders by shopId
 
 export async function getRecentOrdersByShopId(shopId: string) {
@@ -751,6 +730,16 @@ export const handlePaymentSuccess = async (
         });
       }
     }
+
+    // update balance in the shop
+    await prisma.shop.update({
+      where: { id: shopId },
+      data: {
+        balance: {
+          increment: orderData.amount / 100,
+        },
+      },
+    });
 
     return orderRes;
   } catch (error) {

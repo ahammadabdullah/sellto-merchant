@@ -24,17 +24,17 @@ model Merchant {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String     @id @default(cuid())
+  email     String     @unique
   name      String?
   password  String
   image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      String   @default("merchant")
-  status    String   @default("pending")
-  shopId    String?  @unique
-  Shop      Shop?    @relation("userToShop", fields: [shopId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  shopId    String?    @unique
+  role      UserRole   @default(merchant)
+  status    UserStatus @default(pending)
+  Shop      Shop?      @relation("userToShop", fields: [shopId], references: [id])
 }
 
 model Shop {
@@ -51,11 +51,13 @@ model Shop {
   currency            String     @default("USD")
   productTypes        String?
   subDomain           String     @unique
-  categories          Category[]
+  balance             Float      @default(0)
+  status              ShopStatus @default(pending)
   orders              Order[]
   products            Product[]  @relation("ShopToProductById")
   productsBySubDomain Product[]  @relation("ShopToProductBySubDomain")
-  User                User[]     @relation("userToShop")
+  tickets             Ticket[]
+  User                User?      @relation("userToShop")
 }
 
 model Product {
@@ -73,8 +75,8 @@ model Product {
   productName           String
   shortDescription      String?
   visibility            String
-  stock                 Int       @default(0)
   soldCount             Int       @default(0)
+  stock                 Int       @default(0)
   shop                  Shop      @relation("ShopToProductById", fields: [shopId], references: [id])
   shopBySubDomain       Shop      @relation("ShopToProductBySubDomain", fields: [shopSubDomain], references: [subDomain])
   variants              Variant[]
@@ -107,47 +109,82 @@ model Variant {
 }
 
 model Order {
-  id             String   @id @default(cuid())
+  id             String      @id @default(cuid())
   customer_name  String
-  customer_email String
   revenue        Float
-  productIds     String[]
-  paymentId      String
-  variantIds     String[]
-  productNames   String[]
-  quantities     Int[]
   shopId         String
-  status         String   @default("paid")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  shop           Shop     @relation(fields: [shopId], references: [id])
-}
-
-model Category {
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  id        String   @id @default(cuid())
-  shopId    String
-  shop      Shop     @relation(fields: [shopId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  customer_email String
+  paymentId      String
+  productIds     String[]
+  quantities     Int[]
+  productNames   String[]
+  variantIds     String[]
+  status         OrderStatus @default(paid)
+  shop           Shop        @relation(fields: [shopId], references: [id])
 }
 
 model Ticket {
-  id        String    @id @default(cuid())
+  id        String       @id @default(cuid())
   subject   String
   email     String
   invoiceId String?
   shopId    String
-  status    String    @default("open")
+  createdAt DateTime     @default(now())
+  status    TicketStatus @default(open)
+  type      TicketType   @default(shop)
   messages  Message[]
-  createdAt DateTime  @default(now())
+  Shop      Shop         @relation(fields: [shopId], references: [id])
 }
 
 model Message {
-  id        String   @id @default(cuid())
+  id        String        @id @default(cuid())
   ticketId  String
-  ticket    Ticket   @relation(fields: [ticketId], references: [id])
-  sender    String
   content   String
-  createdAt DateTime @default(now())
+  createdAt DateTime      @default(now())
+  sender    MessageSender @default(user)
+  ticket    Ticket        @relation(fields: [ticketId], references: [id])
+}
+
+enum ShopStatus {
+  pending
+  clean
+  warned
+  banned
+}
+
+enum UserRole {
+  merchant
+  admin
+}
+
+enum UserStatus {
+  pending
+  active
+  banned
+}
+
+enum OrderStatus {
+  paid
+  shipped
+  delivered
+  refunded
+  cancelled
+}
+
+enum TicketStatus {
+  open
+  closed
+}
+
+enum TicketType {
+  shop
+  admin
+}
+
+enum MessageSender {
+  user
+  admin
+  seller
 }
