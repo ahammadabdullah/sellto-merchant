@@ -33,7 +33,7 @@ const useShop = () => {
       if (id) {
         const response = await getShop(id);
         if (response) {
-          setShop(response as Shop);
+          setShop(response as unknown as Shop);
         } else {
           setShop(null);
         }
