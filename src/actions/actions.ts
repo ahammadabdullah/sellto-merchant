@@ -115,15 +115,15 @@ export async function signUp(prevState: State, formData: FormData) {
         password: hashedPassword,
       },
     });
-    await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    // await signIn("credentials", {
+    //   email,
+    //   password,
+    //   redirect: false,
+    // });
     return {
       errors: {},
-      message: "Signup successful!",
-      redirectUrl: "/onboarding",
+      message: "Signup successful! Please login",
+      redirectUrl: "/login",
     };
   } catch (error) {
     console.error("Signup failed", error);
@@ -487,7 +487,7 @@ export async function updateProductById(
     const updatedVariants = variants.map((variant) => {
       updatedStock += parseInt(variant.stock); // Calculate total stock
       return {
-        id: variant.id as string,
+        id: (variant as any)?.id as string,
         productId: productId,
         name: variant.name,
         price: parseFloat(variant.price),

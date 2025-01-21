@@ -28,7 +28,7 @@ export default async function Component({ className }: classProps) {
   }
   const data = await getDashboardStatistics(shopId);
   const chartData = await getChartData();
-  console.log(chartData);
+  console.log(data, "chartData");
   return (
     <section className={cn(className, "")}>
       <div className="wrap flex flex-col gap-5">
