@@ -1,5 +1,12 @@
 "use client";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import {
+  Banknote,
+  Calendar,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+} from "lucide-react";
 import {
   ArrowLeftFromLine,
   LayoutDashboard,
@@ -39,6 +46,7 @@ const navItems = [
   { icon: ShoppingBasket, label: "Orders", url: "/dashboard/orders" },
   { icon: Ticket, label: "Tickets", url: "/dashboard/tickets" },
   { icon: Palette, label: "Customization", url: "/dashboard/customization" },
+  { icon: Banknote, label: "Earnings", url: "/dashboard/earnings" },
 ];
 
 export function AppSidebar() {
