@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/CustomButton";
 import { AllOrders, columns } from "./columns";
 import { DataTable } from "@/components/helpers/data-table";
 import { auth } from "@/auth";
-import EarningsStats from "./Stats";
-
+import EarningsStats from "./components/Stats";
+import { WithdrawalDrawer } from "./components/WithdrawlsDrawer";
 async function getData(shopId: string): Promise<AllOrders[]> {
   // Mock data generation
   const mockOrders: AllOrders[] = Array.from({ length: 20 }, (_, index) => ({
@@ -46,8 +46,10 @@ export default async function Withdraw() {
           className="w-fit"
         />
         <div className="flex gap-2">
-          <Button>Withdraw from stripe</Button>
-          <Button variant="secondary" title="stripe settings">
+          <WithdrawalDrawer
+            balance={Number(earningsData.currentBalance.replace(/,/g, ""))}
+          ></WithdrawalDrawer>
+          <Button variant="secondary" title="stripe account settings">
             <Settings />
             <span className="sr-only">stripe settings</span>
           </Button>
