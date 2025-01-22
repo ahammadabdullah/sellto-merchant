@@ -1,0 +1,9 @@
+/* Add these styles to override default table spacing */
+.data-table {
+  --table-cell-padding: 0.5rem; /* Adjust this value as needed */
+}
+
+/* Or target specific table elements */
+.data-table td {
+  padding: var(--table-cell-padding);
+}

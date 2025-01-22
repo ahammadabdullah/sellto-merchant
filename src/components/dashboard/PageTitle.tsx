@@ -16,14 +16,19 @@ export default function PageTitle({
 }) {
   return (
     <div
-      className={cn("w-full flex place-items-center  gap-2 mb-8", className)}
+      className={cn(
+        "w-full flex place-items-center items-center  gap-2 mb-8",
+        className
+      )}
     >
       <Icon className="text-primary2 min-w-[30px] mb-[-2.5px]" size={30}></Icon>
       <div className="flex flex-wrap place-items-end ">
         <h1 className="text-3xl sm:text-4xl font-clash  mr-2 mb-[-5px]">
           {title}
         </h1>
-        <p className="text-sm text-muted-foreground ">{subTitle}</p>
+        {subTitle && (
+          <p className="text-sm text-muted-foreground ">{subTitle}</p>
+        )}
       </div>
     </div>
   );
