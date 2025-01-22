@@ -42,45 +42,58 @@ export function DataTableColumnHeader<TData, TValue>({
     return <div className={cn(className)}>{title}</div>;
   }
 
+  // Function to handle click cycling through sort states
+  const handleSortClick = () => {
+    const currentSort = column.getIsSorted();
+    if (currentSort === false) {
+      // First click - sort ascending
+      column.toggleSorting(false);
+    } else if (currentSort === "asc") {
+      // Second click - sort descending
+      column.toggleSorting(true);
+    } else {
+      // Third click - clear sorting
+      column.clearSorting();
+    }
+  };
+
   return (
     <div className={cn("flex items-center space-x-2", className)}>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
-          >
-            <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <ICON2 className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === "asc" ? (
-              <ICON1 className="ml-2 h-4 w-4" />
-            ) : (
-              <ChevronsUpDown className="ml-2 h-4 w-4" />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ICON1 className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            {text1}
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ICON2 className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            {text2}
-          </DropdownMenuItem>
-          {hideButton && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-                <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Hide
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8"
+        onClick={handleSortClick}
+      >
+        <span>{title}</span>
+        {column.getIsSorted() === "desc" ? (
+          <ICON2 className="ml-2 h-4 w-4" />
+        ) : column.getIsSorted() === "asc" ? (
+          <ICON1 className="ml-2 h-4 w-4" />
+        ) : (
+          <ChevronsUpDown className="ml-2 h-4 w-4" />
+        )}
+      </Button>
+      {hideButton && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-ml-3 h-8 data-[state=open]:bg-accent"
+            >
+              <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Hide
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
+              <EyeOff className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+              Hide
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }
