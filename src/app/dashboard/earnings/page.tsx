@@ -24,6 +24,7 @@ async function getEarningsData() {
   return {
     currentBalance: "2,458.00",
     totalWithdrawn: "14,589.00",
+    underWithdrawal: "1,000.00",
     totalEarnings: "17,047.00",
   };
 }

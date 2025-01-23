@@ -8,6 +8,7 @@ interface EarningsStatsProps {
     currentBalance: string;
     totalWithdrawn: string;
     totalEarnings: string;
+    underWithdrawal: string;
   };
 }
 
@@ -17,16 +18,19 @@ export default function EarningsStats({
 }: EarningsStatsProps) {
   return (
     <div
-      className={cn(
-        "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-        className
-      )}
+      className={cn("flex flex-wrap min-[1380px]:flex-nowrap gap-4", className)}
     >
       <LargeInfoCard
         title="Current Balance"
         icon={<DollarSign className="w-6 h-6" />}
         value={stats.currentBalance}
-        description="Available for withdrawal"
+        description="Total balance in your sellto account"
+      />
+      <LargeInfoCard
+        title="Under Withdrawal"
+        icon={<DollarSign className="w-6 h-6" />}
+        value={stats.underWithdrawal ?? false}
+        description="Amount under withdrawal request"
       />
 
       <LargeInfoCard

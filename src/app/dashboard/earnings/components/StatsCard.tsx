@@ -35,7 +35,15 @@ export default function LargeInfoCard({
       <CardContent>
         <div className="flex gap-1">
           <h1 className="text-xl sm:text-3xl font-clash font-medium ">
-            <span className="text-primary2">$</span> {value}
+            {value ? (
+              <>
+                <span className="text-primary2">$</span> {value}
+              </>
+            ) : (
+              <span>
+                N<span className="text-primary2 font-semibold">/</span>A
+              </span>
+            )}
           </h1>
         </div>
       </CardContent>
