@@ -6,31 +6,60 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/components/hooks/use-toast";
 
 interface WithdrawalFormProps {
   balance: number;
-  onSubmit: (amount: number) => void;
-  onCancel: () => void;
+  setOpen: (open: boolean) => void;
   loading?: boolean;
 }
 
-export function WithdrawalForm({
-  balance,
-  onSubmit,
-  onCancel,
-  loading,
-}: WithdrawalFormProps) {
+export function WithdrawalForm({ balance, setOpen }: WithdrawalFormProps) {
   const [amount, setAmount] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     if (
       Number.parseFloat(amount) > 0 &&
       Number.parseFloat(amount) <= balance &&
       agreed
     ) {
-      onSubmit(Number.parseFloat(amount));
+      try {
+        setLoading(true);
+        const response = await fetch("/api/stripe/withdrawl", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ amount }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to process withdrawal");
+        }
+
+        toast({
+          title: "Success",
+          description:
+            "Your withdrawal request has been submitted successfully",
+        });
+        setOpen(false);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description:
+            error instanceof Error ? error.message : "Something went wrong",
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -88,7 +117,7 @@ export function WithdrawalForm({
         seller admin reviews it.
       </p>
       <div className="mt-4 flex gap-2 justify-end">
-        <Button type="button" variant="outline" onClick={onCancel}>
+        <Button type="button" variant="outline" onClick={() => setOpen(false)}>
           Cancel
         </Button>
         <Button type="submit" disabled={loading || !isValid}>
