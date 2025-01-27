@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/hooks/use-toast";
+import useShop from "@/components/hooks/use-shop";
 
 interface WithdrawalFormProps {
   balance: number;
@@ -19,6 +20,7 @@ export function WithdrawalForm({ balance, setOpen }: WithdrawalFormProps) {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { shop } = useShop();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,12 +32,12 @@ export function WithdrawalForm({ balance, setOpen }: WithdrawalFormProps) {
     ) {
       try {
         setLoading(true);
-        const response = await fetch("/api/stripe/withdrawl", {
+        const response = await fetch("/api/stripe/withdraw", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ amount }),
+          body: JSON.stringify({ amount, shopId: shop?.id }),
         });
 
         const data = await response.json();
@@ -44,11 +46,15 @@ export function WithdrawalForm({ balance, setOpen }: WithdrawalFormProps) {
           throw new Error(data.error || "Failed to process withdrawal");
         }
 
-        toast({
-          title: "Success",
-          description:
-            "Your withdrawal request has been submitted successfully",
-        });
+        if (data.success === "true") {
+          toast({
+            title: "Success",
+            description:
+              "Your withdrawal request has been submitted successfully",
+          });
+        } else {
+          throw new Error(data.message || "Failed to process withdrawal");
+        }
         setOpen(false);
       } catch (error) {
         toast({

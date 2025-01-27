@@ -58,6 +58,7 @@ model Shop {
   productsBySubDomain Product[]  @relation("ShopToProductBySubDomain")
   tickets             Ticket[]
   User                User?      @relation("userToShop")
+  Withdraw            Withdraw[]
 }
 
 model Product {
@@ -147,6 +148,15 @@ model Message {
   ticket    Ticket        @relation(fields: [ticketId], references: [id])
 }
 
+model Withdraw {
+  id        String         @id @default(cuid())
+  amount    Float
+  shopId    String
+  createdAt DateTime       @default(now())
+  status    WithdrawStatus @default(pending)
+  Shop      Shop           @relation(fields: [shopId], references: [id])
+}
+
 enum ShopStatus {
   pending
   clean
@@ -187,4 +197,10 @@ enum MessageSender {
   user
   admin
   seller
+}
+
+enum WithdrawStatus {
+  pending
+  completed
+  cancelled
 }
