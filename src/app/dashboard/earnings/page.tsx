@@ -7,6 +7,9 @@ import { DataTable } from "@/components/helpers/data-table";
 import { auth } from "@/auth";
 import EarningsStats from "./components/Stats";
 import { WithdrawalDrawer } from "./components/WithdrawlsDrawer";
+import useShop from "@/components/hooks/use-shop";
+import StripeConnect from "./components/StripeConnect";
+
 async function getData(shopId: string): Promise<AllOrders[]> {
   // Mock data generation
   const mockOrders: AllOrders[] = Array.from({ length: 20 }, (_, index) => ({
@@ -50,10 +53,7 @@ export default async function Withdraw() {
           <WithdrawalDrawer
             balance={Number(earningsData.currentBalance.replace(/,/g, ""))}
           ></WithdrawalDrawer>
-          <Button variant="secondary" title="stripe account settings">
-            <Settings />
-            <span className="sr-only">stripe settings</span>
-          </Button>
+          <StripeConnect />
         </div>
       </div>
       <EarningsStats stats={earningsData} className="mb-10" />

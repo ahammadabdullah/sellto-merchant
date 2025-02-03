@@ -47,6 +47,9 @@ model Shop {
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
   userId              String     @unique
+  stripeAccountId     String?
+  stripeStatus        String?
+  stripeLoginLink     String?
   theme               Json?
   currency            String     @default("USD")
   productTypes        String?
@@ -201,6 +204,7 @@ enum MessageSender {
 
 enum WithdrawStatus {
   pending
-  completed
+  accepted
   cancelled
+  completed
 }

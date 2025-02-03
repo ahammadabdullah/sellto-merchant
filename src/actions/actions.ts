@@ -230,6 +230,9 @@ export const getShop = async (id: string) => {
     where: {
       id: id,
     },
+    include: {
+      User: true,
+    },
   });
   return res;
 };

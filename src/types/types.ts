@@ -55,3 +55,26 @@ export interface Variant {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Shop {
+  id: string;
+  name: string;
+  image?: string;
+  favicon?: string;
+  subTitle?: string;
+  description?: string;
+  stripeAccountId?: string;
+  stripeStatus?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+  theme?: any;
+  currency: string;
+  productTypes?: string;
+  subDomain: string;
+  categories: any[];
+  orders: any[];
+  products: any[];
+  User: any;
+  stripeLoginLink?: string;
+}

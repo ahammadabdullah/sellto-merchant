@@ -1,5 +1,4 @@
 import { CartItem } from "@/components/shop/productProfile";
-import { stat } from "fs";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
