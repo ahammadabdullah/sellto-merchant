@@ -28,15 +28,12 @@ export async function middleware(request: NextRequest) {
       const hostParts = host.split(".");
 
       if (host.endsWith(".vercel.app")) {
-        // For *.sellto-merchant.vercel.app format
         if (
           hostParts.length === 4 &&
           hostParts.slice(1).join(".") === "sellto-merchant.vercel.app"
         ) {
           subdomain = hostParts[0];
-        }
-        // For other vercel apps like *.vercel.app
-        else if (hostParts.length === 3) {
+        } else if (hostParts.length === 3) {
           subdomain = hostParts[0];
         }
       } else {
