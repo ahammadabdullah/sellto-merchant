@@ -69,12 +69,14 @@ export default function Component({ className }: classProps) {
             alt="Company Logos"
             placeholder="blur"
             className="max-[1278px]:w-[95%] hidden dark:block"
+            priority
           />
           <Image
             src={hero_img_light}
             alt="Company Logos"
             placeholder="blur"
             className="max-[1278px]:w-[95%] dark:hidden"
+            priority
           />
         </div>
 

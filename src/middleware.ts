@@ -9,12 +9,32 @@ export async function middleware(request: NextRequest) {
   const session = await auth();
   const isLoggedIn = !!session?.user;
   const { pathname } = nextUrl;
-  console.log("Host Header:", request.headers.get("host"));
-  const host = request.headers.get("host");
-  const subdomain = host?.split(".")[0];
-  console.log("Rewriting URL to:", `/shop/${subdomain}${nextUrl.pathname}`);
 
-  const privateRoutes = ["/dashboard", "/dashboard/:path*"];
+  const host = request.headers.get("host");
+  console.log("Host Header:", host);
+
+  const mainDomain = process.env.NEXT_PUBLIC_SERVER_URL || "localhost:3000";
+
+  let subdomain = null;
+  if (host && host !== mainDomain) {
+    if (host.includes(".")) {
+      const hostParts = host.split(".");
+      const mainDomainParts = mainDomain.split(".");
+
+      if (hostParts.length > mainDomainParts.length) {
+        subdomain = hostParts[0];
+      } else if (
+        host.endsWith(".vercel.app") &&
+        !host.startsWith("sellto-merchant")
+      ) {
+        subdomain = hostParts[0];
+      }
+    }
+  }
+
+  console.log("Extracted subdomain:", subdomain);
+
+  const privateRoutes = ["/dashboard", "/onboarding"];
   const mainDomainRoutes = [
     "/about",
     "/login",
@@ -24,14 +44,19 @@ export async function middleware(request: NextRequest) {
     "/api",
   ];
 
-  // Redirect to onboarding if user is logged in but has no shopId
-  // if (
-  //   isLoggedIn &&
-  //   !session.user.shopId &&
-  //   !pathname.startsWith("/onboarding")
-  // ) {
-  //   return NextResponse.redirect(new URL("/onboarding", nextUrl));
-  // }
+  const isPrivateRoute = privateRoutes.some(
+    (route) => pathname === route || pathname.startsWith(route + "/")
+  );
+
+  if (isPrivateRoute && !isLoggedIn) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (isLoggedIn && (pathname === "/login" || pathname === "/signup")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
 
   const isMainDomainRoute = (pathname: string) => {
     return (
@@ -39,25 +64,18 @@ export async function middleware(request: NextRequest) {
       mainDomainRoutes.some((route) => pathname.startsWith(route + "/"))
     );
   };
+
   if (
     subdomain &&
-    subdomain !== "localhost" &&
-    subdomain !== "localhost:3000" &&
+    subdomain !== "www" &&
     subdomain !== "beta" &&
     !isMainDomainRoute(pathname)
   ) {
     const url = nextUrl.clone();
     url.pathname = `/shop/${subdomain}${url.pathname}`;
+    console.log("Rewriting URL to:", url.pathname);
     return NextResponse.rewrite(url);
   }
-  // Protect private routes for unauthenticated users
-  // if (
-  //   !isLoggedIn &&
-  //   privateRoutes.some((route) => pathname.startsWith(route))
-  // ) {
-  //   console.log("from middleware");
-  //   return NextResponse.redirect(new URL("/login", nextUrl));
-  // }
 
   return NextResponse.next();
 }
