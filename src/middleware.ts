@@ -13,21 +13,43 @@ export async function middleware(request: NextRequest) {
   const host = request.headers.get("host");
   console.log("Host Header:", host);
 
-  const mainDomain = process.env.NEXT_PUBLIC_SERVER_URL || "localhost:3000";
+  const mainDomains = [
+    "sellto-merchant.vercel.app",
+    "localhost:3000",
+    process.env.NEXT_PUBLIC_SERVER_URL,
+  ].filter(Boolean);
+
+  console.log("Main Domains:", mainDomains);
 
   let subdomain = null;
-  if (host && host !== mainDomain) {
+
+  if (host && !mainDomains.includes(host)) {
     if (host.includes(".")) {
       const hostParts = host.split(".");
-      const mainDomainParts = mainDomain.split(".");
 
-      if (hostParts.length > mainDomainParts.length) {
-        subdomain = hostParts[0];
-      } else if (
-        host.endsWith(".vercel.app") &&
-        !host.startsWith("sellto-merchant")
-      ) {
-        subdomain = hostParts[0];
+      if (host.endsWith(".vercel.app")) {
+        // For *.sellto-merchant.vercel.app format
+        if (
+          hostParts.length === 4 &&
+          hostParts.slice(1).join(".") === "sellto-merchant.vercel.app"
+        ) {
+          subdomain = hostParts[0];
+        }
+        // For other vercel apps like *.vercel.app
+        else if (hostParts.length === 3) {
+          subdomain = hostParts[0];
+        }
+      } else {
+        for (const mainDomain of mainDomains) {
+          if (mainDomain && host.endsWith(`.${mainDomain}`)) {
+            subdomain = hostParts[0];
+            break;
+          }
+        }
+
+        if (!subdomain && hostParts.length > 2) {
+          subdomain = hostParts[0];
+        }
       }
     }
   }
